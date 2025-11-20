@@ -1,0 +1,98 @@
+﻿@model MedicalDentCRM.Models.OrdenTrabajoModelo
+
+<div style="margin-left:3cm;margin-right:90px;">
+    <table cellpadding="0" border="0" cellspacing="0" class="w-100 f-s-10">
+        <tr>
+            <td></td>
+            <td class="t-l" width="140px">
+                Lima, @DateTime.Now.ConvertirFechaLarga()
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td class="t-l">
+                HORA: @DateTime.Now.ConvertirHoraLarga()
+            </td>
+        </tr>
+        <tr>
+            <td class="t-c f-w-b f-s-12" colspan="2" height="50px">
+                INFORME TÉCNICO Nº @Model.OrdenTrabajoId
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" class="f-s-12">
+                <span class="f-w-b f-s-12">CLIENTE:</span> @Model.NombreCliente <br />
+                <span class="f-w-b f-s-12">CASO:</span> @Model.Paciente
+            </td>
+        </tr>
+    </table>
+    <div style="border-bottom:1px solid black;margin-top:15px;margin-bottom:60px"></div>
+    <table cellpadding="0" cellspacing="0" class="w-100 f-s-12">
+        <tr>
+            <td colspan="2">
+                <span class="f-w-b" style="text-decoration:underline">OBSERVACIONES</span>
+            </td>
+        </tr>
+        <tr>
+            <td height="20px" colspan="2"></td>
+        </tr>
+        <tr>
+            <td width="50px"></td>
+            <td>
+                @Model.ObservacionesTecnicas
+            </td>
+        </tr>
+        <tr>
+            <td height="40px" colspan="2"></td>
+        </tr>
+        <tr>
+            <td colspan="2" class="t-c">
+                <img src="@(Model.RutaImagen1.TieneValor() ? Server.MapPath(Model.RutaImagen1) : "")" style="max-height:8cm;max-width:10cm" />
+            </td>
+        </tr>
+        <tr>
+            <td height="40px" colspan="2"></td>
+        </tr>
+        <tr>
+            <td colspan="2" class="t-c">
+                <img src="@(Model.RutaImagen2.TieneValor() ? Server.MapPath(Model.RutaImagen2) : "")" style="max-height:8cm;max-width:10cm;" />
+            </td>
+        </tr>
+    </table>
+    <table cellpadding="0" cellspacing="0" class="w-100 f-s-12" style="margin-top:30px">
+        <tr>
+            <td colspan="2">
+                <span class="f-w-b" style="text-decoration:underline">ACCIONES</span>
+            </td>
+        </tr>
+        <tr>
+            <td height="20px" colspan="2"></td>
+        </tr>
+        <tr>
+    </table>
+    <div style="margin-bottom:10px">
+        @Model.AccionesTecnicas
+    </div>
+    <table>
+        <tr>
+            <td colspan="2" class="t-c">
+                <img src="@(Model.RutaImagen3.TieneValor() ? Server.MapPath(Model.RutaImagen3) : "")" style="max-height:8cm;max-width:10cm;" />
+            </td>
+        </tr>
+        <tr>
+            <td height="40px" colspan="2"></td>
+        </tr>
+        <tr>
+            <td colspan="2" class="t-c">
+                <img src="@(Model.RutaImagen4.TieneValor() ? Server.MapPath(Model.RutaImagen4) : "")" style="max-height:8cm;max-width:10cm;" />
+            </td>
+        </tr>
+    </table>
+    <table cellpadding="0" cellspacing="0" class="w-100 f-s-12" style="margin-top:20px">
+        <tr>
+            <td colspan="2">
+                <span class="f-w-b">Atentamente</span>
+            </td>
+        </tr>
+    </table>
+</div>

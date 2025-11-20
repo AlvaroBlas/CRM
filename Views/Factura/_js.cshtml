@@ -1,0 +1,285 @@
+﻿<script>
+        $(function () {
+
+            var $form = $("#FormFactura");
+
+            var $clienteId = $form.find("#ClienteId");
+            var $vendedorId = $("#VendedorId");
+            var $terminoId = $("#TerminoPagoId");
+            var $btnAgregarProducto = $("#btnAgregarProducto");
+            var $tablaProductos = $("#tablaProductos");
+            var $sSubtotal = $("#sSubtotal");
+            var $sImpuesto = $("#sImpuesto");
+            var sTotal = $("#sTotal");
+            var $infoc = $(".info-c");
+            var $dirFactura = $(".dirFactura");
+            var $dirEnvio = $(".dirEnvio");
+            var $fechaFactura = $("#FechaFactura");
+            var $fechaVencimiento = $("#FechaVencimiento");
+
+            $clienteId.select2({
+                placeholder: "Seleccionar cliente",
+            });
+
+            $vendedorId.select2({
+                placeholder: "Seleccionar vendedor",
+            });
+
+            $terminoId.select2({
+                placeholder: "Seleccionar término",
+            });
+
+            $(".cmbProducto").select2({
+                placeholder: "Seleccionar producto",
+            });
+            $(".cmbColor").select2();
+
+            $('.custom-file-input').on('change', function () {
+                var fileName = $(this)[0].files[0].name;
+                $(this).next('.custom-file-label').addClass("selected").html(fileName);
+            })
+
+            var opcionesDt = {
+                "singleDatePicker": true,
+                "autoApply": true,
+                "showDropdowns": true,
+                "autoUpdateInput": false,
+                "applyButtonClasses": "btn-danger",
+                "cancelClass": "btn-secondary",
+                locale: {
+                    format: 'DD/MM/YYYY',
+                    applyLabel: 'Aplicar',
+                    cancelLabel: 'Cancelar',
+                    daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+                    monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Setiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                }
+            }
+
+            $fechaFactura.daterangepicker(opcionesDt, function (start, end, label) {
+                $fechaFactura.val(start.format('DD/MM/YYYY'));
+            });
+
+            $fechaVencimiento.daterangepicker(opcionesDt, function (start, end, label) {
+                $fechaVencimiento.val(start.format('DD/MM/YYYY'));
+            });
+
+            var obtenerDatosCliente = function (id) {
+
+                var $divFacturas = '<div class="info-cliente">' +
+                    '<a href="javascript:void(0)" class="info-facturas" data-clienteid="' + id + '">' +
+                    '<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 512 512" xml: space="preserve" class="icon icon-sm text-top text-warning"><path d="M448.4 104.8L360.6.5h.1H93.5c-16.6 0-30 13.4-30 30v452c0 16.6 13.4 30 30 30h325c16.6 0 30-13.4 30-30v-346l-.1-31.7zM256.5 397.6c-16.3 0-29.5-13.1-29.5-29.1 0-16.1 13.2-29.1 29.5-29.1s29.5 13 29.5 29.1c-.1 16-13.3 29.1-29.5 29.1zm38.9-239.2c-2.5 19.6-20.8 114.4-26.9 145.9-1.1 5.8-6.3 8.6-12.3 8.6h-.2c-6.2 0-11.5-3-12.7-9-6.1-31.9-24.4-126.4-26.9-145.7-3-23.3 15.4-43.8 39.2-43.8 24.2 0 42.8 20.4 39.8 44z"></path></svg>' +
+                    'Facturas no pagadas' +
+                    '</a>' +
+                    '</div>';
+                var $divDetalle = '<div class="info-cliente">' +
+                    '<a href="javascript:void(0)" class="info-detalle" data-clienteid="' + id+ '">' +
+                    '<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon text-bottom"><path d="M394.8 422h-90c-11 0-20-9-20-20s9-20 20-20h90c11 0 20 9 20 20s-9 20-20 20zm97-145h-187c-11 0-20-9-20-20s9-20 20-20h187c11 0 20 9 20 20s-9 20-20 20zm0-145h-187c-11 0-20-9-20-20s9-20 20-20h187c11 0 20 9 20 20s-9 20-20 20zM227.2 422c-11 0-20-9-20-20v-37.3c0-22.2-22.3-40.3-49.8-40.3H89.8c-27.4 0-49.8 18.1-49.8 40.3V402c0 11-9 20-20 20s-20-9-20-20v-37.3c0-44.3 40.3-80.3 89.8-80.3h67.6c49.5 0 89.8 36 89.8 80.3V402c0 11-8.9 20-20 20zM123.6 244.8C80.8 244.8 46 210 46 167.2s34.8-77.6 77.6-77.6 77.6 34.8 77.6 77.6-34.8 77.6-77.6 77.6zm0-115.1c-20.7 0-37.6 16.9-37.6 37.6 0 20.7 16.8 37.6 37.6 37.6s37.6-16.9 37.6-37.6c0-20.8-16.8-37.6-37.6-37.6z"></path></svg>' +
+                    'Ver detalle cliente' +
+                    '</a>' +
+                    '</div >';
+
+                $.ajax({
+                    type: 'GET',
+                    url: URL_BASE + "Cliente/ObtenerInformacionParaFactura",
+                    data: { clienteId: id },
+                    success: function (data) {
+                        $infoc.empty();
+                        if (data.TieneFacturaNoPagadas) {
+                            $infoc.append($divFacturas);
+                            $infoc.append($divDetalle);
+                        } else {
+                            $infoc.append($divDetalle);
+                        }
+                        $dirEnvio.empty();
+                        $dirFactura.empty();
+
+                        if (data.DireccionEnvio != null)
+                            $dirEnvio.append("DIRECCIÓN DE ENVIÓ </br>" + data.DireccionEnvio);
+
+                        if (data.DireccionFactura != null)
+                            $dirFactura.append("DIRECCIÓN DE FACTURACIÓN </br>" + data.DireccionFactura);
+
+                        $terminoId.val(data.TerminoPagoId).trigger('change');
+
+                    }
+                });
+            }
+
+            var bloquearFechas = function () {
+                var fechaInicio = moment($fechaFactura.val(), 'DD/MM/YYYY');
+                var drp = $fechaVencimiento.data('daterangepicker');
+                drp.minDate = fechaInicio;
+                //$fechaVencimiento.daterangepicker({
+                //    isInvalidDate: function (date) {
+                //        var disabled_start = moment($fechaFactura.val(), 'DD/MM/YYYY');
+                //        //var disabled_end = moment($fechaFactura.val(), 'DD/MM/YYYY');
+                //        return date.isAfter(disabled_start) /*&& date.isBefore(disabled_end)*/;
+                //    }
+                //});
+            };
+
+            bloquearFechas();
+
+            $fechaFactura.on('apply.daterangepicker', function (ev, picker) {
+                var fechaSeleccionada = picker.startDate.format('DD/MM/YYYY');
+                var fechaVencimiento = $fechaVencimiento.val();
+                if (fechaSeleccionada > fechaVencimiento) {
+                    $fechaVencimiento.data('daterangepicker').setStartDate(fechaSeleccionada);
+                    $fechaVencimiento.data('daterangepicker').setEndDate(fechaSeleccionada);
+                    $fechaVencimiento.val(fechaSeleccionada);
+                }
+                bloquearFechas();
+                //$(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+            });
+
+            $clienteId.on('change', function () {
+                var id = $(this).val();
+                obtenerDatosCliente(id);
+            });
+
+            //$terminoId.on('change', function () {
+            //    var
+            //    var fechaInicio = moment($fechaFactura.val(), 'DD/MM/YYYY');
+            //});
+
+            $btnAgregarProducto.on('click', function (e) {
+
+                //var img = $(this).find('img');
+                //var span = $(this).find('div.fa.fa-spinner');
+
+                //img.hide();
+                //span.show();
+
+                var body = $tablaProductos.find('tbody');
+
+                $tablaProductos.find("tbody > tr").each(function () {
+                    var td = $(this).find("td:first").html();
+                    if (td === "No tiene productos añadidos.") {
+                        $tablaProductos.find("tbody").empty();
+                    }
+                });
+
+                $.ajax({
+                    url: URL_BASE + "Producto/AgregarProducto",
+                    data: { esFactura: true },
+                    cache: false,
+                    success: function (html) {
+                        body.append(html);
+                        $("form").removeData("validator");
+                        $("form").removeData("unobtrusiveValidation");
+                        $.validator.unobtrusive.parse("form");
+                        $(".cmbProducto").select2({
+                            placeholder: "Seleccionar producto",
+                        });
+                        $(".cmbColor").select2();
+                    },
+                    complete: function () {
+                        //img.show();
+                        //span.hide();
+                    }
+                });
+
+                $tablaProductos.find("tbody > tr td .btnEliminarProducto").bind('click', function () {
+                    eliminarFila(this);
+                });
+            });
+
+            $(document).on("click", ".btnEliminarProducto", function () {
+                eliminarFila(this);
+            });
+
+            var eliminarFila = function (fila) {
+                var $fila = $(fila).closest("tr");
+                $fila.remove();
+                mostrarTotales();
+            };
+
+            var mostrarTotales = function () {
+
+                var suma = 0;
+                //var sumaImpuestos = 0;
+                var cantidadTotalTabla = 0;
+
+                $tablaProductos.find("tbody > tr").each(function () {
+                    var index = $(this).find('input').val();
+
+                    var precio = parseFloat($('#Productos_' + index + '__Precio').val()) || 0;
+                    var cantidad = parseFloat($('#Productos_' + index + '__Cantidad').val()) || 0;
+                    var importe = parseFloat($(this).find('#Productos_' + index + '__SubTotal').val()) || 0;
+                    //var impuesto = (cantidad * parseFloat($('#Productos_' + index + '__ImpuestoPrecio').val())) || 0;
+                    suma = suma + importe;
+                    //sumaImpuestos = sumaImpuestos + impuesto;
+                    cantidadTotalTabla = cantidadTotalTabla + cantidad;
+                });
+
+                //$sSubtotal.text(suma.toFixed(2));
+                //$sImpuesto.text(sumaImpuestos.toFixed(2));
+                //sTotal.text((suma + sumaImpuestos).toFixed(2));
+                var subtotal = parseFloat(suma / 1.18).toFixed(2);
+                var impuesto = parseFloat(suma - subtotal).toFixed(2);
+                $sImpuesto.text(impuesto);
+                $sSubtotal.text(subtotal)
+                sTotal.text(suma.toFixed(2));
+
+            }
+
+            $(document).on("keyup", ".pq-cantidad-o", function () {
+                var $fila = $(this).closest("tr");
+                var index = $fila.find('input').val();
+                var cantidad = $(this).val();
+                var precio = parseFloat($('#Productos_' + index + '__Precio').val());
+                var total = cantidad * precio;
+                $('#Productos_' + index + '__SubTotal').val(total.toFixed(2));
+
+                mostrarTotales();
+            });
+
+            $(document).off("change").on("change", ".cmbProducto", function () {
+                var $fila = $(this).closest("tr");
+                var index = $fila.find('input').val();
+                $.ajax({
+                    type: 'GET',
+                    url: URL_BASE + "Producto/ObtenerPreciosPorProductoId",
+                    data: { productoId: $(this).val() },
+                    success: function (data) {
+                        $('#Productos_' + index + '__Cantidad').val(1);
+                        //$('#Productos_' + index + '__PrecioSinImpuesto').val(data.PrecioSinImpuesto);
+                        $('#Productos_' + index + '__Precio').val(data.PrecioConImpuesto.toFixed(2));
+                        //$('#Productos_' + index + '__ImpuestoPrecio').val(data.ImpuestoProducto);
+                        $('#Productos_' + index + '__Impuesto').val(data.Impuesto.toFixed(2));
+
+                        var total = 1 * data.PrecioConImpuesto || 0;
+                        $('#Productos_' + index + '__SubTotal').val(total.toFixed(2));
+                        mostrarTotales();
+                    }
+                })
+            });
+
+            $(document).on("keyup", ".pq-precio-o", function () {
+
+                var $fila = $(this).closest("tr");
+                var index = $fila.find('input').val();
+                var precio = parseFloat($(this).val());
+                var cantidad = parseFloat($('#Productos_' + index + '__Cantidad').val());
+                var impuesto = parseFloat($('#Productos_' + index + '__Impuesto').val());
+                var total = cantidad * precio;
+
+
+                $('#Productos_' + index + '__SubTotal').val(total.toFixed(2));
+
+                var nuevoImpuesto = precio * impuesto;
+
+                $('#Productos_' + index + '__ImpuestoPrecio').val(nuevoImpuesto.toFixed(2));
+
+                mostrarTotales();
+            });
+
+            var sid = @Model.ClienteId;
+
+            if (sid > 0) {
+                obtenerDatosCliente(sid);
+                mostrarTotales();
+            }
+
+        })
+</script>

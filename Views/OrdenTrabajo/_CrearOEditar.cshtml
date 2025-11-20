@@ -1,0 +1,617 @@
+﻿@model OrdenTrabajoModelo
+
+<div class="modal-body">
+    <div class="form-row">
+        <table class="w-100">
+            <tr>
+                <td class="pl-1" width="130px">
+                    <div class="form-group">
+                        <label for="VendedorId" class="col-form-label col-form-label-sm font-weight-bold">Orden Nº</label>
+                        <div class="">
+                            @Html.TextBoxFor(model => model.NumeroRegistro, new { @class = "form-control form-control-sm text-center", @readonly = "readonly" })
+                        </div>
+                    </div>
+                </td>
+                <td width="26px" style="text-align:center">
+                    <i class="numeracionOrden text-primary" data-ordentrabajoid="@Model.OrdenTrabajoId">
+                        <svg version="1.1" style="vertical-align:bottom;cursor:pointer" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 512 512" xml:space="preserve" class="icon icon-sm text-top"><path d="M258.3 149.8c-57.3 0-103.9 46.6-103.9 103.9 0 57.3 46.6 103.9 103.9 103.9s104-46.6 104-103.9c0-57.3-46.6-103.9-104-103.9zm0 175.9c-39.7 0-71.9-32.3-71.9-71.9 0-39.7 32.3-71.9 71.9-71.9 39.7 0 71.9 32.3 71.9 71.9.1 39.6-32.2 71.9-71.9 71.9z"></path><path d="M491.4 202.9l-38.7-14c-3-9.5-6.6-18.6-10.7-27.1l18.3-38.3c5.6-11.8 3.2-26-6-35.2l-30.5-30.6c-9.3-9.3-23.4-11.7-35.2-6.1l-38.2 18.1c-8.1-3.8-16.7-7.1-27.1-10.3l-14-38.7C304.9 8.5 293.2.4 280.2.4h-43.6c-12.9 0-24.6 8.2-29.1 20.4l-14.1 38.8c-9.7 3.1-18.8 6.7-27.1 10.7l-38.2-18.4c-11.8-5.6-26-3.2-35.2 6L62.1 88.3c-9.3 9.3-11.7 23.5-6 35.3l18 37.8c-5.2 9.8-9.2 18.7-12.2 27l-40.8 14.2C8.6 207 .2 218.7.2 232v43.3c0 13.2 8.4 25 20.7 29.2l40.9 14.3c3.1 8.8 6.9 17.7 11.7 27.1L55.6 384c-5.6 11.9-3.2 26 6.2 35.2L92.6 450c9.2 9.2 23.4 11.7 35.2 6l38.1-18.1c9.7 5.2 18.6 9.2 27.1 12.2l14.2 40.8c4.3 12.5 16 20.8 29.3 20.8h43.3c13.2 0 25-8.4 29.3-20.8l14.2-40.9c8.9-3.1 18-7 27.1-11.7l38.1 17.9c11.8 5.6 26 3.1 35.3-6.2l30.7-30.9c9.2-9.2 11.6-23.3 6-35.2l-18.2-38.4c3.8-8 7.1-16.6 10.3-27.1l38.6-14c12.3-4.3 20.6-16 20.6-29V232c0-13-8.2-24.7-20.4-29.1zm-11.6 71.8l-38.5 14c-9.2 3.3-16.1 10.6-19 19.9v.1c-2.8 9.3-5.7 16.8-8.9 23.5-4.1 8.5-4.2 18.3-.1 26.7l18.2 38.3-29.7 29.9-38-17.9c-8.9-4.1-18.8-4-27.3.5-8 4.1-16 7.6-23.7 10.3-8.9 2.9-16.1 10.1-19.3 19.1l-14.2 40.7h-41.8L223.2 439c-3.1-8.9-10-15.9-19-19-7.3-2.6-15-6.1-23.7-10.7s-19.1-4.8-27.9-.6l-37.9 18-29.9-29.8 17.9-37.9c4.1-8.9 4-18.9-.5-27.3-4.3-8.3-7.7-16.1-10.3-23.9-3.1-8.9-10.2-16-19.1-19.1l-40.6-14.2v-41.8l40.7-14.2c8.9-3.1 15.9-10 19-18.9 2.5-7 6-14.7 10.7-23.5 4.6-8.6 4.9-19 .6-27.9l-18-37.8L115 80.9l38 18.3c8.5 4.1 18.6 4 27.1-.2 7.1-3.5 15.1-6.6 23.6-9.3 9-2.9 16.3-9.9 19.6-19l14-38.5h42.1l13.9 38.4c3.3 9.2 10.6 16.1 19.9 19h.1c9.2 2.8 16.6 5.6 23.4 8.9 8.6 4.1 18.3 4.1 26.8.1l38-18 29.5 29.6-18.2 38-.1.2c-4 8.7-4 18.5.2 26.9 3.6 7.4 6.7 15.3 9.3 23.5 2.7 9 9.8 16.4 18.9 19.8l38.5 14v42.1z"></path></svg>
+                    </i>
+                </td>
+                <td class="pl-2">
+                    <div class="form-group">
+                        <label for="VendedorId" class="col-form-label col-form-label-sm font-weight-bold">Vendedor</label>
+                        <div class="">
+                            @if (Model.Estado >= Estados.Disapro || Model.Estado == Estados.Anulado)
+                            {
+                                @Html.DropDownListFor(model => model.VendedorId, Model.VendedoresDisponibles, string.Empty, new { @class = "form-control form-control-sm bloqueado", @style = "width:100%" })
+                            }
+                            else
+                            {
+                                @Html.DropDownListFor(model => model.VendedorId, Model.VendedoresDisponibles, string.Empty, new { @class = "form-control form-control-sm", @style = "width:100%" })
+                            }
+                        </div>
+                    </div>
+                </td>
+                <td></td>
+                <td width="182px">
+                    @if (Model.OrdenTrabajoId > 0)
+                    {
+                        <div class="form-group" style="width:140px;display:inline-block">
+                            <label for="Estado" class="col-form-label col-form-label-sm font-weight-bold">Estado</label>
+                            @Html.Partial("_Estados")
+                        </div>
+                        <a title="Historial cambios de estado" href="javascript:void(0)" data-ordentrabajoid="@Model.OrdenTrabajoId" onclick="detalleEstados(this)" style="display:inline-block;margin:0 10px">
+                            <i class="fas fa-info-circle"></i>
+                        </a>
+                    }
+                    else
+                    {
+                        <div class="form-group">
+                            <label for="Estado" class="col-form-label col-form-label-sm font-weight-bold">Estado</label>
+                            @Html.Partial("_Estados")
+                        </div>
+                    }
+                </td>
+            </tr>
+        </table>
+    </div>
+    <fieldset>
+        <legend>Información Orden</legend>
+        <div class="form-row">
+            <div class="form-group col-md-10">
+                <div class="row">
+                    <label for="colFormLabelSm" class="col-sm-1 col-form-label col-form-label-sm requerido">Solicitante</label>
+                    <div class="col-sm-11">
+                        <table class="w-100">
+                            <tr>
+                                <td>
+                                    @if (Model.Estado >= Estados.Disapro || Model.Estado == Estados.Anulado)
+                                    {
+                                        @Html.DropDownListFor(model => model.ClienteId, Model.ClientesDisponibles, string.Empty, new { @class = "form-control form-control-sm bloqueado", @style = "width:100%" })
+                                    }
+                                    else
+                                    {
+                                        @Html.DropDownListFor(model => model.ClienteId, Model.ClientesDisponibles, string.Empty, new { @class = "form-control form-control-sm", @style = "width:100%" })
+                                    }
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-6 info-c">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="Direccion" class="col-sm-1 col-form-label col-form-label-sm">Dirección</label>
+                    <div class="col-sm-11">
+                        @Html.TextAreaFor(model => model.Direccion, new { @class = "form-control form-control-sm", @readonly = "readonly" })
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="Referencia" class="col-sm-1 col-form-label col-form-label-sm">Referencia</label>
+                    <div class="col-sm-11">
+                        @Html.TextAreaFor(model => model.Referencia, new { @class = "form-control form-control-sm", @readonly = "readonly" })
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="DNI_RUC" class="col-sm-1 col-form-label col-form-label-sm">DNI/RUC</label>
+                    <div class="col-sm-2">
+                        @Html.TextBoxFor(model => model.DNI_RUC, new { @class = "form-control form-control-sm", @readonly = "readonly" })
+                    </div>
+                    <label for="CentroTrabajo" class="col-sm-2 col-form-label col-form-label-sm">Centro de Trabajo</label>
+                    <div class="col-sm-3">
+                        @Html.TextBoxFor(model => model.CentroTrabajo, new { @class = "form-control form-control-sm", @readonly = "readonly" })
+                    </div>
+                    <label for="Telefonos" class="col-sm-1 col-form-label col-form-label-sm">Telefonos</label>
+                    <div class="col-sm-3">
+                        <input id="Telefonos" class="form-control form-control-sm" title="Telefono Fijo/Movil" readonly />
+                    </div>
+                </div>
+            </div>
+            @*<div class="form-group col-md-1">
+                </div>*@
+            <div class="col-md-2" style="margin-top:-22px;">
+                @*<div class="form-row">
+                        <div class="mb-1 col-md-12">
+                            @Html.Partial("_Estados")
+                        </div>
+                    </div>*@
+                <div class="form-row">
+                    <div class="mb-1 col-md-12">
+                        <label for="FechaRecepcion" class="sm mb-0">Fecha Recepción</label>
+                        @Html.TextBoxFor(model => model.FechaRecepcion, new { @Value = Model.FechaRecepcionStr, @class = Model.Estado >= Estados.Disapro || Model.Estado == Estados.Anulado ? "form-control text-center form-control-sm bloqueado" : "form-control text-center form-control-sm" })
+                    </div>
+                </div>
+                @*<div class="form-row">
+                        <div class="mb-1 col-md-12">
+                            <label for="FechaEstimadaDiseno" class="sm mb-0">Fecha Estimada Diseño</label>
+                            @Html.TextBoxFor(model => model.FechaEstimadaDiseno, new { @Value = Model.FechaEstimadaDisenoStr, @class = "form-control text-center form-control-sm" })
+                        </div>
+                    </div>*@
+                <div class="form-row">
+                    <div class="mb-1 col-md-12">
+                        <label for="FechaEstimadaEntrega" class="sm mb-0">Fecha Estimada de Entrega</label>
+                        @Html.TextBoxFor(model => model.FechaEstimadaEntrega, new { @Value = Model.FechaEstimadaEntregaStr, @class = Model.Estado >= Estados.Disapro || Model.Estado == Estados.Anulado ? "form-control text-center form-control-sm bloqueado" : "form-control text-center form-control-sm" })
+                    </div>
+                </div>
+                @*<div class="form-row">
+                        <div class="mb-1 col-md-12">
+                            <label for="FechaEgreso" class="sm mb-0">Fecha Egreso</label>
+                            @Html.TextBoxFor(model => model.FechaEgreso, new { @Value = Model.FechaEgresoStr, @class = "form-control text-center form-control-sm" })
+                        </div>
+                    </div>*@
+            </div>
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend>Información Paciente</legend>
+        <div class="form-group row">
+            <label for="Paciente" class="col-sm-1 col-form-label col-form-label-sm">Nombres</label>
+            <div class="col-sm-6">
+                @Html.TextBoxFor(model => model.Paciente, new { @class = Model.Estado >= Estados.Disapro || Model.Estado == Estados.Anulado ? "form-control form-control-sm bloqueado" : "form-control form-control-sm" })
+            </div>
+            <label for="Edad" class="col-sm-1 col-form-label col-form-label-sm">Edad</label>
+            <div class="col-sm-1">
+                @Html.TextBoxFor(model => model.Edad, new { @class = Model.Estado >= Estados.Disapro || Model.Estado == Estados.Anulado ? "form-control form-control-sm bloqueado" : "form-control form-control-sm" })
+            </div>
+            <label for="colFormLabelSm" class="col-sm-1 col-form-label col-form-label-sm">Sexo</label>
+            <div class="col-sm-2">
+                @Html.DropDownListFor(model => model.Sexo, new SelectList(
+new List<object>{
+        new { value = TipoSexo.Ninguno.ValorEntero() , text = TipoSexo.Ninguno.DescripcionAtributo()  },
+        new { value = TipoSexo.Femenino.ValorEntero() , text = TipoSexo.Femenino.DescripcionAtributo()  },
+        new { value = TipoSexo.Masculino.ValorEntero() , text = TipoSexo.Masculino.DescripcionAtributo()  }
+}, "value", "text"), new { @class = Model.Estado >= Estados.Disapro || Model.Estado == Estados.Anulado ? "form-control form-control-sm bloqueado" : "form-control form-control-sm" })
+            </div>
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend style="width:200px;float:left;">Detalle Orden</legend>
+        @if (Model.Estado < Estados.Disapro && Model.Estado != Estados.Anulado)
+        {
+            <button style="float:right" type="button" class="btn btn-danger btn-sm" id="btnAgregarProducto">
+                <span class="fas fa-plus"></span> Agregar producto
+            </button>
+        }
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-sm-12">
+                <table id="tablaProductos" class="w-100 mb-2 table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                Producto
+                            </th>
+                            <th width="150px">
+                                Color
+                            </th>
+                            <th width="60px">
+                                Cant.
+                            </th>
+                            <th width="100px">
+                                Precio
+                            </th>
+                            <th width="100px">
+                                Subtotal
+                            </th>
+                            <th width="50px">
+
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Productos.Count > 0)
+                        {
+                            foreach (var p in Model.Productos)
+                            {
+                                Html.RenderAction("AgregarProducto", "Producto", p);
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center">No tiene productos añadidos.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-sm-6">
+            </div>
+            <div class="col-sm-6 mt-3">
+                <table class="table" style="width:435px;float:right;margin-right:53px;">
+                    <tr>
+                        <td>Subtotal</td>
+                        <td class="text-right">
+                            <span id="sSubtotal">
+                                0.00
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>IGV[18%]</td>
+                        <td class="text-right">
+                            <span id="sImpuesto">
+                                0.00
+                            </span>
+                        </td>
+                    </tr>
+                    <tr style="background:#F9F8F8;border:1px solid #ECECEC">
+                        <td>Total (PEN)</td>
+                        <td class="text-right">
+                            <span id="sTotal">
+                                0.00
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="form-group col-sm-12">
+                <label class="col-form-label col-form-label-sm">Odontograma Geométrico</label>
+                @Html.ListBoxFor(model => model.Odontograma, Model.DientesDisponibles, new { @class = Model.Estado >= Estados.Disapro || Model.Estado == Estados.Anulado ? "form-control form-control-sm bloqueado" : "form-control form-control-sm" })
+            </div>
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend>Información Adicional</legend>
+        <div class="form-group row">
+            <div class="col-sm-3">
+                <div class="custom-control custom-checkbox @(Model.Estado >= Estados.Disapro || Model.Estado == Estados.Anulado ? "bloqueado" : "")">
+                    @*<input type="checkbox" class="custom-control-input" id="customCheck1">*@
+                    @Html.CheckBoxFor(model => model.RegistroMordida, new { @class = "custom-control-input" })
+                    <label class="custom-control-label" for="RegistroMordida">Registro de Mordida</label>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="custom-control custom-checkbox @(Model.Estado >= Estados.Disapro || Model.Estado == Estados.Anulado ? "bloqueado" : "")">
+                    @*<input type="checkbox" class="custom-control-input" id="customCheck1">*@
+                    @Html.CheckBoxFor(model => model.ImpresionDefinitiva, new { @class = "custom-control-input" })
+                    <label class="custom-control-label" for="ImpresionDefinitiva">Impresión Definitiva</label>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="custom-control custom-checkbox @(Model.Estado >= Estados.Disapro || Model.Estado == Estados.Anulado ? "bloqueado" : "")">
+                    @Html.CheckBoxFor(model => model.Fotografia, new { @class = "custom-control-input" })
+                    <label class="custom-control-label" for="Fotografia">Fotografia</label>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="custom-control custom-checkbox @(Model.Estado >= Estados.Disapro || Model.Estado == Estados.Anulado ? "bloqueado" : "")">
+                    @Html.CheckBoxFor(model => model.Antagonista, new { @class = "custom-control-input" })
+                    <label class="custom-control-label" for="Antagonista">Antagonista</label>
+                </div>
+            </div>
+        </div>
+        <div class="form-row form-group">
+            <div class="mb-1 col-md-12">
+                <label for="Observaciones" class="sm mb-0">Condiciones Generales</label>
+                @Html.TextAreaFor(model => model.CondicionesGenerales, new { @class = Model.Estado >= Estados.Disapro || Model.Estado == Estados.Anulado ? "form-control form-control-sm bloqueado" : "form-control form-control-sm", @rows = "3" })
+
+            </div>
+        </div>
+        <div class="form-row form-group">
+            <div class="mb-1 col-md-12">
+                <label for="Observaciones" class="sm mb-0">Depositar A</label>
+                @Html.TextAreaFor(model => model.DepositarA, new { @class = Model.Estado >= Estados.Disapro || Model.Estado == Estados.Anulado ? "form-control form-control-sm bloqueado" : "form-control form-control-sm", @rows = "5" })
+            </div>
+        </div>
+        <div class="form-row form-group">
+            <div class="mb-1 col-md-12">
+                <label for="Observaciones" class="sm mb-0">Observaciones</label>
+                @Html.TextAreaFor(model => model.Observaciones, new { @class = Model.Estado >= Estados.Disapro || Model.Estado == Estados.Anulado ? "form-control form-control-sm bloqueado" : "form-control form-control-sm" })
+            </div>
+        </div>
+    </fieldset>
+</div>
+<div class="modal-footer">
+    @*@if (Model.OrdenTrabajoId > 0)
+        {
+            <a target="_blank" href="@Url.Action("Imprimir", "OrdenTrabajo", new { ordenTrabajoId = Model.OrdenTrabajoId })" class="btn btn btn-secondary  btn-sm">
+                <span class="fas fa-print"></span>
+                Imprimir
+            </a>
+        }*@
+
+    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+    @if (Model.Estado >= Estados.Disapro && Model.Estado != Estados.Anulado)
+    {
+        if (!Model.Facturado)
+        {
+            <a href="javascript:void(0)" data-dismiss="modal" onclick="convertirAFactura(this)" data-ordentrabajoid="@Model.OrdenTrabajoId" class="btn btn-primary btn-sm">Generar ticket</a>
+        }
+        else
+        {
+            <a href="javascript:void(0)" data-dismiss="modal" onclick="confirmarFactura(this)" data-ordentrabajoid="@Model.OrdenTrabajoId" class="btn btn-primary btn-sm">Generar ticket</a>
+        }
+    }
+    @*@if (Model.Estado < Estados.Disapro)
+        {*@
+    <button type="submit" class="btn btn-danger btn-sm">Guardar</button>
+    @*}*@
+</div>
+
+<script>
+
+
+
+    $(function () {
+
+        var $form = $("#FormOrdenTrabajo");
+
+        var $clienteId = $form.find("#ClienteId");
+        var $txtDireccion = $form.find("#Direccion");
+        var $txtReferencia = $form.find("#Referencia");
+        var $txtDni = $form.find("#DNI_RUC");
+        var $txtCentroTrabajo = $form.find("#CentroTrabajo");
+        var $fechaRecepcion = $form.find("#FechaRecepcion");
+        var $fechaEstimadaDiseno = $form.find("#FechaEstimadaDiseno");
+        var $fechaEstimadaEntrega = $form.find("#FechaEstimadaEntrega");
+        var $fechaEgreso = $form.find("#FechaEgreso");
+        var $btnAgregarProducto = $form.find("#btnAgregarProducto");
+        var $tablaProductos = $form.find("#tablaProductos");
+        var $txtTelefonos = $form.find("#Telefonos");
+        var $odontograma = $form.find("#Odontograma");
+        var $vendedorId = $form.find("#VendedorId");
+
+        var $infoc = $(".info-c");
+        var $sSubtotal = $("#sSubtotal");
+        var $sImpuesto = $("#sImpuesto");
+        var sTotal = $("#sTotal");
+
+        $vendedorId.select2({
+            placeholder: "Seleccionar Vendedor",
+        });
+
+        $clienteId.select2({
+            placeholder: "Seleccionar Cliente",
+        });
+
+        $odontograma.select2({
+            maximumSelectionLength: 0,
+            placeholder: "Seleccionar Numeración",
+        });
+        $odontograma.prop("disabled", true);
+
+        var opcionesDt = {
+            "singleDatePicker": true,
+            "showDropdowns": true,
+            "timePicker": true,
+            "autoApply": false,
+            "autoUpdateInput": false,
+            "applyButtonClasses": "btn-danger",
+            "cancelClass": "btn-secondary",
+            locale: {
+                format: 'DD/MM/YYYY HH:mm',
+                applyLabel: 'Aplicar',
+                cancelLabel: 'Cancelar',
+                daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+                monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Setiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            },
+            "timePicker24Hour": true,
+        }
+
+        $fechaRecepcion.daterangepicker(opcionesDt, function (start, end, label) {
+            $fechaRecepcion.val(start.format('DD/MM/YYYY HH:mm'));
+        });
+        $fechaEstimadaDiseno.daterangepicker(opcionesDt, function (start, end, label) {
+            $fechaEstimadaDiseno.val(start.format('DD/MM/YYYY HH:mm'));
+        });
+        $fechaEstimadaEntrega.daterangepicker(opcionesDt, function (start, end, label) {
+            $fechaEstimadaEntrega.val(start.format('DD/MM/YYYY HH:mm'));
+        });
+        $fechaEgreso.daterangepicker(opcionesDt, function (start, end, label) {
+            $fechaEgreso.val(start.format('DD/MM/YYYY HH:mm'));
+        });
+
+        var obtenerDatosCliente = function (clienteId) {
+
+            var $divFacturas = '<div class="info-cliente">' +
+                '<a href="javascript:void(0)" class="info-facturas" data-clienteid="' + clienteId + '">' +
+                '<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 512 512" xml: space="preserve" class="icon icon-sm text-top text-warning"><path d="M448.4 104.8L360.6.5h.1H93.5c-16.6 0-30 13.4-30 30v452c0 16.6 13.4 30 30 30h325c16.6 0 30-13.4 30-30v-346l-.1-31.7zM256.5 397.6c-16.3 0-29.5-13.1-29.5-29.1 0-16.1 13.2-29.1 29.5-29.1s29.5 13 29.5 29.1c-.1 16-13.3 29.1-29.5 29.1zm38.9-239.2c-2.5 19.6-20.8 114.4-26.9 145.9-1.1 5.8-6.3 8.6-12.3 8.6h-.2c-6.2 0-11.5-3-12.7-9-6.1-31.9-24.4-126.4-26.9-145.7-3-23.3 15.4-43.8 39.2-43.8 24.2 0 42.8 20.4 39.8 44z"></path></svg>' +
+                'Facturas no pagadas' +
+                '</a>' +
+                '</div>';
+            var $divDetalle = '<div class="info-cliente">' +
+                '<a href="javascript:void(0)" class="info-detalle" data-clienteid="' + clienteId + '">' +
+                '<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon text-bottom"><path d="M394.8 422h-90c-11 0-20-9-20-20s9-20 20-20h90c11 0 20 9 20 20s-9 20-20 20zm97-145h-187c-11 0-20-9-20-20s9-20 20-20h187c11 0 20 9 20 20s-9 20-20 20zm0-145h-187c-11 0-20-9-20-20s9-20 20-20h187c11 0 20 9 20 20s-9 20-20 20zM227.2 422c-11 0-20-9-20-20v-37.3c0-22.2-22.3-40.3-49.8-40.3H89.8c-27.4 0-49.8 18.1-49.8 40.3V402c0 11-9 20-20 20s-20-9-20-20v-37.3c0-44.3 40.3-80.3 89.8-80.3h67.6c49.5 0 89.8 36 89.8 80.3V402c0 11-8.9 20-20 20zM123.6 244.8C80.8 244.8 46 210 46 167.2s34.8-77.6 77.6-77.6 77.6 34.8 77.6 77.6-34.8 77.6-77.6 77.6zm0-115.1c-20.7 0-37.6 16.9-37.6 37.6 0 20.7 16.8 37.6 37.6 37.6s37.6-16.9 37.6-37.6c0-20.8-16.8-37.6-37.6-37.6z"></path></svg>' +
+                'Ver detalle cliente' +
+                '</a>' +
+                '</div >';
+
+            $.ajax({
+                type: 'GET',
+                url: URL_BASE + "Cliente/ObtenerDatosClientePorId/?clienteId=" + clienteId,
+                success: function (data) {
+                    $txtDireccion.val(data.DireccionEnvio);
+                    $txtReferencia.val(data.ReferenciaEnvio);
+                    $txtDni.val(data.DNI_RUC);
+                    $txtCentroTrabajo.val(data.CentroTrabajo);
+                    $txtTelefonos.val(data.Telefonos);
+
+                    $infoc.empty();
+                    if (data.TieneFacturaNoPagadas) {
+                        $infoc.append($divFacturas);
+                        $infoc.append($divDetalle);
+                    } else {
+                        $infoc.append($divDetalle);
+                    }
+                }
+            });
+        }
+
+        $clienteId.on('change', function () {
+            var id = $(this).val()
+            obtenerDatosCliente(id);
+        });
+
+        if ($clienteId.val() > 0) {
+            obtenerDatosCliente($clienteId.val());
+        }
+
+        $(".cmbProducto").select2({
+            placeholder: "Seleccionar producto",
+        });
+        $(".cmbColor").select2();
+
+
+        detalleEstados = function (btn) {
+            var ordenTrabajoId = $(btn).data("ordentrabajoid");
+            var url = URL_BASE + "OrdenTrabajo/DetalleEstados/" + ordenTrabajoId;
+            crearModalCentradoLG(url, 1, 1);
+        };
+
+        $btnAgregarProducto.on('click', function (e) {
+
+            //var img = $(this).find('img');
+            //var span = $(this).find('div.fa.fa-spinner');
+
+            //img.hide();
+            //span.show();
+
+            var body = $tablaProductos.find('tbody');
+
+            $tablaProductos.find("tbody > tr").each(function () {
+                var td = $(this).find("td:first").html();
+                if (td === "No tiene productos añadidos.") {
+                    $tablaProductos.find("tbody").empty();
+                }
+            });
+
+            $.ajax({
+                url: URL_BASE + "Producto/AgregarProducto",
+                cache: false,
+                success: function (html) {
+                    body.append(html);
+                    $("form").removeData("validator");
+                    $("form").removeData("unobtrusiveValidation");
+                    $.validator.unobtrusive.parse("form");
+                    $(".cmbProducto").select2({
+                        placeholder: "Seleccionar producto",
+                    });
+                    $(".cmbColor").select2();
+                    mostrarTotales();
+                },
+                complete: function () {
+                    //img.show();
+                    //span.hide();
+                }
+            });
+
+            $tablaProductos.find("tbody > tr td .btnEliminarProducto").bind('click', function () {
+                eliminarFila(this);
+            });
+
+        });
+
+        $(document).on("click", ".btnEliminarProducto", function () {
+            eliminarFila(this);
+        });
+
+        var eliminarFila = function (fila) {
+            var $fila = $(fila).closest("tr");
+            $fila.remove();
+            mostrarTotales();
+        };
+
+        var mostrarTotales = function () {
+
+            var suma = 0;
+            //var sumaImpuestos = 0;
+            var cantidadTotalTabla = 0;
+
+            $tablaProductos.find("tbody > tr").each(function () {
+                var index = $(this).find('input').val();
+
+                var precio = parseFloat($('#Productos_' + index + '__Precio').val()) || 0;
+                var cantidad = parseFloat($('#Productos_' + index + '__Cantidad').val()) || 0;
+                var importe = parseFloat($(this).find('#Productos_' + index + '__SubTotal').val()) || 0;
+                //var impuesto = (cantidad * parseFloat($('#Productos_' + index + '__ImpuestoPrecio').val())) || 0;
+                suma = suma + importe;
+                //sumaImpuestos = sumaImpuestos + impuesto;
+                cantidadTotalTabla = cantidadTotalTabla + cantidad;
+            });
+
+            //$sSubtotal.text(suma.toFixed(2));
+            //var impuesto = parseFloat(suma * 0.18).toFixed(2);
+            //var subtotal = parseFloat(suma - impuesto).toFixed(2);
+            var subtotal = parseFloat(suma / 1.18).toFixed(2);
+            var impuesto = parseFloat(suma - subtotal).toFixed(2);
+            $sImpuesto.text(impuesto);
+            $sSubtotal.text(subtotal)
+            sTotal.text(suma.toFixed(2));
+
+            if (cantidadTotalTabla > 0) {
+                $odontograma.prop("disabled", false);
+                $odontograma.select2({
+                    placeholder: "Seleccionar Numeración",
+                    language: {
+                        maximumSelected: function (e) {
+                            var t = "Solo puedes seleccionar " + e.maximum + " elemento";
+                            e.maximum != 1 && (t += "s");
+                            return t;
+                        }
+                    },
+                    maximumSelectionLength: cantidadTotalTabla
+                });
+            }
+        }
+
+        $(document).on("keyup", ".pq-cantidad-o", function () {
+            var $fila = $(this).closest("tr");
+            var index = $fila.find('input').val();
+            var cantidad = $(this).val();
+            var precio = parseFloat($('#Productos_' + index + '__Precio').val());
+            var total = cantidad * precio;
+            $('#Productos_' + index + '__SubTotal').val(total.toFixed(2));
+            mostrarTotales();
+        });
+
+        $(document).off("change", ".cmbProducto").on("change", ".cmbProducto", function () {
+            var $fila = $(this).closest("tr");
+            var index = $fila.find('input').val();
+            $.ajax({
+                type: 'GET',
+                url: URL_BASE + "Producto/ObtenerPreciosPorProductoId",
+                data: { productoId: $(this).val() },
+                success: function (data) {
+                    $('#Productos_' + index + '__Cantidad').val(1);
+                    //$('#Productos_' + index + '__PrecioSinImpuesto').val(data.PrecioSinImpuesto);
+                    $('#Productos_' + index + '__Precio').val(data.PrecioConImpuesto.toFixed(2));
+                    //$('#Productos_' + index + '__ImpuestoPrecio').val(data.ImpuestoProducto);
+                    $('#Productos_' + index + '__Impuesto').val(data.Impuesto.toFixed(2));
+
+                    var total = 1 * data.PrecioConImpuesto || 0;
+                    $('#Productos_' + index + '__SubTotal').val(total.toFixed(2));
+                    mostrarTotales();
+                }
+            })
+        });
+
+        $(document).on("keyup", ".pq-precio-o", function () {
+
+            var $fila = $(this).closest("tr");
+            var index = $fila.find('input').val() || 0;
+            var precio = parseFloat($(this).val()) || 0;
+            var cantidad = parseFloat($('#Productos_' + index + '__Cantidad').val()) || 0;
+            var impuesto = parseFloat($('#Productos_' + index + '__Impuesto').val()) || 0;
+            var total = (cantidad * precio) || 0;
+
+
+            $('#Productos_' + index + '__SubTotal').val(total.toFixed(2));
+
+            var nuevoImpuesto = precio * impuesto;
+
+            $('#Productos_' + index + '__ImpuestoPrecio').val(nuevoImpuesto);
+
+            mostrarTotales();
+        });
+
+         var sid = @Model.OrdenTrabajoId;
+
+        if (sid > 0) {
+            mostrarTotales();
+        }
+    })
+</script>

@@ -1,0 +1,15 @@
+﻿@model OrdenTrabajoModelo
+
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLongTitle">Editar Orden Trabajo</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+@using (Html.BeginForm("Editar", "OrdenTrabajo", FormMethod.Post, new { @autocomplete = "off", @id = "FormOrdenTrabajo" }))
+{
+    @Html.HiddenFor(model => model.OrdenTrabajoId)
+    <text>
+        @Html.Partial("_CrearOEditar")
+    </text>
+}

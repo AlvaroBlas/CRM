@@ -1,0 +1,131 @@
+﻿@model MedicalDentCRM.Base.Cliente
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(model => model.ClienteId)
+    <div class="row">
+        <div class="col-md-6">
+            <h4>Detalle Cuenta</h4>
+            <div class="row col-md-12">
+                <div class="form-group col-md-12">
+                    <label class="col-form-label col-form-label-sm">Cuenta</label>
+                    @Html.TextBoxFor(model => model.Cuenta, new { @class = "form-control form-control-sm" })
+                </div>
+            </div>
+            <div class="row col-md-12">
+                <div class="form-group col-md-3">
+                    <label class="col-form-label col-form-label-sm">
+                        Tel. fijo
+                    </label>
+                    @Html.TextBoxFor(model => model.TelefonoFijo, new { @class = "form-control form-control-sm" })
+                </div>
+                <div class="form-group col-md-3">
+                    <label class="col-form-label col-form-label-sm">Tel. Movil</label>
+                    @Html.TextBoxFor(model => model.TelefonoMovil, new { @class = "form-control form-control-sm" })
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="col-form-label col-form-label-sm">Email</label>
+                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control form-control-sm" })
+                </div>
+                @*<div class="form-group col-md-4">
+                        <label class="col-form-label col-form-label-sm">Sitio Web</label>
+                        @Html.TextBoxFor(model => model.SitioWeb, new { @class = "form-control form-control-sm" })
+                    </div>*@
+            </div>
+            <div class="row col-md-12">
+                <div class="form-group col-md-3">
+                    <label class="col-form-label col-form-label-sm">RUC</label>
+                    @Html.TextBoxFor(model => model.RUC, new { @class = "form-control form-control-sm" })
+                </div>
+                <div class="form-group col-md-3">
+                    <label class="col-form-label col-form-label-sm">DNI</label>
+                    @Html.TextBoxFor(model => model.NumeroDocumento, new { @class = "form-control form-control-sm" })
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="col-form-label col-form-label-sm">Centro Trabajo</label>
+                    @Html.TextBoxFor(model => model.CentroTrabajo, new { @class = "form-control form-control-sm" })
+                </div>
+            </div>
+            <div class="row col-md-12">
+                <div class="form-group col-md-6">
+                    <label class="col-form-label col-form-label-sm">Colegiatura</label>
+                    @Html.TextBoxFor(model => model.Colegiatura, new { @class = "form-control form-control-sm" })
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="col-form-label col-form-label-sm">Especialización</label>
+                    @Html.TextBoxFor(model => model.Especializacion, new { @class = "form-control form-control-sm" })
+                </div>
+            </div>
+            <h4>Información Dirección</h4>
+            <div class="row col-md-12">
+                <div class="form-group col-md-12">
+                    <label class="col-form-label col-form-label-sm">Dirección(Factura)</label>
+                    @Html.TextAreaFor(model => model.DireccionFactura, new { @class = "form-control form-control-sm" })
+                </div>
+
+            </div>
+            <div class="row col-md-12">
+                <div class="form-group col-md-6">
+                    <label class="col-form-label col-form-label-sm">Distrito(Factura)</label>
+                    @Html.TextBoxFor(model => model.DistritoFactura, new { @class = "form-control form-control-sm" })
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="col-form-label col-form-label-sm">Dirección(Factura)</label>
+                    @Html.TextBoxFor(model => model.DepartamentoFactura, new { @class = "form-control form-control-sm" })
+                </div>
+            </div>
+            <div class="row col-md-12">
+                <div class="form-group col-md-12">
+                    <label class="col-form-label col-form-label-sm">Dirección(Envio)</label>
+                    @Html.TextAreaFor(model => model.DireccionEnvio, new { @class = "form-control form-control-sm" })
+                </div>
+
+            </div>
+            <div class="row col-md-12">
+                <div class="form-group col-md-6">
+                    <label class="col-form-label col-form-label-sm">Distrito(Envio)</label>
+                    @Html.TextBoxFor(model => model.DistritoEnvio, new { @class = "form-control form-control-sm" })
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="col-form-label col-form-label-sm">Dirección(Envio)</label>
+                    @Html.TextBoxFor(model => model.DepartamentoEnvio, new { @class = "form-control form-control-sm" })
+                </div>
+            </div>
+            <h4>Observaciones</h4>
+            <div class="row col-md-12">
+                <div class="form-group col-md-12">
+                    <label class="col-form-label col-form-label-sm">Observación</label>
+                    @Html.TextAreaFor(model => model.Observacion, new { @class = "form-control form-control-sm" })
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row col-md-12">
+                <nav class="mt-2 w-100">
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <a class="nav-item nav-link active" data-toggle="tab" href="#nav-comentario" role="tab" aria-controls="nav-home" aria-selected="true">Comentario</a>
+                        <a class="nav-item nav-link" data-toggle="tab" href="#nav-llamada" role="tab" aria-controls="nav-profile" aria-selected="false">Llamada</a>
+                        <a class="nav-item nav-link" data-toggle="tab" href="#nav-sms" role="tab" aria-controls="nav-contact" aria-selected="false">SMS</a>
+                        <a class="nav-item nav-link" data-toggle="tab" href="#nav-email" role="tab" aria-controls="nav-contact" aria-selected="false">Email</a>
+                    </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="nav-comentario" role="tabpanel" aria-labelledby="nav-general">
+                    </div>
+                    <div class="tab-pane fade" id="nav-llamada" role="tabpanel" aria-labelledby="nav-ordenes">...</div>
+                    <div class="tab-pane fade" id="nav-sms" role="tabpanel" aria-labelledby="nav-facturas">...</div>
+                    <div class="tab-pane fade" id="nav-email" role="tabpanel" aria-labelledby="nav-historial">...</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="row col-md-12">
+                <div class="modal-footer">
+                    <a href="@Url.Action("Index","Cliente")" class="btn btn-secondary btn-sm">Cerrar</a>
+                    <button type="submit" class="btn btn-danger btn-sm">Actualizar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}

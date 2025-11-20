@@ -1,0 +1,270 @@
+﻿@model List<ClienteModelo>
+
+@{
+    ViewBag.Titulo = "Productos";
+}
+
+<div class="titulo">
+    <div class="t1">
+        <span class="t11">Productos</span>
+        <span class="t12">Todos los productos</span>
+    </div>
+    <div class="t2">
+        <button id="nuevoProducto" data-url-crear="@Url.Action("Crear","Producto")" type="button" class="btn btn-danger my-1 btn-sm">
+            <i class="fas fa-plus"></i> Nuevo producto
+        </button>
+        <div class="btn-group accioneslista">
+            <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="fas fa-list"></span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right">
+                <a download class="dropdown-item" href="javascript:void(0)" id="btnExportarClientes">
+                    <span class="fas fa-upload"></span> Exportar productos
+                </a>
+                <div class="dropdown-divider"></div>
+                <a title="Actualizar" class="dropdown-item btnBuscarProductos" href="javascript:void(0)">
+                    <span class="fas fa-sync-alt"></span> Actualizar la lista
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div>
+<div class="lista">
+    <form class="form-inline form-f" autocomplete="off">
+        <table class="w-100">
+            <tr>
+                <td>
+                    <div class="btn-group" role="group">
+                        <span style="line-height:27px">|</span>
+                        <button type="button" class="btn btn-f b">FILTROS</button>
+                        <button id="btnGroupDrop1" type="button" class="btn btn-f dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Nombre producto
+                        </button>
+                        <div class="dropdown-menu p-0" aria-labelledby="btnGroupDrop1">
+                            <div class="input-group">
+                                <input type="text" class="form-control form-control-sm" id="txtProducto" aria-describedby="button-addon2">
+                                <div class="input-group-append">
+                                    <button class="btn btn-light btn-outline-dark btn-sm" type="button">
+                                        <span class="fas fa-times"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dropdown">
+                            <button id="btndis" type="button" class="btn btn-f dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Codigo producto
+                            </button>
+                            <div class="dropdown-menu p-0" aria-labelledby="btndis">
+                                <div class="input-group">
+                                    <input type="text" class="form-control form-control-sm" id="txtCodigoProducto" aria-describedby="button-addon2">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-light btn-outline-dark btn-sm" type="button">
+                                            <span class="fas fa-times"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @*<div class="dropdown">
+                                <button id="btndis" type="button" class="btn btn-f dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Distrito
+                                </button>
+                                <div class="dropdown-menu p-0" aria-labelledby="btndis">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control form-control-sm" id="txtDistrito" aria-describedby="button-addon2">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-light btn-outline-dark btn-sm" type="button">
+                                                <span class="fas fa-times"></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>*@
+                        <button type="button" class="btn btn-f" id="btnBorrarFiltros">
+                            <i class="fas fa-eraser"></i>
+                            Borrar Filtros
+                        </button>
+
+                    </div>
+                </td>
+                <td class="text-right">
+                    <div class="">
+                        <button title="Actualizar" type="submit" class="btn btn-secondary btnBuscarProductos btn-sm" style="padding:1px 10px">
+                            <i class="fas fa-sync-alt"></i> Actualizar
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        @*<select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+                <option selected>Choose...</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+            </select>
+
+            <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                <input type="checkbox" class="custom-control-input" id="customControlInline">
+                <label class="custom-control-label" for="customControlInline">Remember my preference</label>
+            </div>*@
+    </form>
+
+    <table class="table table-hover table-striped table-bordered" id="tablaProductos" style="width:100%">
+        <thead>
+            <tr>
+                <th>
+                    Nombre
+                </th>
+                <th>
+                    <span class="t-e-a">
+                        <span class="t-e-b">
+                            Codigo de Producto
+                        </span>
+                    </span>
+                </th>
+                <th>
+                    Descripción
+                </th>
+                <th>
+                    Tarifa
+                </th>
+                <th>
+                    Unidad
+                </th>
+                <th>
+                    Acciones
+                </th>
+            </tr>
+        </thead>
+    </table>
+</div>
+@section scripts{
+    <script>
+        $(function () {
+
+            var $btnNuevoProducto = $("#nuevoProducto");
+            var $tbProductos = $("#tablaProductos");
+            var $btnBuscar = $(".btnBuscarProductos");
+            var $btnBorrarFiltros = $("#btnBorrarFiltros");
+            var $txtProducto = $("#txtProducto");
+            var $txtCodigoProducto = $("#txtCodigoProducto");
+
+            $btnBorrarFiltros.on('click', function () {
+                $txtProducto.val("");
+                $txtCodigoProducto.val("");
+                $btnBuscar.trigger('click');
+            })
+
+            $btnNuevoProducto.on('click', function () {
+                var url = $(this).data("url-crear");
+                crearModalLG(url, 1, 1);
+            });
+
+            this.editarProducto = function (btn) {
+                var id = $(btn).data("productoid");
+                var url = URL_BASE + "Producto/Editar/" + id;
+                crearModalLG(url, 1, 1);
+            };
+
+            this.eliminarProducto = function (btn) {
+                var id = $(btn).data("productoid");
+                var url = URL_BASE + "Producto/Eliminar/" + id;
+                crearModalCentrado(url, 1, 1);
+            };
+
+            var dataTable = $tbProductos.DataTable({
+                "dom": dom,
+                "oLanguage": idiomaDT,
+                "bRetrieve": true,
+                "bServerSide": true,
+                "filter": true,
+                //"iDisplayLength": cantidadFilas(),
+                "iDisplayLength": 10,
+                //processing: true,
+                "ajax": {
+                    "type": "POST",
+                    "url": URL_BASE + 'Producto/ObtenerProductos',
+                    "contentType": 'application/json; charset=utf-8',
+                    'data': function (data) {
+                        data.producto = $txtProducto.val();
+                        data.codigo = $txtCodigoProducto.val();
+                        return JSON.stringify(data);
+                    }
+                },
+                "columns": [
+                    {
+                        data: "Nombre",
+                        name: "Nombre",
+                        sWidth: "20%",
+                        render: function (data, type, fila) {
+                            return '<span class="t-e-a"><span class="t-e-b"><a  href="javascript:void(0)" title="Editar" onclick="editarProducto(this)"  data-productoid="' + fila.ProductoId + '">' + fila.Nombre + '</span></span></a>'
+                        }
+                    },
+                    {
+                        data: "Codigo",
+                        name: "Codigo",
+                        sWidth: "10%",
+                        orderable: false,
+                    },
+                    {
+                        data: "Descripcion",
+                        name: "Descripcion",
+                        sWidth: "20%",
+                        orderable: false,
+                        render: function (data, type, fila) {
+                            return '<span class="t-e-a"><span class="t-e-b">' + fila.Descripcion + '</span></span>'
+                        }
+                    },
+                    {
+                        data: "Tarifa",
+                        name: "Tarifa",
+                        sWidth: "15%",
+                        sClass: "text-right",
+                        orderable: false,
+                        render: function (data, type, fila) {
+                            return '<span>' + (fila.Moneda + fila.TarifaStr) + '</span>'
+                        }
+                    },
+                    {
+                        data: "Unidad",
+                        name: "Unidad",
+                        sWidth: "10%",
+                        sClass: 'text-right',
+                        orderable: false,
+                    },
+                    {
+                        data: "Acciones",
+                        name: "Acciones",
+                        sWidth: "1%",
+                        sClass: 'text-center',
+                        orderable: false,
+                        render: function (data, type, fila) {
+                            var menu = '<a class="nav-item dropdown-toggle mr-md-2" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="display:block">' +
+                                '<span class="fas fa fa-ellipsis-v"></span></a>' +
+                                '<div class="dropdown-menu dropdown-menu-right">' +
+                                '<a class="dropdown-item" href="javascript:void(0)" title="Editar" onclick="editarProducto(this)" data-productoid="' + fila.ProductoId + '"><span class="fas fa-edit"></span> Editar</a>' +
+                                '<a class="dropdown-item" href="javascript:void(0)" title="Eliminar" onclick="eliminarProducto(this)" data-productoid="' + fila.ProductoId + '"><span class="fas fa-trash"></span> Eliminar</a>' +
+                                '</div>'
+                            return menu;
+                        }
+                    },
+                ],
+                "drawCallback": function (settings) {
+                    botonActualizar2("btnBuscarProducto");
+                },
+            });
+
+            $btnBuscar.click(function (e, draw) {
+                e.preventDefault();
+                botonActualizar("btnBuscarProducto");
+
+                if (typeof draw === 'undefined')
+                    draw = true;
+
+                dataTable.draw(draw);
+            });
+        });
+    </script>
+}

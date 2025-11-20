@@ -1,0 +1,31 @@
+﻿@model MedicalDentCRM.Base.Vendedor
+
+<style>
+    .tab-pane {
+        padding: 10px;
+    }
+</style>
+
+<div class="modal-body">
+
+    <fieldset>
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label for="Nombre" class="sm">Nombre</label>
+                <input type="hidden" id="FakePassword" name="FakePassword" />
+                @Html.TextBoxFor(model => model.NombreCompleto, new { @class = "form-control form-control-sm", @autocomplete = "off" })
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label for="Email" class="sm">Email</label>
+                @Html.TextBoxFor(model => model.Email, new { @class = "form-control form-control-sm", @autocomplete = "off" })
+            </div>
+        </div>
+
+    </fieldset>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+    <button type="submit" class="btn btn-danger btn-sm">Guardar</button>
+</div>

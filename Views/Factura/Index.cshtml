@@ -1,0 +1,373 @@
+﻿@model List<OrdenTrabajoModelo>
+
+@{
+    ViewBag.Titulo = "Tickets";
+}
+
+<div class="titulo">
+    <div class="t1">
+        <span class="t11">Facturas</span>
+        <span class="t12">Todas las facturas</span>
+    </div>
+    <div class="t2">
+        <a href="javascript:void(0)" onclick="crearFactura(this)" class="btn btn-danger my-1 btn-sm">
+            <i class="fas fa-plus"></i> Nuevo ticket
+        </a>
+        @*<a href="javascript:void(0)" onclick="crearPagoRecibido()" class="btn btn-danger my-1 btn-sm">
+            <i class="fas fa-plus"></i> Nuevo pago
+        </a>*@
+        <div class="btn-group accioneslista">
+            <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="fas fa-list"></span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right">
+                @*<div class="dropdown-divider"></div>*@
+                <a download class="dropdown-item" href="javascript:void(0)" id="btnExportarClientes">
+                    <span class="fas fa-upload"></span> Exportar facturas
+                </a>
+                <a title="Actualizar" class="dropdown-item btnBuscarFactura" href="javascript:void(0)">
+                    <span class="fas fa-sync-alt"></span> Actualizar la lista
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div>
+<div class="lista">
+    <form class="form-inline form-f" autocomplete="off">
+        <div class="btn-group" role="group">
+            <span style="line-height:27px">|</span>
+            <button type="button" class="btn btn-f b">FILTROS</button>
+            <button id="btnGroupDrop1" type="button" class="btn btn-f dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Cuenta
+            </button>
+            <div class="dropdown-menu p-0">
+                <div class="input-group">
+                    <input type="text" class="form-control form-control-sm" id="txtCuenta">
+                    <div class="input-group-append">
+                        <button class="btn btn-light btn-outline-dark btn-sm" type="button">
+                            <span class="fas fa-times"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="">
+                <button id="btnGroupDrop1" type="button" class="btn btn-f dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Estado
+                </button>
+                <div class="dropdown-menu evento p-0">
+                    <div class="input-group">
+                        @Html.DropDownList("CmbEstado", new SelectList(
+                               new List<object>{
+                 new { value = "" , text = ""  },
+                 new { value = EstadoFactura.Anulado.ValorEntero() , text = EstadoFactura.Anulado.DescripcionAtributo()  },
+                 new { value = EstadoFactura.Pendiente.ValorEntero() , text = EstadoFactura.Pendiente.DescripcionAtributo()  },
+                 new { value = EstadoFactura.Pagado.ValorEntero() , text = EstadoFactura.Pagado.DescripcionAtributo()  },
+                 //new { value = EstadoFactura.Vencido.ValorEntero() , text = EstadoFactura.Vencido.DescripcionAtributo()  }
+                               }, "value", "text"), new { @class = "form-control form-control-sm", @style="width:83% !important" })
+                        <div class="input-group-append">
+                            <button class="btn btn-light btn-outline-dark btn-sm" type="button">
+                                <span class="fas fa-times"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-f" id="btnBorrarFiltros">
+                <i class="fas fa-eraser"></i>
+                Borrar Filtros
+            </button>
+        </div>
+        <div class="btnes">
+            <button title="Actualizar" type="submit" class="btn btn-secondary btn-sm btnBuscarFactura ocultar" style="padding:1px 10px">
+                <i class="fas fa-sync-alt"></i> Actualizar la lista
+            </button>
+        </div>
+        @*<button title="Actualizar" type="submit" style="display:none" class="btn btn-primary btn-sm" id="btnBuscarFactura">
+                <i class="fas fa-sync-alt"></i>
+            </button>*@
+    </form>
+
+    <table class="table w-100 table-striped table-hover table-bordered dt-responsive nowrap" id="tablaFacturas">
+        <thead>
+            <tr>
+                <th>
+                    FECHA
+                </th>
+                <th>
+                    <span class="t-e-a" title="Nº DE FACTURA">
+                        <span class="t-e-b">
+                            Nº DE TICKET
+                        </span>
+                    </span>
+                </th>
+                <th>
+                    <span class="t-e-a" title="NÚMERO DE ORDEN">
+                        <span class="t-e-b">
+                            NÚMERO DE ORDEN
+                        </span>
+                    </span>
+                </th>
+                <th>
+                    <span class="t-e-a" title="NOMBRE DEL CLIENTE">
+                        <span class="t-e-b">
+                            NOMBRE DEL CLIENTE
+                        </span>
+                    </span>
+                </th>
+                <th>
+                    <span class="t-e-a" title="ESTADO">
+                        <span class="t-e-b">
+                            ESTADO
+                        </span>
+                    </span>
+                </th>
+                <th>
+                    <span class="t-e-a" title="FECHA DE VENCIMIENTO">
+                        <span class="t-e-b">
+                            FECHA DE VENCIMIENTO
+                        </span>
+                    </span>
+                </th>
+                <th>
+                    <span class="t-e-a" title="TOTAL">
+                        <span class="t-e-b">
+                            TOTAL
+                        </span>
+                    </span>
+                </th>
+                <th>
+                    <span class="t-e-a" title="SALDO ADEUDADO">
+                        <span class="t-e-b">
+                            SALDO ADEUDADO
+                        </span>
+                    </span>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+@section scripts{
+    <script>
+        $(function () {
+
+            var $txtCuenta = $("#txtCuenta");
+            var $tbFacturas = $("#tablaFacturas");
+            var $btnBuscar = $(".btnBuscarFactura");
+            var $btnBorrarFiltros = $("#btnBorrarFiltros");
+            var $cmbEstado = $("#CmbEstado");
+
+            $btnBorrarFiltros.on('click', function () {
+                $txtCuenta.val("");
+                $cmbEstado.val("");
+                $btnBuscar.trigger('click');
+            })
+
+            $cmbEstado.select2({
+                "placeholder": "--"
+            });
+
+            eliminarFactura = function (btn) {
+                var id = $(btn).data("facturaid");
+                var url = URL_BASE + "Factura/Eliminar/" + id;
+                crearModalCentrado(url, 1, 1);
+            };
+
+            this.registrarPago = function (btn) {
+                var id = $(btn).data("facturaid");
+                var url = URL_BASE + "Factura/RegistrarPago/" + id;
+                crearModalIzquierdolLG(url, 1, 1);
+            };
+
+            this.listaPago = function (btn) {
+                var id = $(btn).data("facturaid");
+                var url = URL_BASE + "Factura/ListaPagos/" + id;
+                crearModalCentradoLG(url, 1, 1);
+            };
+
+            $cmbEstado.on('change', function () {
+                dataTable.ajax.url(URL_BASE + 'Factura/ObtenerFacturas/?estado=' + $(this).val());
+                dataTable.draw();
+            });
+
+            this.vistaPrevia = function (btn, pdf) {
+                var id = $(btn).data("facturaid");
+                var url = URL_BASE + "Factura/VistaPrevia?id=" + id + "&pdf=" + pdf;
+                crearModalXL(url, 1, 1);
+            }
+
+            marcarComoEnviado = function (btn) {
+                bloquearDiv($('html'));
+                var id = $(btn).data("facturaid");
+                var url = URL_BASE + "Factura/MarcarComoEnviado/" + id;
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: { id: id },
+                    success: function (data) {
+                        if (data.resultado === OK) {
+                            if (typeof data.crear !== "undefined" && data.crear === OK) {
+                                var oTable = $('#' + data.tabla).DataTable();
+                                oTable.draw(false);
+                            } else if (typeof data.actualizar !== "undefined" && data.actualizar === OK) {
+                                oTable = $('#' + data.tabla).DataTable();
+                                oTable.draw(false);
+                            }
+                            if (data.mensaje !== null) {
+                                mensajeDevCore(1, data.mensaje);
+                            }
+                        } else if (data.resultado === ALERTA) {
+                            mensajeDevCore(2, data.mensaje);
+                        } else if (data.resultado === ERROR) {
+                            if (detalleErrorMensaje === true) {
+                                data.mensaje = data.mensaje + "<br />" + (data.detalleError !== null ? data.detalleError : "");
+                            }
+                            mensajeDevCore(3, data.mensaje);
+                        }
+                    },
+                    complete: function () {
+                        desbloquearDiv($("html"));
+                    }
+                })
+            }
+
+
+            var dataTable = $tbFacturas.DataTable({
+                "dom": dom,
+                "oLanguage": idiomaDT,
+                responsive: true,
+                "bRetrieve": true,
+                "bServerSide": true,
+                "filter": true,
+                "iDisplayLength": 10,
+                //processing: true,
+                "ajax": {
+                    "type": "POST",
+                    "url": URL_BASE + 'Factura/ObtenerFacturas',
+                    "contentType": 'application/json; charset=utf-8',
+                    'data': function (data) {
+                        data.cuenta = $txtCuenta.val();
+                        data.estado = $cmbEstado.val();
+                        return JSON.stringify(data);
+                    }
+                },
+                "order": [[0, "desc"]],
+                "columns": [
+                    {
+                        data: "FechaFactura",
+                        name: "FechaFactura",
+                        sWidth: "8%",
+                        render: function (data, type, fila) {
+                            return '<span>' + fila.FechaFacturaStr + '</span>'
+                        }
+                    },
+                    {
+                        data: "NumeroFactura",
+                        name: "NumeroFactura",
+                        sWidth: "8%",
+                        orderable: false,
+                    },
+                    {
+                        data: "NumeroOrden",
+                        name: "NumeroOrden",
+                        sWidth: "8%",
+                        orderable: false,
+                    },
+                    {
+                        data: "NombreCliente",
+                        name: "NombreCliente",
+                        sWidth: "15%",
+                        orderable: false,
+                    },
+                    {
+                        data: "EstadoStr",
+                        name: "EstadoStr",
+                        sWidth: "5%",
+                        orderable: false,
+                        render: function (data, type, fila) {
+
+                            var css = "";
+
+                            if (fila.Estado == 1)
+                                css = "text-primary"                          
+                            else if (fila.Estado == 2)
+                                css = "text-success"
+                            else if (fila.Estado == 3)
+                                css = "text-secondary"
+
+                            return '<span class="' + css + '">' + fila.EstadoStr + '</span>'
+                        }
+                    },
+                    {
+                        data: "FechaVencimientoStr",
+                        name: "FechaVencimiento",
+                        sWidth: "10%",
+                        orderable: false,
+                    },
+                    {
+                        data: "Total",
+                        name: "Total",
+                        sWidth: "10%",
+                        sClass: "text-right",
+                        orderable: false,
+                        render: function (data, type, fila) {
+                            return '<span>' + (fila.Moneda + fila.TotalStr) + '</span>'
+                        }
+                    },
+                    {
+                        data: "SaldoAdeudado",
+                        name: "SaldoAdeudado",
+                        sWidth: "10%",
+                        sClass: "text-right",
+                        orderable: false,
+                        render: function (data, type, fila) {
+                            return '<span>' + (fila.Moneda + fila.SaldoAdeudadoStr) + '</span>'
+                        }
+                    },
+                    {
+                        data: "Acciones",
+                        name: "Acciones",
+                        sWidth: "2%",
+                        sClass: "text-center",
+                        orderable: false,
+                        render: function (data, type, fila) {
+                            var menu = '<a class="nav-item dropdown-toggle mr-md-2" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="display:block">' +
+                                '<span class="fas fa fa-ellipsis-v"></span></a>' +
+                                '<div class="dropdown-menu dropdown-menu-right">' +
+                                '<a class="dropdown-item" href="javascript:void(0)" title="Editar" onclick="editarFactura(this)" data-facturaid="' + fila.FacturaId + '"><span class="fas fa-edit"></span> Editar</a>' +
+                                '<a class="dropdown-item" href="javascript:void(0)" title="Eliminar" onclick="eliminarFactura(this)" data-facturaid="' + fila.FacturaId + '"><span class="fas fa-trash"></span> Eliminar</a>' +
+                                //'<a class="dropdown-item" href="javascript:void(0)" title="Descargar Pdf" onclick="eliminarOrden(this)" data-facturaid="' + fila.FacturaId + '"><span class="fas fa-file-pdf"></span> Descargar Pdf</a>' +
+                                //'<a class="dropdown-item" href="javascript:void(0)" title="Imprimir factura" onclick="vistaPrevia(this,1)" data-facturaid="' + fila.FacturaId + '"><span class="fas fa-print"></span> Imprimir factura</a>' +
+                                (fila.Estado !== 2 ? '<a class="dropdown-item" href="javascript:void(0)" title="Registrar pago" onclick="registrarPago(this)" data-facturaid="' + fila.FacturaId + '"><span class="fas fa-money-bill"></span> Registrar Pago</a>' : "") +
+                                (fila.Estado > 0 ? '<a class="dropdown-item" href="javascript:void(0)" title="Lista de pagos" onclick="listaPago(this)" data-facturaid="' + fila.FacturaId + '"><span class="fas fa-list"></span> Lista de Pagos</a>' : "") +
+                                (fila.Estado === 2 ? '<a class="dropdown-item" href="javascript:void(0)" title="Imprimir comprobante de pago" onclick="vistaPrevia(this,1)" data-facturaid="' + fila.FacturaId + '"><span class="fas fa-print"></span> Imprimir comprobante de pago</a>' : "" )
+                                //'<a class="dropdown-item" href="javascript:void(0)" title="Descargar Pdf" onclick="eliminarOrden(this)" data-facturaid="' + fila.FacturaId + '"><span class="fas fa-file-pdf"></span> Descargar comprobante Pdf</a>' +                                
+                                //(fila.Estado !== 2 && fila.Estado !== 4 ? '<a class="dropdown-item" href="javascript:void(0)" title="Marcar como enviado" onclick="marcarComoEnviado(this)" data-facturaid="' + fila.FacturaId + '"><span class="fas fa-check-double"></span> Marcar como enviado</a>' : "") +
+                                '</div>'
+                            return menu;
+                        }
+                    }
+                ],
+                "drawCallback": function (settings) {
+                    botonActualizar2("btnBuscarOrden");
+                },
+            });
+
+            $btnBuscar.click(function (e, draw) {
+                e.preventDefault();
+                botonActualizar("btnBuscarOrden");
+
+                if (typeof draw === 'undefined')
+                    draw = true;
+
+                dataTable.draw(draw);
+            });
+
+            $(document).on('click', '.dropdown-menu.evento', function (e) {
+                e.stopPropagation();
+            });
+        });
+    </script>
+}

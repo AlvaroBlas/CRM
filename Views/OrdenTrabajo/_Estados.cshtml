@@ -1,0 +1,74 @@
+﻿@model OrdenTrabajoModelo
+
+@if (Model.OrdenTrabajoId > 0)
+{
+    if (Model.Estado == Estados.Recibido)
+    {
+        @Html.DropDownListFor(model => model.Estado, new SelectList(
+                            new List<object>{
+              new { value = Estados.Recibido.ValorEntero() , text = Estados.Recibido.DescripcionAtributo()  },
+              new { value = Estados.Aprobado.ValorEntero() , text = Estados.Aprobado.DescripcionAtributo()  },
+              new { value = Estados.Anulado.ValorEntero() , text = Estados.Anulado.DescripcionAtributo()  }
+                            }, "value", "text"), new { @class = "form-control form-control-sm" })
+    }
+    else if (Model.Estado == Estados.Aprobado)
+    {
+        @Html.DropDownListFor(model => model.Estado, new SelectList(
+                             new List<object>{
+               new { value = Estados.Aprobado.ValorEntero() , text = Estados.Aprobado.DescripcionAtributo()  },
+               new { value = Estados.Disapro.ValorEntero() , text = Estados.Disapro.DescripcionAtributo()  },
+               new { value = Estados.Anulado.ValorEntero() , text = Estados.Anulado.DescripcionAtributo()  }
+                             }, "value", "text"), new { @class = "form-control form-control-sm" })
+    }
+    else if (Model.Estado == Estados.Disapro)
+    {
+        @Html.DropDownListFor(model => model.Estado, new SelectList(
+                             new List<object>{
+               new { value = Estados.Disapro.ValorEntero() , text = Estados.Disapro.DescripcionAtributo()  },
+                new { value = Estados.Esppago.ValorEntero() , text = Estados.Esppago.DescripcionAtributo()  },
+                new { value = Estados.Anulado.ValorEntero() , text = Estados.Anulado.DescripcionAtributo()  }
+                             }, "value", "text"), new { @class = "form-control form-control-sm" })
+    }
+    else if (Model.Estado == Estados.Esppago)
+    {
+        @Html.DropDownListFor(model => model.Estado, new SelectList(
+                              new List<object>{
+                new { value = Estados.Esppago.ValorEntero() , text = Estados.Esppago.DescripcionAtributo()  },
+                new { value = Estados.Ceraent.ValorEntero() , text = Estados.Ceraent.DescripcionAtributo()  },
+                new { value = Estados.Pagado.ValorEntero() , text = Estados.Pagado.DescripcionAtributo()  },
+                new { value = Estados.Anulado.ValorEntero() , text = Estados.Anulado.DescripcionAtributo()  }
+                              }, "value", "text"), new { @class = "form-control form-control-sm" })
+    }
+    else if (Model.Estado == Estados.Ceraent)
+    {
+        @Html.DropDownListFor(model => model.Estado, new SelectList(
+                              new List<object>{
+                new { value = Estados.Ceraent.ValorEntero() , text = Estados.Ceraent.DescripcionAtributo()  },
+                new { value = Estados.Pagado.ValorEntero() , text = Estados.Pagado.DescripcionAtributo()  },
+                new { value = Estados.Anulado.ValorEntero() , text = Estados.Anulado.DescripcionAtributo()  }
+                              }, "value", "text"), new { @class = "form-control form-control-sm" })
+    }
+    else if (Model.Estado == Estados.Pagado)
+    {
+        @Html.DropDownListFor(model => model.Estado, new SelectList(
+                              new List<object>{
+                new { value = Estados.Pagado.ValorEntero() , text = Estados.Pagado.DescripcionAtributo()  },
+                new { value = Estados.Anulado.ValorEntero() , text = Estados.Anulado.DescripcionAtributo()  }
+                              }, "value", "text"), new { @class = "form-control form-control-sm" })
+    }
+    else
+    {
+        @Html.DropDownListFor(model => model.Estado, new SelectList(
+                              new List<object>{
+                new { value = Estados.Anulado.ValorEntero() , text = Estados.Anulado.DescripcionAtributo()  },
+                              }, "value", "text"), new { @class = "form-control form-control-sm" })
+    }
+}
+else
+{
+    @Html.DropDownListFor(model => model.Estado, new SelectList(
+                  new List<object>{
+            new { value = Estados.Recibido.ValorEntero() , text = Estados.Recibido.DescripcionAtributo()  },
+            new { value = Estados.Anulado.ValorEntero() , text = Estados.Anulado.DescripcionAtributo()  }
+                  }, "value", "text"), new { @class = "form-control form-control-sm" })
+}

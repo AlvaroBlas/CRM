@@ -1,0 +1,748 @@
+﻿@model List<OrdenTrabajoModelo>
+
+@{
+    ViewBag.Titulo = "Ordenes de Trabajo";
+}
+
+<div class="titulo">
+    <div class="t1">
+        <span class="t11">Ordenes de Trabajo</span>
+        <span class="t12">Todas las ordenes disponibles</span>
+    </div>
+    <div class="t2">
+        <button id="generarcotizacion" style="display:none" type="button" class="btn btn-secondary my-1 btn-sm">
+            <i></i> Generar cotización
+        </button>
+        <button id="convertirFactura" style="display:none" type="button" class="btn btn-secondary my-1 btn-sm">
+            <i></i> Generar Ticket
+        </button>
+        <button id="nuevaOrden" data-url-crear="@Url.Action("Crear","OrdenTrabajo")" type="button" class="btn btn-danger my-1 btn-sm">
+            <i class="fas fa-plus"></i> Nueva orden de trabajo
+        </button>
+        <div class="btn-group accioneslista">
+            <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="fas fa-list"></span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right">
+                <a download class="dropdown-item" href="javascript:void(0)" id="btnExportarClientes">
+                    <span class="fas fa-upload"></span> Exportar ordenes de trabajo
+                </a>
+                <div class="dropdown-divider"></div>
+                <a title="Actualizar" class="dropdown-item btnBuscarOrden" href="javascript:void(0)">
+                    <span class="fas fa-sync-alt"></span> Actualizar la lista
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div>
+<div class="lista">
+    <form class="form-inline form-f" autocomplete="off">
+        <table class="w-100">
+            <tr>
+                <td>
+                    <div class="btn-group" role="group">
+                        <span style="line-height:27px">|</span>
+                        <button type="button" class="btn btn-f b">FILTROS</button>
+                        <button id="btnGroupDrop1" type="button" class="btn btn-f dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Doctor
+                        </button>
+                        <div class="dropdown-menu p-0">
+                            <div class="input-group">
+                                <input type="text" class="form-control form-control-sm" id="txtCuenta">
+                                <div class="input-group-append">
+                                    <button class="btn btn-light btn-outline-dark btn-sm" type="button">
+                                        <span class="fas fa-times"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="">
+                            <button id="btnGroupDrop1" type="button" class="btn btn-f dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Estado
+                            </button>
+                            <div class="dropdown-menu evento p-0">
+                                <div class="input-group">
+                                    @Html.DropDownList("CmbEstado", new SelectList(
+                                           new List<object>{
+                             new { value = "" , text = ""  },
+                             new { value = Estados.Anulado.ValorEntero() , text = Estados.Anulado.DescripcionAtributo()  },
+                             new { value = Estados.Recibido.ValorEntero() , text = Estados.Recibido.DescripcionAtributo()  },
+                             new { value = Estados.Aprobado.ValorEntero() , text = Estados.Aprobado.DescripcionAtributo()  },
+                             new { value = Estados.Disapro.ValorEntero() , text = Estados.Disapro.DescripcionAtributo()  },
+                             new { value = Estados.Esppago.ValorEntero() , text = Estados.Esppago.DescripcionAtributo()  },
+                             new { value = Estados.Ceraent.ValorEntero() , text = Estados.Ceraent.DescripcionAtributo()  },
+                             new { value = Estados.Pagado.ValorEntero() , text = Estados.Pagado.DescripcionAtributo()  }
+                                           }, "value", "text"), new { @class = "form-control form-control-sm", @style="width:83% !important" })
+                                    <div class="input-group-append">
+                                        <button class="btn btn-light btn-outline-dark btn-sm" type="button">
+                                            <span class="fas fa-times"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-f" id="btnBorrarFiltros">
+                            <i class="fas fa-eraser"></i>
+                            Borrar Filtros
+                        </button>
+                    </div>
+                </td>
+                <td class="text-right">
+                    <div class="">
+                        <button title="Actualizar" type="submit" class="btn btn-secondary btn-sm btnBuscarOrden" style="padding:1px 10px">
+                            <i class="fas fa-sync-alt"></i> Actualizar
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    <table class="table w-100 table-striped table-hover table-bordered dt-responsive nowrap" id="tablaOrdenes">
+        <thead>
+            <tr>
+                <th>
+                    <input name="select_all" value="1" type="checkbox">
+                </th>
+                <th>
+                    <span class="t-e-a" title="Fecha Ingreso">
+                        <span class="t-e-b">
+                            NÚMERO DE LA COTIZACIÓN
+                        </span>
+                    </span>
+                </th>
+                <th>
+                    <span class="t-e-a" title="Recibido">
+                        <span class="t-e-b">
+                            RECIBIDO
+                        </span>
+                    </span>
+                </th>
+                <th>
+                    <span class="t-e-a" title="Aprobado">
+                        <span class="t-e-b">
+                            APROBADO
+                        </span>
+                    </span>
+                </th>
+                <th>
+                    <span class="t-e-a" title="Diseño aprobado">
+                        <span class="t-e-b">
+                            DISEÑO APROBADO
+                        </span>
+                    </span>
+                </th>
+                <th>
+                    <span class="t-e-a" title="En Proceso">
+                        <span class="t-e-b">
+                            EN PROCESO
+                        </span>
+                    </span>
+                </th>
+                <th>
+                    <span class="t-e-a" title="Terminado">
+                        <span class="t-e-b">
+                            TERMINADO
+                        </span>
+                    </span>
+                </th>
+                <th>
+                    Doctor
+                </th>
+                <th>
+                    Cliente
+                </th>
+                <th>
+                    Producto
+                </th>
+                @*<th>
+                        Color
+                    </th>*@
+                @*<th>
+                        Cantidad
+                    </th>*@
+                <th style="padding:4px 10px !important">
+                    <span class="t-e-a" title="Fecha Ingreso">
+                        <span class="t-e-b">
+                            Estado
+                        </span>
+                    </span>
+                </th>
+                <th>
+                    TICKET
+                </th>
+                @*<th>
+                        Total
+                    </th>*@
+                <th>
+                    Acciones
+                </th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+@section scripts{
+    <script>
+        $(function () {
+
+            var $btnNuevaOrden = $("#nuevaOrden");
+            var $txtCuenta = $("#txtCuenta");
+            var $tbOrdenes = $("#tablaOrdenes");
+            var $btnBuscar = $(".btnBuscarOrden");
+            var $btnBorrarFiltros = $("#btnBorrarFiltros");
+            var $cmbEstado = $("#CmbEstado");
+            var $convertirFactura = $("#convertirFactura");
+            var $generarcotizacion = $("#generarcotizacion");
+
+            $btnBorrarFiltros.on('click', function () {
+                $txtCuenta.val("");
+                $cmbEstado.val("");
+                $btnBuscar.trigger('click');
+            })
+
+            $cmbEstado.select2({
+                "placeholder": "--"
+            });
+
+
+            $btnNuevaOrden.on('click', function () {
+                var url = $(this).data("url-crear");
+                //crearModalXL(url, 1, 1);
+                crearModalIzquierdolXL(url, 1, 1);
+            });
+
+            this.eliminarOrden = function (btn) {
+                var id = $(btn).data("ordentrabajoid");
+                var url = URL_BASE + "OrdenTrabajo/Eliminar/" + id;
+                crearModalCentrado(url, 1, 1);
+            };
+
+            this.editarInforme = function (btn) {
+                var id = $(btn).data("ordentrabajo-id");
+                var url = URL_BASE + "OrdenTrabajo/CrearInformeTecnico/?ordenTrabajoId=" + id;
+                crearModalLG(url, 1, 1);
+            };
+
+            $cmbEstado.on('change', function () {
+                dataTable.ajax.url(URL_BASE + 'OrdenTrabajo/ObtenerOrdenes/?estado=' + $(this).val());
+                dataTable.draw();
+            });
+
+            var rows_selected = [];
+            var doctorIds = [];
+
+            var dataTable = $tbOrdenes.DataTable({
+                "dom": dom,
+                "oLanguage": idiomaDT,
+                //responsive: true,
+                "bRetrieve": true,
+                "bServerSide": true,
+                "filter": true,
+                "iDisplayLength": 25,
+                //processing: true,
+                "ajax": {
+                    "type": "POST",
+                    "url": URL_BASE + 'OrdenTrabajo/ObtenerOrdenes',
+                    "contentType": 'application/json; charset=utf-8',
+                    'data': function (data) {
+                        data.cuenta = $txtCuenta.val();
+                        data.estado = $cmbEstado.val();
+                        return JSON.stringify(data);
+                    }
+                },
+                "order": [[1, "desc"]],
+                //columnDefs: [
+                //    {
+                //        orderable: false,
+                //        //className: 'select-checkbox',
+                //        'searchable': false,
+                //        targets: 0,
+                //        'render': function (data, type, full, meta) {
+                //            return '<input type="checkbox" name="id[]" value="' + $('<div/>').text(data).html() + '">';
+                //        }
+                //    },
+                //],
+                'columnDefs': [{
+                    'targets': 0,
+                    'searchable': false,
+                    'orderable': false,
+                    'width': '1%',
+                    'className': 'dt-body-center',
+                    //'render': function (data, type, full, meta) {
+                    //    return '<input type="checkbox">';
+                    //}
+                }],
+
+                "columns": [
+                    {
+                        "data": null,
+                        //"defaultContent": "",
+                        //sWidth: "2%",
+                        //name: "Codigo",
+                        //sClass: "text-center",
+                        //'render': function (data, type, full, meta) {
+                        //    return '<input type="checkbox" name="id[]" value="' + $('<div/>').text(data).html() + '">';
+                        //}
+                        render: function (data, type, fila) {
+                            if (!fila.Facturado && fila.Estado !== 1 && fila.Estado >= 4)
+                                return '<input type="checkbox">';
+                            else
+                                return '';
+                        }
+                    },
+                    {
+                        targets: 1,
+                        data: "Codigo",
+                        name: "Codigo",
+                        sWidth: "2%",
+                        orderable: false,
+                        render: function (data, type, fila) {
+                            return '<a href="javascript:void(0)" onclick="editarOrden(this)" data-ordentrabajoid="' + fila.OrdenTrabajoId + '">' + fila.Codigo + '</a>'
+                        }
+                    },
+                    //{
+                    //    data: "FechaRecepcion",
+                    //    name: "FechaRecepcion",
+                    //    sWidth: "8%",
+                    //    "visible": false,
+                    //},
+                    {
+                        data: "FechaRecepcion",
+                        name: "FechaRecepcion",
+                        sWidth: "8%",
+                        render: function (data, type, fila) {
+                            return '<span>' + fila.FechaRecepcionStr + '</span>'
+                        }
+                    },
+                    {
+                        data: "FechaAprobadoStr",
+                        name: "FechaAprobadoStr",
+                        sWidth: "8%",
+                        orderable: false,
+                    },
+                    {
+                        data: "FechaDisenoAprobadoStr",
+                        name: "FechaDisenoAprobadoStr",
+                        sWidth: "8%",
+                        orderable: false,
+                    },
+                    {
+                        data: "FechaEnProcesoStr",
+                        name: "FechaEnProcesoStr",
+                        sWidth: "8%",
+                        orderable: false,
+                    },
+                    {
+                        data: "FechaTerminadoStr",
+                        name: "FechaTerminadoStr",
+                        sWidth: "8%",
+                        orderable: false,
+                    },
+                    {
+                        data: "Doctor",
+                        name: "Doctor",
+                        sWidth: "14%",
+                        orderable: true,
+                    },
+                    {
+                        data: "Paciente",
+                        name: "Paciente",
+                        sWidth: "10%",
+                        orderable: false,
+                    },
+                    {
+                        data: "DetalleProductos",
+                        name: "DetalleProductos",
+                        sWidth: "15%",
+                        orderable: false,
+                        render: function (data, type, fila) {
+                            return '<span class="t-e-a" title="' + fila.DetalleProductos + '"><span class="t-e-b">' + fila.DetalleProductos + '</span></span>'
+                        }
+                    },
+                    //{
+                    //    data: "Color",
+                    //    name: "Color",
+                    //    sWidth: "5%",
+                    //    orderable: false,
+                    //    render: function (data, type, fila) {
+                    //        return '<span class="t-e-a" title="' + fila.Color + '"><span class="t-e-b">' + fila.Color + '</span></span>'
+                    //    }
+                    //},
+                    //{
+                    //    data: "Cantidad",
+                    //    name: "Cantidad",
+                    //    sWidth: "5%",
+                    //    sClass: "text-center",
+                    //    orderable: false,
+                    //},
+                    {
+                        data: "Estado",
+                        name: "Estado",
+                        sWidth: "5%",
+                        sClass: 'p-0 pl-1 text-center',
+                        orderable: false,
+                        render: function (data, type, fila) {
+
+                            var css = "badge-light";
+
+                            if (data === 1)
+                                css = "badge-dark";
+                            else if (data === 2)
+                                css = "badge-primary";
+                            else if (data === 3)
+                                css = "badge-info";
+                            else if (data === 4)
+                                css = "badge-warning";
+                            else if (data === 5)
+                                css = "badge-primary";
+                            else if (data === 6)
+                                css = "badge-secondary";
+                            else if (data === 7)
+                                css = "badge-success";
+
+                            return '<a data-type="select" id="estado' + fila.OrdenTrabajoId + '" data-pk="' + fila.OrdenTrabajoId + '" href="javascript:void(0)" class="editable editable-click"><span class="badge ' + css + '">' + fila.EstadoStr + '</span></a>';
+                        }
+                    },
+                    {
+                        data: "Facturado",
+                        name: "Facturado",
+                        sWidth: "5%",
+                        orderable: false,
+                        sClass: "text-center",
+                        render: function (data, type, fila) {
+                            if (fila.Facturado)
+                                return '<span class="text-uppercase badge badge-success font-weight-normal" style="width:26px">SI</span>';
+                            else
+                                return '<span class="text-uppercase badge badge-secondary font-weight-normal" style="width:26px">NO</span>';
+                        }
+                    },
+                    //{
+                    //    data: "Total",
+                    //    name: "TotalStr",
+                    //    sWidth: "5%",
+                    //    sClass: "text-right",
+                    //    orderable: false,
+                    //    render: function (data, type, fila) {
+                    //        return '<span>' + (fila.Moneda + fila.TotalStr) + '</span>'
+                    //    }
+                    //},
+                    {
+                        data: "Acciones",
+                        name: "Acciones",
+                        sWidth: "1%",
+                        sClass: 'text-center',
+                        orderable: false,
+                        render: function (data, type, fila) {
+                            var menu = '<a class="nav-item dropdown-toggle mr-md-2" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding:0 10px">' +
+                                '<span class="fas fa fa-ellipsis-v"></span></a>' +
+                                '<div class="dropdown-menu dropdown-menu-right">' +
+                                '<a class="dropdown-item" href="javascript:void(0)" title="Editar" onclick="editarOrden(this)" data-ordentrabajoid="' + fila.OrdenTrabajoId + '"><span class="fas fa-edit"></span> Editar</a>' +
+                                '<a class="dropdown-item" href="javascript:void(0)" title="Eliminar" onclick="eliminarOrden(this)" data-ordentrabajoid="' + fila.OrdenTrabajoId + '"><span class="fas fa-trash"></span> Eliminar</a>' +
+                                (fila.Estado > 1 ? '<a class="dropdown-item" data-ordentrabajoid="' + fila.OrdenTrabajoId + '"  title="Imprimir Orden Atención" href="javascript:void(0)" onclick="vistaPrevia(this,1)"><span class="fas fa-print"></span> Imprimir Orden</a>' : '') +
+                                (fila.Estado > 2 ? '<a class="dropdown-item" data-ordentrabajoid="' + fila.OrdenTrabajoId + '" href="javascript:void(0)" title="Generar Cotización" onclick="vistaPrevia(this,2)"><span class="fas fa-print" ></span> Imprimir Cotización</a>' : '') +
+                                (fila.Estado === 1 ? '<a class="dropdown-item" href="javascript:void(0)" onclick="editarInforme(this)" data-ordentrabajo-id="' + fila.OrdenTrabajoId + '" title="Crear Informe Tecnico"><span class="fas fa-file-signature"></span> Crear informe</a>' : '') +
+                                (fila.Estado === 1 ? '<a class="dropdown-item" href="javascript:void(0)" onclick="vistaPrevia(this,3)" data-ordentrabajoid="' + fila.OrdenTrabajoId + '" title="Imprimir Informe Tecnico"><span class="fas fa-print"></span> Imprimir informe</a>' : '') +
+                                (fila.Estado >= 4 ? '<a class="dropdown-item" href="javascript:void(0)" ' + (fila.Facturado ? "onclick='confirmarFactura(this)'" : "onclick='convertirAFactura(this)'") + '"title="Crear Factura" data-ordentrabajoid="' + fila.OrdenTrabajoId + '"><span class="fas fa-file-invoice-dollar"></span> Generar Ticket</a>' : '') +
+                                //'<a class="dropdown-item" href="javascript:void(0)" title="Crear Llamada" onclick="eliminarCliente(this)" data-cliente-id="' + fila.ClienteId + '"><span class="fas fa fa-phone-volume"></span> Crear Llamada</a>' +
+                                //'<a class="dropdown-item" href="javascript:void(0)" title="Enviar correo electrónico" onclick="eliminarCliente(this)" data-cliente-id="' + fila.ClienteId + '"><span class="fas fa fa-envelope"></span> Enviar correo electrónico</a>' +
+                                //'<a class="dropdown-item" href="javascript:void(0)" title="Enviar SMS" onclick="eliminarCliente(this)" data-cliente-id="' + fila.ClienteId + '"><span class="fas fa fa-comments"></span> Enviar SMS</a>' +
+                                //'<a class="dropdown-item" href="javascript:void(0)" title="Agregar Nota" onclick="eliminarCliente(this)" data-cliente-id="' + fila.ClienteId + '"><span class="fas fa fa-file-alt"></span> Agregar Nota</a>' +
+                                //'<a class="dropdown-item" href="javascript:void(0)" title="Agregar Tarea" onclick="eliminarCliente(this)" data-cliente-id="' + fila.ClienteId + '"><span class="fas fa fa-business-time"></span> Agregar Tarea</a>' +
+                                '</div>'
+                            return menu;
+                        }
+                    },
+                    //{
+                    //    data: "Acciones",
+                    //    name: "Acciones",
+                    //    sWidth: "2%",
+                    //    sClass: "",
+                    //    orderable: false,
+                    //    render: function (data, type, fila) {
+                    //        return '<button type="button" class="btn btn-link dclink" title="Editar" onclick="editarOrden(this)" data-ordentrabajo-id="' + fila.OrdenTrabajoId + '"><span class="fas fa-edit"></span></button>' +
+                    //            '<button type="button" class="btn btn-link dclink" title="Eliminar" onclick="eliminarOrden(this)" data-ordentrabajo-id="' + fila.OrdenTrabajoId + '"><span class="fas fa-trash"></span></button>' +
+                    //            (fila.Estado > 0 ? '<a target="_blank" href="' + URL_BASE + "OrdenTrabajo/Imprimir/?ordenTrabajoId=" + fila.OrdenTrabajoId + '" class="btn btn-link dclink" title="Imprimir Orden Atención"  data-ordentrabajo-id="' + fila.OrdenTrabajoId + '"><span class="fas fa-file-pdf"></span></a>' : '') +
+                    //            (fila.Estado > 1 ? '<a target="_blank" href="' + URL_BASE + "OrdenTrabajo/Cotizacion/?ordenTrabajoId=" + fila.OrdenTrabajoId + '" class="btn btn-link dclink" title="Generar Cotización"><span class="fas fa-file-invoice-dollar" ></span></a>' : '') +
+                    //            (fila.Estado === 0 ? '<button type="button" class="btn btn-link dclink" onclick="editarInforme(this)" data-ordentrabajo-id="' + fila.OrdenTrabajoId + '" title="Crear Informe Tecnico"><span class="fas fa-file-signature"></span></button>' : '');
+                    //    }
+                    //},
+                ],
+                'columnDefs': [
+                    {
+                        'targets': 0,
+                        'searchable': false,
+                        'orderable': false,
+                        'width': '1%',
+                        'className': 'dt-body-center',
+                        'render': function (data, type, full, meta) {
+                            return '<input type="checkbox">';
+                        }
+                    }
+                ],
+                //retrieve: true,
+                'select': {
+                    'style': 'multi'
+                },
+                "drawCallback": function (settings) {
+                    botonActualizar2("btnBuscarOrden");
+                    //var api = this.api();
+                    //var data = api.rows({ page: 'current' }).data();
+                },
+                'rowCallback': function (row, data, dataIndex) {
+                    var id = data.OrdenTrabajoId;
+                    var estado = data.Estado;
+
+                    var estados = [];
+
+                    if (estado == 1) {
+                        estados.push({ value: 1, text: "Anulado" });
+                    }
+                    else if (estado == 2) {
+                        estados.push({ value: 2, text: "Recibido" });
+                        estados.push({ value: 3, text: "Aprobado" });
+                        estados.push({ value: 1, text: "Anulado" });
+                    }
+                    else if (estado == 3) {
+                        estados.push({ value: 3, text: "Aprobado" });
+                        estados.push({ value: 4, text: "Diseño Aprobado" });
+                        estados.push({ value: 1, text: "Anulado" });
+                    }
+                    else if (estado == 4) {
+                        estados.push({ value: 4, text: "Diseño Aprobado" });
+                        //estados.push({ value: 5, text: "Esperando Pago" });
+                        estados.push({ value: 5, text: "En Proceso" });
+                        estados.push({ value: 1, text: "Anulado" });
+                    }
+                    else if (estado == 5) {
+                        //estados.push({ value: 5, text: "Esperando Pago" });
+                        estados.push({ value: 5, text: "En Proceso" });
+                        //estados.push({ value: 6, text: "Encerado" });
+                        estados.push({ value: 6, text: "Terminado" });
+                        estados.push({ value: 7, text: "Pagado" });
+                        estados.push({ value: 1, text: "Anulado" });
+                    } else if (estado == 6) {
+                        //estados.push({ value: 6, text: "Encerado" });
+                        estados.push({ value: 6, text: "Terminado" });
+                        estados.push({ value: 7, text: "Pagado" });
+                        estados.push({ value: 1, text: "Anulado" });
+                    } else if (estado == 7) {
+                        estados.push({ value: 7, text: "Pagado" });
+                        estados.push({ value: 1, text: "Anulado" });
+                    }
+
+                    $(row).find('.editable').editable({
+                        mode: 'inline',
+                        value: estado,
+                        url: URL_BASE + 'OrdenTrabajo/CambiarEstado',
+                        success: function (data) {
+                            if (data) {
+                                mensajeDevCore(1, data.mensaje);
+                                dataTable.draw(false);
+                            } else {
+                                mensajeDevCore(3, data.mensaje);
+                            }
+                        },
+                        //ajaxOptions: {
+                        //    type: 'put',
+                        //    dataType: 'json',
+
+                        //},
+                        showbuttons: false,
+                        source: estados,
+                        //    [
+                        //    { value: 1, text: 'Anulado' },
+                        //    { value: 2, text: 'Recibido' },
+                        //    { value: 3, text: 'Aprobado' },
+                        //    { value: 4, text: 'Diseño Aprobado' },
+                        //    { value: 5, text: 'Esperando Pago' },
+                        //    { value: 6, text: 'Encerado' },
+                        //    { value: 7, text: 'Pagado' },
+                        //],
+                        display: function (value, sourceData) {
+
+                            var elemento;
+
+                            $.each(sourceData, function (index, valor) {
+                                if (sourceData[index].value == value) {
+                                    elemento = sourceData[index].text;
+                                }
+                            })
+
+                            $(this).find('span').removeAttr("class");
+                            $(this).find('span').addClass('badge');
+
+                            var css = "badge-light";
+
+                            if (value == 1)
+                                css = "badge-danger";
+                            else if (value == 2)
+                                css = "badge-azul";
+                            else if (value == 3)
+                                css = "badge-celeste";
+                            else if (value == 4)
+                                css = "badge-warning";
+                            else if (value == 5)
+                                css = "badge-naranja";
+                            else if (value == 6)
+                                css = "badge-dark";
+                            else if (value == 7)
+                                css = "badge-success";
+
+                            $(this).find('span').addClass(css).text(elemento);
+                        }
+                    });
+
+                    var rowId = data[0];
+
+                    // If row ID is in the list of selected row IDs
+                    if ($.inArray(rowId, rows_selected) !== -1) {
+                        $(row).find('input[type="checkbox"]').prop('checked', true);
+                        $(row).addClass('selected');
+                    }
+                }
+            });
+
+            $('#tablaOrdenes tbody').on('click', 'input[type="checkbox"]', function (e) {
+                var $row = $(this).closest('tr');
+
+                // Get row data
+                var data = dataTable.row($row).data();
+
+                //console.log(data);
+
+                // Get row ID
+                //var rowId = data[0];
+                var rowId = data.OrdenTrabajoId;
+                var doctorId = data.ClienteId;
+
+                // Determine whether row ID is in the list of selected row IDs
+                var index = $.inArray(rowId, rows_selected);
+                var indexDoctor = $.inArray(doctorId, doctorIds);
+
+                // If checkbox is checked and row ID is not in list of selected row IDs
+                if (this.checked && index === -1) {
+                    rows_selected.push(rowId);
+                    doctorIds.push(doctorId)
+                    // Otherwise, if checkbox is not checked and row ID is in list of selected row IDs
+                } else if (!this.checked && index !== -1) {
+                    rows_selected.splice(index, 1);
+                    doctorIds.splice(indexDoctor, 1);
+                }
+
+                if (this.checked) {
+                    $row.addClass('selected');
+                } else {
+                    $row.removeClass('selected');
+                }
+
+                // Update state of "Select all" control
+                updateDataTableSelectAllCtrl(dataTable);
+
+                // Prevent click event from propagating to parent
+                e.stopPropagation();
+            });
+
+            $('#tablaOrdenes').on('click', 'tbody td, thead th:first-child', function (e) {
+                $(this).parent().find('input[type="checkbox"]').trigger('click');
+            });
+
+            $('thead input[name="select_all"]', dataTable.table().container()).on('click', function (e) {
+                if (this.checked) {
+                    $('#tablaOrdenes tbody input[type="checkbox"]:not(:checked)').trigger('click');
+                } else {
+                    $('#tablaOrdenes tbody input[type="checkbox"]:checked').trigger('click');
+                }
+
+                // Prevent click event from propagating to parent
+                e.stopPropagation();
+            });
+
+            dataTable.on('draw', function () {
+                // Update state of "Select all" control
+                updateDataTableSelectAllCtrl(dataTable);
+            });
+
+            $convertirFactura.on('click', function (e) {
+                var ids = rows_selected;
+                var url = URL_BASE + "Factura/Crear/?ids=" + ids;
+                crearModalIzquierdolXL(url, 1, 1);
+                e.preventDefault();
+            });
+
+            $generarcotizacion.on('click', function (e) {
+                var ids = rows_selected;
+                var doctordIds = doctorIds;
+
+                //https://stackoverflow.com/a/35568895
+                if (doctordIds.every((val, i, arr) => val === arr[0])) {
+                    var url = URL_BASE + "OrdenTrabajo/VistaPrevia?id=0&ids=" + ids + "&pdf=2";
+                    crearModalXL(url, 1, 1);
+                }
+                else {
+                    mensajeDevCore(2, "Las ordenes de trabajo seleccionadas no pertenecen al mismo cliente");
+                }
+                e.preventDefault();
+            });
+
+            $btnBuscar.click(function (e, draw) {
+                e.preventDefault();
+                botonActualizar("btnBuscarOrden");
+
+                if (typeof draw === 'undefined')
+                    draw = true;
+
+                dataTable.draw(draw);
+            });
+
+            $(document).on('click', '.evento', function (e) {
+                e.stopPropagation();
+            });
+        });
+
+        function updateDataTableSelectAllCtrl(table) {
+            var $table = table.table().node();
+            var $chkbox_all = $('tbody input[type="checkbox"]', $table);
+            var $chkbox_checked = $('tbody input[type="checkbox"]:checked', $table);
+            var chkbox_select_all = $('thead input[name="select_all"]', $table).get(0);
+
+            // If none of the checkboxes are checked
+            if ($chkbox_checked.length === 0) {
+                chkbox_select_all.checked = false;
+                $("#convertirFactura").hide();
+                $("#generarcotizacion").hide();
+                if ('indeterminate' in chkbox_select_all) {
+                    chkbox_select_all.indeterminate = false;
+                }
+
+                // If all of the checkboxes are checked
+            } else if ($chkbox_checked.length === $chkbox_all.length) {
+                chkbox_select_all.checked = true;
+                if ($chkbox_checked.length > 1) {
+                    $("#convertirFactura").show();
+                    $("#generarcotizacion").show();
+                }
+                if ('indeterminate' in chkbox_select_all) {
+                    chkbox_select_all.indeterminate = false;
+                }
+
+                // If some of the checkboxes are checked
+            } else {
+                chkbox_select_all.checked = true;
+
+                if ($chkbox_checked.length > 1) {
+                    $("#convertirFactura").show();
+                    $("#generarcotizacion").show();
+                } else {
+                    $("#convertirFactura").hide();
+                    $("#generarcotizacion").hide();
+                }
+                if ('indeterminate' in chkbox_select_all) {
+                    chkbox_select_all.indeterminate = true;
+                }
+            }
+        }
+
+    </script>
+}

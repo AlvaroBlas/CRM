@@ -1,0 +1,282 @@
+﻿@model List<ClienteModelo>
+
+@{
+    ViewBag.Titulo = "Cuentas";
+}
+
+<div class="titulo">
+    <div class="t1">
+        <span class="t11">Cuentas</span>
+        <span class="t12">Todas las cuentas disponibles</span>
+    </div>
+    <div class="t2">
+        <button id="nuevaCuenta" data-url-crear="@Url.Action("Crear","Cliente")" type="button" class="btn btn-danger my-1 btn-sm">
+            <i class="fas fa-plus"></i> Nuevo cliente
+        </button>
+        <div class="btn-group accioneslista">
+            <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="fas fa-list"></span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right">
+                <a class="dropdown-item" href="#">
+                    <span class="fas fa-download"></span>
+                    Importar contactos
+                </a>
+                <a download class="dropdown-item" href="javascript:void(0)" id="btnExportarClientes">
+                    <span class="fas fa-upload"></span> Exportar contactos
+                </a>
+                <div class="dropdown-divider"></div>
+                <a title="Actualizar" class="dropdown-item btnBuscarCliente" href="javascript:void(0)">
+                    <span class="fas fa-sync-alt"></span> Actualizar la lista
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div>
+<div class="lista">
+    <form class="form-inline form-f" autocomplete="off">
+        <table class="w-100">
+            <tr>
+                <td>
+                    <div class="btn-group" role="group">
+                        <span style="line-height:27px">|</span>
+                        <button type="button" class="btn btn-f b">FILTROS</button>
+                        <button id="btnGroupDrop1" type="button" class="btn btn-f dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Cuenta
+                        </button>
+                        <div class="dropdown-menu p-0" aria-labelledby="btnGroupDrop1">
+                            <div class="input-group">
+                                <input type="text" class="form-control form-control-sm" id="txtCuenta" aria-describedby="button-addon2">
+                                <div class="input-group-append">
+                                    <button class="btn btn-light btn-outline-dark btn-sm" type="button">
+                                        <span class="fas fa-times"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dropdown">
+                            <button id="btndis" type="button" class="btn btn-f dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Distrito
+                            </button>
+                            <div class="dropdown-menu p-0" aria-labelledby="btndis">
+                                <div class="input-group">
+                                    <input type="text" class="form-control form-control-sm" id="txtDistrito" aria-describedby="button-addon2">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-light btn-outline-dark btn-sm" type="button">
+                                            <span class="fas fa-times"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-f" id="btnBorrarFiltros">
+                            <i class="fas fa-eraser"></i>
+                            Borrar Filtros
+                        </button>
+                    </div>
+                </td>
+                <td class="text-right">
+                    <div class="">
+                        <button title="Actualizar" type="submit" class="btn btn-secondary btn-sm btnBuscarCliente" style="padding:1px 10px">
+                            <i class="fas fa-sync-alt"></i> Actualizar
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+
+        @*<select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+                <option selected>Choose...</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+            </select>
+
+            <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                <input type="checkbox" class="custom-control-input" id="customControlInline">
+                <label class="custom-control-label" for="customControlInline">Remember my preference</label>
+            </div>*@
+    </form>
+
+    <table class="table table-hover table-striped table-bordered" id="tablaClientes" style="width:100%">
+        <thead>
+            <tr>
+                <th>
+                    Cuenta
+                </th>
+                <th>
+                    Distrito
+                </th>
+                <th>
+                    Email
+                </th>
+                <th>
+                    Telefonos
+                </th>
+                <th>
+                    Cuentas por cobrar
+                </th>
+                <th>
+                    Créditos sin usar
+                </th>
+                <th>
+                    Acciones
+                </th>
+            </tr>
+        </thead>
+    </table>
+</div>
+@section scripts{
+    <script>
+        $(function () {
+
+            var $btnNuevaCuenta = $("#nuevaCuenta");
+            var $tbClientes = $("#tablaClientes");
+            var $btnBuscar = $(".btnBuscarCliente");
+            var $btnBorrarFiltros = $("#btnBorrarFiltros");
+            var $txtCuenta = $("#txtCuenta");
+            var $txtDistrito = $("#txtDistrito");
+
+            $btnBorrarFiltros.on('click', function () {
+                $txtCuenta.val("");
+                $txtDistrito.val("");
+                $btnBuscar.trigger('click');
+            })
+
+            $btnNuevaCuenta.on('click', function () {
+                var url = $(this).data("url-crear");
+                crearModalLG(url, 1, 1);
+            });
+
+            var dataTable = $tbClientes.DataTable({
+                "dom": dom,
+                "oLanguage": idiomaDT,
+                "bRetrieve": true,
+                "bServerSide": true,
+                "filter": true,
+                //"iDisplayLength": cantidadFilas(),
+                "iDisplayLength": 10,
+                //processing: true,
+                "ajax": {
+                    "type": "POST",
+                    "url": URL_BASE + 'Cliente/ObtenerClientes',
+                    "contentType": 'application/json; charset=utf-8',
+                    'data': function (data) {
+                        data.cuenta = $("#txtCuenta").val();
+                        data.distrito = $("#txtDistrito").val();
+                        return JSON.stringify(data);
+                    }
+                },
+                "columns": [
+                    {
+                        data: "Cuenta",
+                        name: "Cuenta",
+                        sWidth: "20%",
+                        sClass: "noclick",
+                        render: function (data, type, fila) {
+                            return '<span class="t-e-a"><span class="t-e-b"><a href="javascript:void(0)" onclick="detalleCliente(this)"  data-clienteid="' + fila.ClienteId + '">' + fila.Cuenta + '</span></span></a>'
+                        }
+                    },
+                    {
+                        data: "DistritoFactura",
+                        name: "DistritoFactura",
+                        sWidth: "15%",
+                        orderable: false,
+                    },
+                    {
+                        data: "Email",
+                        name: "Email",
+                        sWidth: "20%",
+                        orderable: false,
+                    },
+                    {
+                        data: "Telefonos",
+                        name: "Telefonos",
+                        sWidth: "15%",
+                        orderable: false,
+                    },
+                    {
+                        data: "CuentasPorCobrar",
+                        name: "CuentasPorCobrar",
+                        sWidth: "15%",
+                        sClass: 'text-right',
+                        orderable: false,
+                        render: function (data, type, fila) {
+                            return '<span class="t-e-a"><span class="t-e-b">' + (fila.Moneda + fila.CuentasPorCobrarStr) + '</span></span>'
+                        }
+                    },
+                    {
+                        data: "CreditosSinUsar",
+                        name: "CreditosSinUsar",
+                        sWidth: "15%",
+                        sClass: 'text-right',
+                        orderable: false,
+                        render: function (data, type, fila) {
+                            return '<span class="t-e-a"><span class="t-e-b">' + (fila.Moneda + fila.CreditosSinUsarStr) + '</span></span>'
+                        }
+                    },
+                    {
+                        data: "Acciones",
+                        name: "Acciones",
+                        sWidth: "1%",
+                        sClass: 'text-center noclick',
+                        orderable: false,
+                        render: function (data, type, fila) {
+                            var menu = '<a class="nav-item dropdown-toggle mr-md-2" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="display:block">' +
+                                '<span class="fas fa fa-ellipsis-v"></span></a>' +
+                                '<div class="dropdown-menu dropdown-menu-right">' +
+                                '<a class="dropdown-item" href="javascript:void(0)" title="Editar" onclick="editarCliente(this)" data-clienteid="' + fila.ClienteId + '"><span class="fas fa-edit"></span> Editar</a>' +
+                                '<a class="dropdown-item" href="javascript:void(0)" title="Eliminar" onclick="eliminarCliente(this)" data-clienteid="' + fila.ClienteId + '"><span class="fas fa-trash"></span> Eliminar</a>' +
+                                '<a class="dropdown-item" href="javascript:void(0)" title="Crear Llamada" onclick="eliminarCliente(this)" data-clienteid="' + fila.ClienteId + '"><span class="fas fa fa-phone-volume"></span> Crear Llamada</a>' +
+                                '<a class="dropdown-item" href="javascript:void(0)" title="Enviar correo electrónico" onclick="enviarCorreo(this)" data-email="' + fila.Email + '"><span class="fas fa fa-envelope"></span> Enviar correo electrónico</a>' +
+                                '<a class="dropdown-item" href="javascript:void(0)" title="Enviar SMS" onclick="eliminarCliente(this)" data-clienteid="' + fila.ClienteId + '"><span class="fas fa fa-comments"></span> Enviar SMS</a>' +
+                                '<a class="dropdown-item" href="javascript:void(0)" title="Agregar Nota" onclick="eliminarCliente(this)" data-clienteid="' + fila.ClienteId + '"><span class="fas fa fa-file-alt"></span> Agregar Nota</a>' +
+                                '<a class="dropdown-item" href="javascript:void(0)" title="Agregar Tarea" onclick="eliminarCliente(this)" data-clienteid="' + fila.ClienteId + '"><span class="fas fa fa-business-time"></span> Agregar Tarea</a>' +
+                                '</div>'
+                            return menu;
+                        }
+                    },
+                ],
+                "drawCallback": function (settings) {
+                    botonActualizar2("btnBuscarCliente");
+                },
+            });
+
+            $btnBuscar.click(function (e, draw) {
+                e.preventDefault();
+                botonActualizar("btnBuscarCliente");
+
+                if (typeof draw === 'undefined')
+                    draw = true;
+
+                dataTable.draw(draw);
+            });
+
+            $("#btnExportarClientes").click(function () {
+                var url = "Cliente/ExportarClientes";
+                url = url + "?cuenta=" + $txtCuenta.val();
+                $("#btnExportarClientes").attr('href', url);
+            });
+
+            //$("#tablaClientes tbody tr td:not(:first-child)").click(function () {
+            //    alert();
+            //    var data = dataTable.row(this).data();
+            //    if (typeof data !== 'undefined') {
+            //        var url = URL_BASE + "Cliente/Detalle/" + data.ClienteId;
+            //        crearModalIzquierdolXL(url, 1, 1);
+            //    }
+            //});
+
+            $tbClientes.on('click', 'td:not(.noclick)', function () {
+                var $tr = $(this).closest("tr");
+                var data = dataTable.row($tr).data();
+                if (typeof data !== 'undefined') {
+                    var url = URL_BASE + "Cliente/Detalle/" + data.ClienteId;
+                    crearModalIzquierdolXL(url, 1, 1);
+                }
+            });
+        });
+    </script>
+}

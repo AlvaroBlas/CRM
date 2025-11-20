@@ -1,0 +1,23 @@
+﻿@model EliminarModelo
+
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLongTitle">Eliminar Vendedor</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+@using (Html.BeginForm("EliminarVendedor", "Usuario", FormMethod.Post, new { @autocomplete = "off" }))
+{
+    @Html.HiddenFor(model => model.Id)
+    <div class="modal-body">
+        <div class="form-row">
+            <div class="col-md-12">
+                @Model.Mensaje
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+    </div>
+}

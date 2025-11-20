@@ -1,0 +1,31 @@
+﻿@model MedicalDentCRM.Base.Rol
+
+<style>
+    .tab-pane {
+        padding: 10px;
+    }
+</style>
+ 
+<div class="modal-body">
+   
+    <fieldset>
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label for="Codigo" class="sm">Nombre usuario</label>
+                <input type="hidden" id="FakePassword" name="FakePassword" />
+                @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control form-control-sm", @autocomplete = "off" })
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label for="Codigo" class="sm">Descripción</label>
+                @Html.TextAreaFor(model => model.Descripcion, new { @class = "form-control form-control-sm", @autocomplete = "off" })
+            </div>
+        </div>
+     
+    </fieldset>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+    <button type="submit" class="btn btn-danger btn-sm">Guardar</button>
+</div>

@@ -1,0 +1,94 @@
+﻿@model InformeTecnicoModelo
+
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLongTitle">Nuevo Informe Tecnico</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+@using (Html.BeginForm("CrearInformeTecnico", "OrdenTrabajo", FormMethod.Post, new { @autocomplete = "off" }))
+{
+    @Html.HiddenFor(model => model.OrdenTrabajoId)
+    <div class="modal-body">
+
+        <fieldset>
+            <legend>Informe</legend>
+            <div class="form-row">
+                <div class="mb-3 col-md-12">
+                    <label for="FechaRecepcion" class="sm mb-1">Observaciones</label>
+                    @Html.TextAreaFor(model => model.Observaciones, new { @class = "form-control form-control-sm", @rows = "7" })
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="mb-3 col-md-12">
+                    <label for="FechaRecepcion" class="sm mb-1">Imagenes Observación</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroupFileAddon01">Subir</span>
+                        </div>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="Imagen1" name="Imagen1" aria-describedby="inputGroupFileAddon01">
+                            <label class="custom-file-label" for="inputGroupFile01">@(Model.NombreImagen1.TieneValor() ? Model.NombreImagen1 : "Elegir el Archivo")</label>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroupFileAddon01">Subir</span>
+                        </div>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="Imagen2" name="Imagen2" aria-describedby="inputGroupFileAddon01">
+                            <label class="custom-file-label" for="inputGroupFile01">@(Model.NombreImagen2.TieneValor() ? Model.NombreImagen2 : "Elegir el Archivo")</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="mb-3 col-md-12">
+                    <label for="FechaRecepcion" class="sm mb-1">Acciones</label>
+                    @Html.TextAreaFor(model => model.Acciones, new { @class = "form-control form-control-sm", @rows = "7" })
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="mb-3 col-md-12">
+                    <label for="FechaRecepcion" class="sm mb-1">Imagenes Acciones</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroupFileAddon01">Subir</span>
+                        </div>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="Imagen3" name="Imagen3" aria-describedby="inputGroupFileAddon01">
+                            <label class="custom-file-label" for="inputGroupFile01">@(Model.NombreImagen3.TieneValor() ? Model.NombreImagen3 : "Elegir el Archivo")</label>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroupFileAddon01">Subir</span>
+                        </div>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="Imagen4" name="Imagen4" aria-describedby="inputGroupFileAddon01">
+                            <label class="custom-file-label" for="inputGroupFile01">@(Model.NombreImagen4.TieneValor() ? Model.NombreImagen4 : "Elegir el Archivo")</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <div class="modal-footer">
+        @*<a target="_blank" href="@Url.Action("InformeTecnico","OrdenTrabajo",new { ordenTrabajoId = Model.OrdenTrabajoId })" class="btn btn-secondary btn-sm">
+            <span class="fas fa-print"></span>
+            Imprimir
+        </a>*@
+        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cerrar</button>
+        <button type="submit" class="btn btn-danger btn-sm">Guardar</button>
+    </div>
+
+}
+
+<script>
+    $(function () {
+        $('.custom-file-input').on('change', function () {
+            var fileName = $(this)[0].files[0].name;
+            $(this).next('.custom-file-label').addClass("selected").html(fileName);
+        })
+    })
+</script>

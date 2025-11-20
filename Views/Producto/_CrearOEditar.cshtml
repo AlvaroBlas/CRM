@@ -1,0 +1,55 @@
+﻿@model ProductoModelo
+
+<style>
+    .tab-pane {
+        padding: 10px;
+    }
+</style>
+
+<div class="modal-body">
+    <fieldset>
+        <legend>Detalle de Producto</legend>
+        <div class="form-row">
+            <div class="form-group col-md-2">
+                <label for="Tipo" class="sm">Tipo</label>
+                @Html.DropDownListFor(model => model.Tipo, new SelectList(
+                             new List<object>{
+               new { value = TipoProducto.Producto.ValorEntero() , text = TipoProducto.Producto.DescripcionAtributo()  },
+               new { value = TipoProducto.Servicio.ValorEntero() , text = TipoProducto.Servicio.DescripcionAtributo()  }
+                             }, "value", "text"), new { @class = "form-control form-control-sm" })
+            </div>
+            <div class="form-group col-md-2">
+                <label for="Codigo" class="sm">Codigo</label>
+                @Html.TextBoxFor(model => model.Codigo, new { @class = "form-control form-control-sm" })
+            </div>
+            <div class="form-group col-md-8">
+                <label for="Nombre" class="sm requerido">Nombre</label>
+                @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control form-control-sm" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-12">
+                <label for="Descripcion" class="sm">Descripción</label>
+                @Html.TextAreaFor(model => model.Descripcion, new { @class = "form-control form-control-sm", @rows = "12" })
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="UnidadId" class="sm">Unidad</label>
+                @Html.DropDownListFor(model => model.UnidadId, Model.UnidadesDisponibles, new { @class = "form-control form-control-sm" })
+            </div>
+            <div class="form-group col-md-4">
+                <label for="Tarifa" class="sm">Impuesto</label>
+                @Html.DropDownListFor(model => model.ImpuestoId, Model.ImpuestosDisponibles, new { @class = "form-control form-control-sm" })
+            </div>
+            <div class="form-group col-md-4">
+                <label for="Tarifa" class="sm requerido">Precio Venta</label>
+                @Html.TextBoxFor(model => model.Tarifa, new { @class = "form-control form-control-sm text-right" })
+            </div>
+        </div>
+    </fieldset>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+    <button type="submit" class="btn btn-danger btn-sm">Guardar</button>
+</div>

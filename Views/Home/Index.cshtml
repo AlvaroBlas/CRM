@@ -1,0 +1,332 @@
+﻿@{
+    /**/
+
+    ViewBag.Titulo = "Inicio";
+}
+
+<style>
+    .embedded-daterangepicker .daterangepicker::before,
+    .embedded-daterangepicker .daterangepicker::after {
+        display: none;
+    }
+
+    .embedded-daterangepicker .daterangepicker {
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        float: left;
+        width: 100%;
+        margin-top: 0;
+        z-index: 1;
+    }
+
+        .embedded-daterangepicker .daterangepicker .drp-calendar {
+            width: 50%;
+            max-width: 50%;
+        }
+
+    .daterangepicker.single.ltr .drp-calendar {
+        float: right;
+    }
+</style>
+
+<div>
+    <div class="d-sm-flex align-items-center justify-content-between mb-4 pt-3 pb-3 pl-4" style="border-bottom:1px solid #EEE;">
+        <h3 class="h4 mb-0 text-gray-800 font-weight-normal">Panel de información</h3>
+    </div>
+    <div style="max-width: 1000px; margin-bottom: 50px;" class="pl-4">
+        <div style="margin-top: 20px;" class="row">
+            <div class="col-md-12">
+                <h4 style="font-size:18px;font-weight:normal">
+                    Total de cuentas por cobrar <i id="ember4998" class="font-small popovercontainer ember-view" data-original-title="" title="">
+                        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 512 512" xml:space="preserve" class="icon icon-xs text-muted cursor-pointer"><path d="M317.1 147.5c-15.1-13.8-35.5-20.8-60.5-20.8-23.7 0-43.1 6.5-57.7 19.4-14.6 12.9-23.5 31.5-26.4 55.5l-.6 4.9 40.4 4.8.7-4.6c2.5-15.8 7.7-27.5 15.4-34.7 7.7-7.2 17.1-10.7 28.7-10.7 12 0 21.9 3.9 30.1 11.9 8.2 8 12.2 16.9 12.2 27.3 0 5.6-1.3 10.7-4 15.4-2.8 4.9-9.3 11.9-19.3 20.7-10.7 9.4-17.9 16.5-22.1 21.5-5.8 7-10 14-12.6 20.8-3.5 9.1-5.3 19.9-5.3 32.3 0 2.1.1 5.1.2 9l.1 4.7h38.4l.1-4.8c.3-14.3 1.4-21.4 2.3-24.7 1.3-4.7 3.2-8.8 5.9-12.5 2.8-3.8 9-10 18.5-18.4 15.1-13.4 25.1-24.6 30.4-34.2 5.4-9.7 8.1-20.4 8.1-31.9 0-19.9-7.7-37-23-50.9zM256.3 385.3c12.1 0 22-9.8 22-22 0-12.1-9.8-22-22-22-12.1 0-22 9.8-22 22s9.8 22 22 22z"></path><path d="M437.4 74.6C388.9 26.1 324.5-.5 256-.5S123.1 26.2 74.6 74.6C26.1 123.1-.5 187.5-.5 256s26.7 132.9 75.1 181.4c48.5 48.5 112.9 75.1 181.4 75.1s132.9-26.7 181.4-75.1c48.5-48.5 75.1-112.9 75.1-181.4s-26.6-132.9-75.1-181.4zm-22.6 340.2c-42.4 42.4-98.8 65.8-158.8 65.8s-116.4-23.4-158.8-65.8C54.8 372.4 31.5 316 31.5 256S54.8 139.6 97.2 97.2C139.6 54.8 196 31.5 256 31.5s116.4 23.4 158.8 65.8c42.4 42.4 65.8 98.8 65.8 158.8s-23.4 116.3-65.8 158.7z"></path></svg>
+                    </i>
+                </h4> <div class="balances-row">
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <td colspan="2">
+                                    <small class="text-muted">Total de cuentas por cobrar PEN4,869.74</small>
+                                    <div width="977" id="ember5063" class="zec-container ember-view">
+                                        <svg width="100%" height="20" viewBox="0 0 977 20" preserveAspectRatio="xMinYMin meet"><g class="bar-container" transform="translate(0,4)"><rect class="ph-rect" width="977" height="12" fill="#F4F4F4"></rect><g class="rects-container" transform="translate(0, 0)"><rect height="12" width="674.9283739994333" class="cursor-pointer" x="0" style="fill: rgb(117, 204, 204);"></rect><rect height="12" width="302.0716260005668" class="cursor-pointer" x="674.9283447265625" style="fill: rgb(255, 182, 51);"></rect><rect height="12" width="0" class="cursor-pointer" x="976.9999694824219" style="fill: rgb(244, 153, 37);"></rect><rect height="12" width="0" class="cursor-pointer" x="976.9999694824219" style="fill: rgb(224, 106, 23);"></rect><rect height="12" width="0" class="cursor-pointer" x="976.9999694824219" style="fill: rgb(197, 64, 10);"></rect></g></g></svg>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="cursor-pointer" data-ember-action="" data-ember-action-5064="5064">
+                                    <div class="current-balance">
+                                        <small class="text-open uppercase f-s-12">Actual</small> <div class="legend over-flow">PEN3,364.10</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="row">
+                                        <div class="text-overdue uppercase col-md-12"><small class="f-s-12">Vencido</small></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-3 cursor-pointer" data-ember-action="" data-ember-action-5065="5065">
+                                            <div class="legend over-flow">PEN1,505.64</div>
+                                            <small class="pull-left text-muted">1-15 días</small>
+                                        </div> <div class="col-md-3 cursor-pointer" data-ember-action="" data-ember-action-5066="5066">
+                                            <div class="legend over-flow">PEN0.00</div>
+                                            <small class="pull-left text-muted">16-30 días</small>
+                                        </div>
+                                        <div class="col-md-3 cursor-pointer" data-ember-action="" data-ember-action-5067="5067">
+                                            <div class="legend over-flow">PEN0.00</div>
+                                            <small class="pull-left text-muted">31-45 días</small>
+                                        </div>
+                                        <div class="col-md-3 cursor-pointer" data-ember-action="" data-ember-action-5068="5068">
+                                            <div class="legend over-flow">PEN0.00</div>
+                                            <small class="pull-left text-muted">Más de 45 días</small>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <ul class="row dashboard-row p-0">
+            <li class="col-md-12">
+                <div id="ember5005" class="pull-right ember-view">
+                    <div id="ember5006" class="dropdown clearfix list-title ember-view">
+                        <a id="ember5007" class="dropdown-toggle  ember-view">
+                            Este año fiscal <b class="caret"></b>
+                        </a>
+                        <ul id="ember5008" class="scrollmenu dropdown-menu ember-view">
+                            <li>
+                                <a data-test-title="TransactionDate.ThisYear" data-ember-action="" data-ember-action-5009="5009">Este año fiscal</a>
+                            </li>
+                            <li>
+                                <a data-test-title="TransactionDate.PreviousYear" data-ember-action="" data-ember-action-5010="5010">El año fiscal anterior</a>
+                            </li>
+                            <li><a data-test-title="TransactionDate.LastTwelveMonths" data-ember-action="" data-ember-action-5011="5011">Últimos 12 meses</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <h4 style="margin-top: 0;font-size:18px;font-weight:normal">
+                    Ventas y gastos
+                    <i id="ember5012" class="font-small popovercontainer ember-view" data-original-title="" title="">
+                        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 512 512" xml:space="preserve" class="icon icon-xs text-muted cursor-pointer"><path d="M317.1 147.5c-15.1-13.8-35.5-20.8-60.5-20.8-23.7 0-43.1 6.5-57.7 19.4-14.6 12.9-23.5 31.5-26.4 55.5l-.6 4.9 40.4 4.8.7-4.6c2.5-15.8 7.7-27.5 15.4-34.7 7.7-7.2 17.1-10.7 28.7-10.7 12 0 21.9 3.9 30.1 11.9 8.2 8 12.2 16.9 12.2 27.3 0 5.6-1.3 10.7-4 15.4-2.8 4.9-9.3 11.9-19.3 20.7-10.7 9.4-17.9 16.5-22.1 21.5-5.8 7-10 14-12.6 20.8-3.5 9.1-5.3 19.9-5.3 32.3 0 2.1.1 5.1.2 9l.1 4.7h38.4l.1-4.8c.3-14.3 1.4-21.4 2.3-24.7 1.3-4.7 3.2-8.8 5.9-12.5 2.8-3.8 9-10 18.5-18.4 15.1-13.4 25.1-24.6 30.4-34.2 5.4-9.7 8.1-20.4 8.1-31.9 0-19.9-7.7-37-23-50.9zM256.3 385.3c12.1 0 22-9.8 22-22 0-12.1-9.8-22-22-22-12.1 0-22 9.8-22 22s9.8 22 22 22z"></path><path d="M437.4 74.6C388.9 26.1 324.5-.5 256-.5S123.1 26.2 74.6 74.6C26.1 123.1-.5 187.5-.5 256s26.7 132.9 75.1 181.4c48.5 48.5 112.9 75.1 181.4 75.1s132.9-26.7 181.4-75.1c48.5-48.5 75.1-112.9 75.1-181.4s-26.6-132.9-75.1-181.4zm-22.6 340.2c-42.4 42.4-98.8 65.8-158.8 65.8s-116.4-23.4-158.8-65.8C54.8 372.4 31.5 316 31.5 256S54.8 139.6 97.2 97.2C139.6 54.8 196 31.5 256 31.5s116.4 23.4 158.8 65.8c42.4 42.4 65.8 98.8 65.8 158.8s-23.4 116.3-65.8 158.7z"></path></svg>
+                    </i>
+                </h4>
+                <div class="container primarychart-container">
+                    <div class="row">
+                        <div class="col-md-10 primary-chart">
+                            <div style="width:725px;height:250px">
+                                <canvas id="graficoVentas"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-md-2 text-right balance-container">
+                            <div class="balance-row">
+                                <div>
+                                    <div class="text-open cursor-pointer f-s-13"> Ventas totales </div>
+                                    <div class="legend over-flow cursor-pointer"> PEN4,869.74 </div>
+                                </div>
+                            </div>
+                            <div class="balance-row">
+                                <div>
+                                    <div class="text-moneyin cursor-pointer f-s-13"> Total recibido </div>
+                                    <div class="legend over-flow cursor-pointer" data-ember-action="" data-ember-action-5097="5097"> PEN503.86 </div>
+                                </div>
+                            </div> <div class="balance-row">
+                                <div>
+                                    <div class="text-moneyout cursor-pointer f-s-13"> Total de gastos </div>
+                                    <div class="legend over-flow cursor-pointer" data-ember-action="" data-ember-action-5099="5099"> PEN500.00 </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <small class="text-muted" style="font-size:12px;">* El valor de ventas mostrado incluye impuestos y créditos.</small>
+            </li>
+            <li class="col-md-6">
+                <div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading legend" style="height:48px;">
+                            <div id="ember1313" class="pull-right ember-view">
+                                <div id="ember1314" class="dropdown clearfix list-title ember-view">
+                                    <a id="ember1315" class="dropdown-toggle  ember-view"> Este año fiscal <b class="caret"></b></a>
+                                    <ul id="ember1316" class="scrollmenu  dropdown-menu ember-view">
+                                        <li>
+                                            <a data-test-title="ExpenseDate.ThisYear" data-ember-action="" data-ember-action-1317="1317">Este año fiscal</a>
+                                        </li>
+                                        <li><a data-test-title="ExpenseDate.ThisQuarter" data-ember-action="" data-ember-action-1318="1318">Este trimestre</a></li>
+                                        <li><a data-test-title="ExpenseDate.ThisMonth" data-ember-action="" data-ember-action-1319="1319">Este mes</a></li>
+                                        <li><a data-test-title="ExpenseDate.PreviousYear" data-ember-action="" data-ember-action-1320="1320">El año fiscal anterior</a></li>
+                                        <li><a data-test-title="ExpenseDate.PreviousQuarter" data-ember-action="" data-ember-action-1321="1321">Trimestre anterior</a></li>
+                                        <li><a data-test-title="ExpenseDate.PreviousMonth" data-ember-action="" data-ember-action-1322="1322">Mes anterior</a></li>
+                                        <li><a data-test-title="ExpenseDate.LastSixMonths" data-ember-action="" data-ember-action-1323="1323">Últimos 6 meses</a></li>
+                                        <li><a data-test-title="ExpenseDate.LastTwelveMonths" data-ember-action="" data-ember-action-1324="1324">Últimos 12 meses</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div>
+                                Gastos principales <span id="ember1325" class="font-small popovercontainer ember-view" data-original-title="" title="">
+                                    <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 512 512" xml:space="preserve" class="icon icon-xs text-muted cursor-pointer"><path d="M317.1 147.5c-15.1-13.8-35.5-20.8-60.5-20.8-23.7 0-43.1 6.5-57.7 19.4-14.6 12.9-23.5 31.5-26.4 55.5l-.6 4.9 40.4 4.8.7-4.6c2.5-15.8 7.7-27.5 15.4-34.7 7.7-7.2 17.1-10.7 28.7-10.7 12 0 21.9 3.9 30.1 11.9 8.2 8 12.2 16.9 12.2 27.3 0 5.6-1.3 10.7-4 15.4-2.8 4.9-9.3 11.9-19.3 20.7-10.7 9.4-17.9 16.5-22.1 21.5-5.8 7-10 14-12.6 20.8-3.5 9.1-5.3 19.9-5.3 32.3 0 2.1.1 5.1.2 9l.1 4.7h38.4l.1-4.8c.3-14.3 1.4-21.4 2.3-24.7 1.3-4.7 3.2-8.8 5.9-12.5 2.8-3.8 9-10 18.5-18.4 15.1-13.4 25.1-24.6 30.4-34.2 5.4-9.7 8.1-20.4 8.1-31.9 0-19.9-7.7-37-23-50.9zM256.3 385.3c12.1 0 22-9.8 22-22 0-12.1-9.8-22-22-22-12.1 0-22 9.8-22 22s9.8 22 22 22z"></path><path d="M437.4 74.6C388.9 26.1 324.5-.5 256-.5S123.1 26.2 74.6 74.6C26.1 123.1-.5 187.5-.5 256s26.7 132.9 75.1 181.4c48.5 48.5 112.9 75.1 181.4 75.1s132.9-26.7 181.4-75.1c48.5-48.5 75.1-112.9 75.1-181.4s-26.6-132.9-75.1-181.4zm-22.6 340.2c-42.4 42.4-98.8 65.8-158.8 65.8s-116.4-23.4-158.8-65.8C54.8 372.4 31.5 316 31.5 256S54.8 139.6 97.2 97.2C139.6 54.8 196 31.5 256 31.5s116.4 23.4 158.8 65.8c42.4 42.4 65.8 98.8 65.8 158.8s-23.4 116.3-65.8 158.7z"></path></svg>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="panel-body p-4">
+                            <div style="width:220px;height:320px">
+                                <canvas id="graficoGastos"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="col-md-6">
+                <div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading legend" style="height:48px;">
+
+                            <div>
+                                Ventas, recibos y ordenes de trabajo <span id="ember1325" class="font-small popovercontainer ember-view" data-original-title="" title="">
+                                    <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 512 512" xml:space="preserve" class="icon icon-xs text-muted cursor-pointer"><path d="M317.1 147.5c-15.1-13.8-35.5-20.8-60.5-20.8-23.7 0-43.1 6.5-57.7 19.4-14.6 12.9-23.5 31.5-26.4 55.5l-.6 4.9 40.4 4.8.7-4.6c2.5-15.8 7.7-27.5 15.4-34.7 7.7-7.2 17.1-10.7 28.7-10.7 12 0 21.9 3.9 30.1 11.9 8.2 8 12.2 16.9 12.2 27.3 0 5.6-1.3 10.7-4 15.4-2.8 4.9-9.3 11.9-19.3 20.7-10.7 9.4-17.9 16.5-22.1 21.5-5.8 7-10 14-12.6 20.8-3.5 9.1-5.3 19.9-5.3 32.3 0 2.1.1 5.1.2 9l.1 4.7h38.4l.1-4.8c.3-14.3 1.4-21.4 2.3-24.7 1.3-4.7 3.2-8.8 5.9-12.5 2.8-3.8 9-10 18.5-18.4 15.1-13.4 25.1-24.6 30.4-34.2 5.4-9.7 8.1-20.4 8.1-31.9 0-19.9-7.7-37-23-50.9zM256.3 385.3c12.1 0 22-9.8 22-22 0-12.1-9.8-22-22-22-12.1 0-22 9.8-22 22s9.8 22 22 22z"></path><path d="M437.4 74.6C388.9 26.1 324.5-.5 256-.5S123.1 26.2 74.6 74.6C26.1 123.1-.5 187.5-.5 256s26.7 132.9 75.1 181.4c48.5 48.5 112.9 75.1 181.4 75.1s132.9-26.7 181.4-75.1c48.5-48.5 75.1-112.9 75.1-181.4s-26.6-132.9-75.1-181.4zm-22.6 340.2c-42.4 42.4-98.8 65.8-158.8 65.8s-116.4-23.4-158.8-65.8C54.8 372.4 31.5 316 31.5 256S54.8 139.6 97.2 97.2C139.6 54.8 196 31.5 256 31.5s116.4 23.4 158.8 65.8c42.4 42.4 65.8 98.8 65.8 158.8s-23.4 116.3-65.8 158.7z"></path></svg>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+</div>
+
+@section scripts{
+
+    <script>
+        $(function () {
+            // init daterangepicker
+            moment.locale('es')
+
+
+            var ventasCanvas = $("#graficoVentas");
+            var gastosCanvas = $("#graficoGastos");
+
+            Chart.defaults.global.defaultFontFamily = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"';
+            Chart.defaults.global.defaultFontSize = 11;
+
+            var ventasTotales = {
+                label: 'Density of Planet (kg/m3)',
+                data: [5427, 5243, 5514, 3933, 1326, 687, 1271, 1638],
+                backgroundColor: 'rgb(149, 203, 238)',
+                borderWidth: 0,
+                yAxisID: "y-axis-density"
+            };
+
+
+            var totalRecibido = {
+                label: 'Gravity of Planet (m/s2)',
+                data: [5227, 5143, 5014, 3033, 1026, 617, 1071, 1038],
+                backgroundColor: 'rgb(186, 220, 151)',
+                borderWidth: 0,
+                yAxisID: "y-axis-density"
+            };
+
+            var totalGastos = {
+                label: 'Gravity of Planet (m/s2)',
+                data: [2227, 3143, 4014, 2033, 4026, 2617, 5071, 2038],
+                backgroundColor: '#f0cf77',
+                borderWidth: 0,
+                yAxisID: "y-axis-density"
+            };
+
+            var planetData = {
+                labels: ["Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"],
+                datasets: [ventasTotales, totalRecibido, totalGastos]
+            };
+
+            var chartOptions = {
+                legend: {
+                    display: false
+                },
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    xAxes: [{
+                        /*barPercentage: 1,
+                        categoryPercentage: 0.6
+                        categorySpacing: -20,*/
+                        /*barThickness: 8,*/
+                        barPercentage: 0.8,
+                        categoryPercentage: 0.4,
+                        gridLines: {
+                            display: false,
+                            color: "#f6f6f66b"
+                        },
+                    }],
+                    yAxes: [{
+                        id: "y-axis-density",
+                        gridLines: {
+                            color: "#f6f6f6"
+                        },
+                    },/*
+                                                                                {
+                                                                                  id: "y-axis-gravity"
+                                                                                }*/
+                    ]
+                }
+            };
+
+            var barChart = new Chart(ventasCanvas, {
+                type: 'bar',
+                data: planetData,
+                options: chartOptions
+            });
+ 
+            data = {
+                datasets: [{
+                    data: [10, 20, 30],
+                    backgroundColor: [
+                        "rgb(255, 99, 132)",
+                        "rgb(54, 162, 235)",
+                        "rgb(255, 205, 86)"]
+                }],
+                labels: [
+                    'Red',
+                    'Blue',
+                    'Yellow'
+                ]
+            };
+
+            var gastosOpciones = {
+                responsive: true,
+                maintainAspectRatio: false,
+            };
+
+            var myPieChart = new Chart(gastosCanvas, {
+                type: 'pie',
+                data: data,
+                options: gastosOpciones
+            });
+
+            //https://jsfiddle.net/9m63neo2/
+            //var picker = $('#daterangepicker1').daterangepicker({
+            //    "parentEl": "#daterangepicker1-container",
+            //    "autoApply": true,
+            //    "singleDatePicker": true,
+            //    locale: {
+            //        format: 'DD/MM/YYYY HH:mm',
+            //        applyLabel: 'Aplicar',
+            //        cancelLabel: 'Cancelar',
+            //        daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+            //        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Setiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            //    },
+            //});
+            //// range update listener
+            //picker.on('apply.daterangepicker', function (ev, picker) {
+            //    $("#cdia").text(picker.startDate.format('dddd, DD MMM'));
+            //});
+            //// prevent hide after range selection
+            //picker.data('daterangepicker').hide = function () { };
+            //// show picker on load
+            //picker.data('daterangepicker').show();
+
+        });
+    </script>
+}

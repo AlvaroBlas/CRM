@@ -1,0 +1,42 @@
+﻿@model EmailModelo
+
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLongTitle">Enviar Correo</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+@using (Html.BeginForm())
+{
+    <div class="modal-body">
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label for="EnviarA" class="sm">Enviar a</label>
+                @Html.DropDownListFor(model => model.EnviarA, Model.CorreosElectronicosDisponibles, new { @class = "form-control form-control-sm" })
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label for="Asunto" class="sm">Asunto</label>
+                @Html.TextBoxFor(model => model.Asunto, new { @class = "form-control form-control-sm" })
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label for="Mensaje" class="sm">Mensaje</label>
+                @Html.TextAreaFor(model => model.Mensaje, new { @class = "form-control form-control-sm", @rows = "7" })
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label for="Asunto" class="sm">Archivo adjunto</label>
+                @Html.TextBoxFor(model => model.ArchivoAdjunto, new { @type = "file", @class = "form-control form-control-sm" })
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        <button type="submit" class="btn btn-danger btn-sm">Enviar</button>
+    </div>
+}

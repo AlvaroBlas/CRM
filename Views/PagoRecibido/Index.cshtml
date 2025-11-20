@@ -1,0 +1,307 @@
+﻿@model List<OrdenTrabajoModelo>
+
+@{
+    ViewBag.Titulo = "Pagos Recibidos";
+}
+
+<div class="titulo">
+    <div class="t1">
+        <span class="t11">Pagos Recibidos</span>
+        <span class="t12">Todos los pagos</span>
+    </div>
+    <div class="t2">
+        <a href="javascript:void(0)" onclick="crearPagoRecibido()" class="btn btn-danger my-1 btn-sm">
+            <i class="fas fa-plus"></i> Nueva pago
+        </a>
+        <div class="btn-group accioneslista">
+            <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="fas fa-list"></span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right">
+                <a download class="dropdown-item" href="javascript:void(0)" id="btnExportarClientes">
+                    <span class="fas fa-upload"></span> Exportar pagos recibidos
+                </a>
+                <div class="dropdown-divider"></div>
+                <a title="Actualizar" class="dropdown-item btnBuscarPago" href="javascript:void(0)">
+                    <span class="fas fa-sync-alt"></span> Actualizar la lista
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div>
+<div class="lista">
+    <form class="form-inline form-f" autocomplete="off">
+        <div class="btn-group" role="group">
+            <span style="line-height:27px">|</span>
+            <button type="button" class="btn btn-f b">FILTROS</button>
+            <button id="btnGroupDrop1" type="button" class="btn btn-f dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Cuenta
+            </button>
+            <div class="dropdown-menu p-0">
+                <div class="input-group">
+                    <input type="text" class="form-control form-control-sm" id="txtCuenta">
+                    <div class="input-group-append">
+                        <button class="btn btn-light btn-outline-dark btn-sm" type="button">
+                            <span class="fas fa-times"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            @*<div class="">
+                    <button id="btnGroupDrop1" type="button" class="btn btn-f dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Estado
+                    </button>
+                    <div class="dropdown-menu p-0">
+                        <div class="input-group">
+                            @Html.DropDownList("CmbEstado", new SelectList(
+                                   new List<object>{
+                     new { value = "" , text = ""  },
+                     new { value = Estados.Anulado.ValorEntero() , text = Estados.Anulado.DescripcionAtributo()  },
+                     new { value = Estados.Recibido.ValorEntero() , text = Estados.Recibido.DescripcionAtributo()  },
+                     new { value = Estados.Aprobado.ValorEntero() , text = Estados.Aprobado.DescripcionAtributo()  },
+                     new { value = Estados.Disapro.ValorEntero() , text = Estados.Disapro.DescripcionAtributo()  },
+                     new { value = Estados.Esppago.ValorEntero() , text = Estados.Esppago.DescripcionAtributo()  },
+                     new { value = Estados.Ceraent.ValorEntero() , text = Estados.Ceraent.DescripcionAtributo()  },
+                     new { value = Estados.Pagado.ValorEntero() , text = Estados.Pagado.DescripcionAtributo()  }
+                                   }, "value", "text"), new { @class = "form-control form-control-sm", @style="width:83% !important" })
+                            <div class="input-group-append">
+                                <button class="btn btn-light btn-outline-dark btn-sm" type="button">
+                                    <span class="fas fa-times"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
+            <button type="button" class="btn btn-f" id="btnBorrarFiltros">
+                <i class="fas fa-eraser"></i>
+                Borrar Filtros
+            </button>
+        </div>
+        <div class="btnes">
+            <button title="Actualizar" type="submit" class="btn btn-secondary btn-sm btnBuscarPago ocultar" style="padding:1px 10px">
+                <i class="fas fa-sync-alt"></i> Actualizar la lista
+            </button>
+        </div>
+        @*<button title="Actualizar" type="submit" style="display:none" class="btn btn-primary btn-sm" id="btnBuscarFactura">
+                <i class="fas fa-sync-alt"></i>
+            </button>*@
+    </form>
+
+    <table class="table w-100 table-striped table-hover table-bordered dt-responsive nowrap" id="tablaPagos">
+        <thead>
+            <tr>
+                <th>
+                    FECHA
+                </th>
+                <th>
+                    <span class="t-e-a" title="Nº DE FACTURA">
+                        <span class="t-e-b">
+                            Nº DE Pago
+                        </span>
+                    </span>
+                </th>
+                <th>
+                    <span class="t-e-a" title="NÚMERO DE ORDEN">
+                        <span class="t-e-b">
+                            Nº de referencia
+                        </span>
+                    </span>
+                </th>
+                <th>
+                    <span class="t-e-a" title="NOMBRE DEL CLIENTE">
+                        <span class="t-e-b">
+                            NOMBRE DEL CLIENTE
+                        </span>
+                    </span>
+                </th>
+                <th>
+                    <span class="t-e-a" title="ESTADO">
+                        <span class="t-e-b">
+                            Nº DE TICKET
+                        </span>
+                    </span>
+                </th>
+                <th>
+                    <span class="t-e-a" title="FECHA DE VENCIMIENTO">
+                        <span class="t-e-b">
+                            MODO
+                        </span>
+                    </span>
+                </th>
+                <th>
+                    <span class="t-e-a" title="TOTAL">
+                        <span class="t-e-b">
+                            IMPORTE
+                        </span>
+                    </span>
+                </th>
+                <th>
+                    <span class="t-e-a" title="SALDO ADEUDADO">
+                        <span class="t-e-b">
+                            IMPORTE SIN UTILIZAR
+                        </span>
+                    </span>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+@section scripts{
+    <script>
+        $(function () {
+
+            var $txtCuenta = $("#txtCuenta");
+            var $tbPagos = $("#tablaPagos");
+            var $btnBuscar = $(".btnBuscarPago");
+            var $btnBorrarFiltros = $("#btnBorrarFiltros");
+            var $cmbEstado = $("#CmbEstado");
+
+            $btnBorrarFiltros.on('click', function () {
+                $txtCuenta.val("");
+                $cmbEstado.val("");
+                $btnBuscar.trigger('click');
+            })
+
+            $cmbEstado.select2({
+                "placeholder": "--"
+            });
+
+            this.eliminarPago = function (btn) {
+                var id = $(btn).data("pagoid");
+                var url = URL_BASE + "PagoRecibido/Eliminar/" + id;
+                crearModalCentrado(url, 1, 1);
+            };
+  
+            $cmbEstado.on('change', function () {
+                dataTable.ajax.url(URL_BASE + 'OrdenTrabajo/ObtenerOrdenes/?estado=' + $(this).val());
+                dataTable.draw();
+            });
+
+            this.vistaPrevia = function (btn, pdf) {
+                var id = $(btn).data("pagoid");
+                var url = URL_BASE + "PagoRecibido/VistaPrevia?id=" + id + "&pdf=" + pdf;
+                crearModalXL(url, 1, 1);
+            }
+
+            var dataTable = $tbPagos.DataTable({
+                "dom": dom,
+                "oLanguage": idiomaDT,
+                responsive: true,
+                "bRetrieve": true,
+                "bServerSide": true,
+                "filter": true,
+                "iDisplayLength": 10,
+                //processing: true,
+                "ajax": {
+                    "type": "POST",
+                    "url": URL_BASE + 'PagoRecibido/ObtenerPagos',
+                    "contentType": 'application/json; charset=utf-8',
+                    'data': function (data) {
+                        data.cuenta = $txtCuenta.val();
+                        data.estado = $cmbEstado.val();
+                        return JSON.stringify(data);
+                    }
+                },
+                "order": [[0, "desc"]],
+                "columns": [
+                    {
+                        data: "Fecha",
+                        name: "Fecha",
+                        sWidth: "8%",
+                        render: function (data, type, fila) {
+                            return '<span>' + fila.FechaStr + '</span>'
+                        }
+                    },
+                    {
+                        data: "NumeroPago",
+                        name: "NumeroPago",
+                        sWidth: "5%",
+                        orderable: false,
+                    },
+                    {
+                        data: "NumeroReferencia",
+                        name: "NumeroReferencia",
+                        sWidth: "8%",
+                        orderable: false,
+                    },
+                    {
+                        data: "NombreCliente",
+                        name: "NombreCliente",
+                        sWidth: "15%",
+                        orderable: false,
+                    },
+                    {
+                        data: "CadenaNumeroFactura",
+                        name: "CadenaNumeroFactura",
+                        sWidth: "10%",
+                        orderable: false,
+                    },
+                    {
+                        data: "ModoPago",
+                        name: "ModoPago",
+                        sWidth: "5%",
+                        orderable: false,
+                    },
+                    {
+                        data: "ImporteRecibido",
+                        name: "ImporteRecibido",
+                        sWidth: "10%",
+                        sClass: "text-right",
+                        orderable: false,
+                        render: function (data, type, fila) {
+                            return '<span>' + (fila.Moneda + fila.ImporteTotalRecibidoStr) + '</span>'
+                        }
+                    },
+                    {
+                        data: "SaldoAdeudado",
+                        name: "SaldoAdeudado",
+                        sWidth: "10%",
+                        sClass: "text-right",
+                        orderable: false,
+                        render: function (data, type, fila) {
+                            return '<span>' + (fila.Moneda + fila.ImporteSinUsarStr) + '</span>'
+                        }
+                    },
+                    {
+                        data: "Acciones",
+                        name: "Acciones",
+                        sWidth: "2%",
+                        sClass: "text-center",
+                        orderable: false,
+                        render: function (data, type, fila) {
+                            var menu = '<a class="nav-item dropdown-toggle mr-md-2" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="display:block">' +
+                                '<span class="fas fa fa-ellipsis-v"></span></a>' +
+                                '<div class="dropdown-menu dropdown-menu-right">' +
+                                '<a class="dropdown-item" href="javascript:void(0)" title="Editar" onclick="editarPagoRecibido(this)" data-pagoid="' + fila.PagoRecibidoId + '"><span class="fas fa-edit"></span> Editar</a>' +
+                                '<a class="dropdown-item" href="javascript:void(0)" title="Eliminar" onclick="eliminarPago(this)" data-pagoid="' + fila.PagoRecibidoId + '"><span class="fas fa-trash"></span> Eliminar</a>' +
+                                //'<a class="dropdown-item" href="javascript:void(0)" title="Descargar" onclick="eliminarOrden(this)" data-facturaid="' + fila.FacturaId + '"><span class="fas fa-file-pdf"></span> Descargar Pdf</a>' +
+                                '<a class="dropdown-item" href="javascript:void(0)" title="Imprimir comprobante de pago" onclick="vistaPrevia(this,1)" data-pagoid="' + fila.PagoRecibidoId + '"><span class="fas fa-print"></span> Imprimir comprobante de pago</a>' +
+                                '</div>'
+                            return menu;
+                        }
+                    }
+                ],
+                "drawCallback": function (settings) {
+                    botonActualizar2("btnBuscarOrden");
+                },
+            });
+
+            $btnBuscar.click(function (e, draw) {
+                e.preventDefault();
+                botonActualizar("btnBuscarOrden");
+
+                if (typeof draw === 'undefined')
+                    draw = true;
+
+                dataTable.draw(draw);
+            });
+
+            //$(document).on('click', '.dropdown-menu', function (e) {
+            //    e.stopPropagation();
+            //});
+        });
+    </script>
+}

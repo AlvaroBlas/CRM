@@ -1,0 +1,245 @@
+﻿@model MedicalDentCRM.Base.Cliente
+
+@{
+    ViewBag.Titulo = Model.Cuenta;
+}
+
+<div class="titulo-view">
+    <div class="row">
+        <div class="col-md-6">
+            <img id="imgAvatar" style="float:left;padding:3px;border:1px solid #dfe5e8;margin:0 10px 0 0;border-radius:4px" />
+            <h5 class="mt-2 ml-2">@Model.Cuenta</h5>
+        </div>
+        <div class="col-md-6 text-right">
+            <button class="btn btn-outline-secondary" title="Realizar Llamada">
+                <span class="fas fa fa-phone-volume"></span>
+            </button>
+            <button class="btn btn-outline-secondary" title="Enviar Correo Electronico">
+                <span class="fas fa fa-envelope"></span>
+            </button>
+            <button class="btn btn-outline-secondary" title="Enviar SMS">
+                <span class="fas fa fa-comments"></span>
+            </button>
+            <button class="btn btn-outline-secondary" title="Añadir Nota">
+                <span class="fas fa fa-file-alt"></span>
+            </button>
+            <button class="btn btn-outline-secondary" title="Agregar Tarea">
+                <span class="fas fa fa-business-time"></span>
+            </button>
+        </div>
+    </div>
+</div>
+ 
+<div class="detalle-view">
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <a class="nav-item nav-link active" data-toggle="tab" href="#nav-general" role="tab" aria-controls="nav-home" aria-selected="true">General</a>
+            <a class="nav-item nav-link" data-toggle="tab" href="#nav-ordenes" role="tab" aria-controls="nav-profile" aria-selected="false">Ordenes Trabajo</a>
+            <a class="nav-item nav-link" data-toggle="tab" href="#nav-facturas" role="tab" aria-controls="nav-contact" aria-selected="false">Facturas</a>
+            <a class="nav-item nav-link" data-toggle="tab" href="#nav-historial" role="tab" aria-controls="nav-contact" aria-selected="false">Historial</a>
+        </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-general" role="tabpanel" aria-labelledby="nav-general">
+            @Html.Partial("_General")
+        </div>
+        <div class="tab-pane fade" id="nav-ordenes" role="tabpanel" aria-labelledby="nav-ordenes">
+            @Html.Partial("_ListaOrdenesCliente")
+        </div>
+        <div class="tab-pane fade" id="nav-facturas" role="tabpanel" aria-labelledby="nav-facturas">...</div>
+        <div class="tab-pane fade" id="nav-historial" role="tabpanel" aria-labelledby="nav-historial">...</div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+
+        $(function () {
+
+            var $btnNuevaOrden = $("#nuevaOrden");
+            var $txtCuenta = $("#txtCuenta");
+            var $tbOrdenes = $("#tablaOrdenes");
+            var $btnBuscar = $("#btnBuscarOrden");
+            var $btnBorrarFiltros = $("#btnBorrarFiltros");
+
+            $btnBorrarFiltros.on('click', function () {
+                $txtCuenta.val("");
+                $btnBuscar.trigger('click');
+            })
+
+            var cuenta = {
+                Cuenta : '@Model.Cuenta'
+            };
+       
+            var avatar = crearAvatar(cuenta);
+
+            $("#imgAvatar").attr("src", avatar);
+
+            $btnNuevaOrden.on('click', function () {
+                var url = $(this).data("url-crear");
+                crearModalXL(url, 1, 1);
+            });
+
+            this.editarOrden = function (btn) {
+                var id = $(btn).data("ordentrabajo-id");
+                var url = URL_BASE + "OrdenTrabajo/Editar/" + id;
+                crearModalXL(url, 1, 1);
+            };
+
+            this.eliminarOrden = function (btn) {
+                var id = $(btn).data("ordentrabajo-id");
+                var url = URL_BASE + "OrdenTrabajo/Eliminar/" + id;
+                crearModalCentrado(url, 1, 1);
+            };
+
+            this.editarInforme = function (btn) {
+                var id = $(btn).data("ordentrabajo-id");
+                var url = URL_BASE + "OrdenTrabajo/CrearInformeTecnico/?ordenTrabajoId=" + id;
+                crearModalLG(url, 1, 1);
+            };
+
+            var dataTable = $tbOrdenes.DataTable({
+                "dom": dom,
+                "oLanguage": idiomaDT,
+                responsive: true,
+                "bRetrieve": true,
+                "bServerSide": true,
+                "filter": true,
+                "iDisplayLength": 10,
+                //processing: true,
+                "ajax": {
+                    "type": "POST",
+                    "url": URL_BASE + 'OrdenTrabajo/ObtenerOrdenes',
+                    "contentType": 'application/json; charset=utf-8',
+                    'data': function (data) {
+                        data.clienteid = @Model.ClienteId;
+                        return JSON.stringify(data);
+                    }
+                },
+                "order": [[2, "desc"]],
+                "columns": [
+                    {
+                        data: "Codigo",
+                        name: "Codigo",
+                        sWidth: "2%",
+                        orderable: false,
+                        render: function (data, type, fila) {
+                            return '<a href="javascript:void(0)" onclick="editarOrden(this)" data-ordentrabajo-id="' + fila.OrdenTrabajoId + '">' + fila.Codigo + '</a>'
+                        }
+                    },
+                    {
+                        data: "Estado",
+                        name: "Estado",
+                        sWidth: "5%",
+                        orderable: false,
+                        render: function (data, type, fila) {
+
+                            var css = "badge-light";
+
+                            if (data === 0)
+                                css = "badge-dark";
+                            else if (data === 1)
+                                css = "badge-danger";
+                            else if (data === 2)
+                                css = "badge-info";
+                            else if (data === 3)
+                                css = "badge-warning";
+                            else if (data === 4)
+                                css = "badge-primary";
+                            else if (data === 5)
+                                css = "badge-secondary";
+                            else if (data === 6)
+                                css = "badge-success";
+
+                            return '<span class="badge ' + css + '">' + fila.EstadoStr + '</span>';
+                        }
+                    },
+                    //{
+                    //    data: "FechaRecepcion",
+                    //    name: "FechaRecepcion",
+                    //    sWidth: "8%",
+                    //    "visible": false,
+                    //},
+                    {
+                        data: "FechaRecepcion",
+                        name: "FechaRecepcion",
+                        sWidth: "8%",
+                        render: function (data, type, fila) {
+                            return '<span>' + fila.FechaRecepcionStr + '</span>'
+                        }
+                    },
+                    {
+                        data: "FechaEstimadaDisenoStr",
+                        name: "FechaEstimadaDisenoStr",
+                        sWidth: "8%",
+                        orderable: false,
+                    },
+                    {
+                        data: "FechaEstimadaEntregaStr",
+                        name: "FechaEstimadaEntregaStr",
+                        sWidth: "8%",
+                        orderable: false,
+                    },
+                    {
+                        data: "FechaEgresoStr",
+                        name: "FechaEgresoStr",
+                        sWidth: "8%",
+                        orderable: false,
+                    },
+                    {
+                        data: "Doctor",
+                        name: "Doctor",
+                        sWidth: "14%",
+                        orderable: false,
+                    },
+                    {
+                        data: "Paciente",
+                        name: "Paciente",
+                        sWidth: "10%",
+                        orderable: false,
+                    },
+                    {
+                        data: "DetalleProductos",
+                        name: "DetalleProductos",
+                        sWidth: "15%",
+                        orderable: false,
+                        render: function (data, type, fila) {
+                            return '<span class="t-e-a" title="' + fila.DetalleProductos + '"><span class="t-e-b">' + fila.DetalleProductos + '</span></span>'
+                        }
+                    },
+                    {
+                        data: "Cantidad",
+                        name: "Cantidad",
+                        sWidth: "5%",
+                        sClass: "text-center",
+                        orderable: false,
+                    },
+                    {
+                        data: "TotalStr",
+                        name: "TotalStr",
+                        sWidth: "5%",
+                        sClass: "text-right",
+                        orderable: false,
+                    },
+                    {
+                        data: "Acciones",
+                        name: "Acciones",
+                        sWidth: "2%",
+                        sClass: "",
+                        orderable: false,
+                        render: function (data, type, fila) {
+                            return '<button type="button" class="btn btn-link dclink" title="Editar" onclick="editarOrden(this)" data-ordentrabajo-id="' + fila.OrdenTrabajoId + '"><span class="fas fa-edit"></span></button>' +
+                                '<button type="button" class="btn btn-link dclink" title="Eliminar" onclick="eliminarOrden(this)" data-ordentrabajo-id="' + fila.OrdenTrabajoId + '"><span class="fas fa-trash"></span></button>' +
+                                (fila.Estado > 0 ? '<a target="_blank" href="' + URL_BASE + "OrdenTrabajo/Imprimir/?ordenTrabajoId=" + fila.OrdenTrabajoId + '" class="btn btn-link dclink" title="Imprimir Orden Atención"  data-ordentrabajo-id="' + fila.OrdenTrabajoId + '"><span class="fas fa-file-pdf"></span></a>' : '') +
+                                (fila.Estado > 1 ? '<a target="_blank" href="' + URL_BASE + "OrdenTrabajo/Cotizacion/?ordenTrabajoId=" + fila.OrdenTrabajoId + '" class="btn btn-link dclink" title="Generar Cotización"><span class="fas fa-file-invoice-dollar" ></span></a>' : '') +
+                                (fila.Estado === 0 ? '<button type="button" class="btn btn-link dclink" onclick="editarInforme(this)" data-ordentrabajo-id="' + fila.OrdenTrabajoId + '" title="Crear Informe Tecnico"><span class="fas fa-file-signature"></span></button>' : '');
+                        }
+                    },
+                ],
+                "drawCallback": function (settings) {
+                    botonActualizar2("btnBuscarOrden");
+                },
+            });
+        });
+    </script>
+}

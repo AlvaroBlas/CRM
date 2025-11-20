@@ -1,0 +1,326 @@
+﻿
+@{
+    ViewBag.Titulo = "Usuario y Roles";
+}
+
+<div class="pt-2">
+    <div class="tabDetalleCliente">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link f-s-14 active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Todos los usuario</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link f-s-14" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Roles</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link f-s-14" id="vendedores-tab" data-toggle="tab" href="#vendedores" role="tab" aria-controls="profile" aria-selected="false">Vendedores</a>
+            </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+
+                <button id="btnNuevoUsuario" style="float:right" type="button" class="btn btn-danger my-1 btn-sm">
+                    <i class="fas fa-plus"></i> Nuevo usuario
+                </button>
+
+                <table class="table table-hover table-striped table-bordered" id="tablaUsuarios" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>
+                                Nombre
+                            </th>
+                            <th>
+                                Rol
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+
+                <button id="btnNuevoRol" style="float:right" type="button" class="btn btn-danger my-1 btn-sm">
+                    <i class="fas fa-plus"></i> Nuevo rol
+                </button>
+
+                <table class="table table-hover table-striped table-bordered" id="tablaRoles" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>
+                                Nombre
+                            </th>
+                            <th>
+                                Descripción
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div class="tab-pane fade" id="vendedores" role="tabpanel" aria-labelledby="home-tab">
+
+                <button id="btnNuevoVendedor" style="float:right" type="button" class="btn btn-danger my-1 btn-sm">
+                    <i class="fas fa-plus"></i> Nuevo vendedor
+                </button>
+
+                <table class="table table-hover table-striped table-bordered" id="tablaVendedores" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>
+                                Nombre
+                            </th> 
+                            <th>
+                                Email
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(function () {
+            var $tablaUsuarios = $("#tablaUsuarios");
+            var $tablaRoles = $("#tablaRoles");
+            var $tablaVendedores = $("#tablaVendedores");
+            var $btnBuscar = $(".btnBuscarUsuario");
+            var $btnNuevoUsuario = $("#btnNuevoUsuario");
+            var $btnNuevoVendedor = $("#btnNuevoVendedor");
+            var $btnNuevoRol = $("#btnNuevoRol");
+
+            $btnNuevoUsuario.on('click', function () {
+                var url = URL_BASE + "Usuario/Crear";
+                crearModal(url, 1, 1);
+            });
+
+            editarUsuario = function (btn) {
+                var id = $(btn).data("usuarioid");
+                var url = URL_BASE + "Usuario/Editar/" + id;
+                crearModal(url, 1, 1);
+            };
+
+            eliminarUsuario = function (btn) {
+                var id = $(btn).data("usuarioid");
+                var url = URL_BASE + "Usuario/Eliminar/" + id;
+                crearModalCentrado(url, 1, 1);
+            };
+
+            $btnNuevoVendedor.on('click', function () {
+                var url = URL_BASE + "Usuario/CrearVendedor";
+                crearModal(url, 1, 1);
+            });
+
+            editarVendedor = function (btn) {
+                var id = $(btn).data("vendedorid");
+                var url = URL_BASE + "Usuario/EditarVendedor/" + id;
+                crearModal(url, 1, 1);
+            };
+
+            eliminarVendedor = function (btn) {
+                var id = $(btn).data("vendedorid");
+                var url = URL_BASE + "Usuario/EliminarVendedor/" + id;
+                crearModalCentrado(url, 1, 1);
+            };
+
+
+            $btnNuevoRol.on('click', function () {
+                var url = URL_BASE + "Usuario/CrearRol";
+                crearModal(url, 1, 1);
+            });
+
+            editarRol = function (btn) {
+                var id = $(btn).data("rolid");
+                var url = URL_BASE + "Usuario/EditarRol/" + id;
+                crearModal(url, 1, 1);
+            };
+
+            eliminarRol = function (btn) {
+                var id = $(btn).data("rolid");
+                var url = URL_BASE + "Usuario/EliminarRol/" + id;
+                crearModalCentrado(url, 1, 1);
+            };
+
+            var dataTable = $tablaUsuarios.DataTable({
+                "dom": dom,
+                "oLanguage": idiomaDT,
+                "bRetrieve": true,
+                "bServerSide": true,
+                "filter": true,
+                //"iDisplayLength": cantidadFilas(),
+                "iDisplayLength": 10,
+                //processing: true,
+                "ajax": {
+                    "type": "POST",
+                    "url": URL_BASE + 'Usuario/ObtenerUsuarios',
+                    "contentType": 'application/json; charset=utf-8',
+                    'data': function (data) {
+                        //data.producto = $txtProducto.val();
+                        return JSON.stringify(data);
+                    }
+                },
+                "columns": [
+                    {
+                        data: "NombreUsuario",
+                        name: "NombreUsuario",
+                        sWidth: "20%",
+                        render: function (data, type, fila) {
+                            return '<span class="t-e-a"><span class="t-e-b"><a  href="javascript:void(0)" title="Editar" onclick="editarUsuario(this)"  data-usuarioid="' + fila.UsuarioId + '">' + fila.NombreUsuario + '</span></span></a>'
+                        }
+                    },
+                    {
+                        data: "Rol",
+                        name: "Rol",
+                        sWidth: "10%",
+                        orderable: false,
+                        render: function (data, type, fila) {
+                            return '<span class="t-e-a"><span class="t-e-b">' + fila.Rol.Nombre + '</span></span>'
+                        }
+                    },
+                    {
+                        data: "Acciones",
+                        name: "Acciones",
+                        sWidth: "1%",
+                        sClass: 'text-center',
+                        orderable: false,
+                        render: function (data, type, fila) {
+                            var menu = '<a class="nav-item dropdown-toggle mr-md-2" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="display:block">' +
+                                '<span class="fas fa fa-ellipsis-v"></span></a>' +
+                                '<div class="dropdown-menu dropdown-menu-right">' +
+                                '<a class="dropdown-item" href="javascript:void(0)" title="Editar" onclick="editarUsuario(this)" data-usuarioid="' + fila.UsuarioId + '"><span class="fas fa-edit"></span> Editar</a>' +
+                                '<a class="dropdown-item" href="javascript:void(0)" title="Eliminar" onclick="eliminarUsuario(this)" data-usuarioid="' + fila.UsuarioId + '"><span class="fas fa-trash"></span> Eliminar</a>' +
+                                '</div>'
+                            return menu;
+                        }
+                    },
+                ],
+                "drawCallback": function (settings) {
+                    botonActualizar2("btnBuscarProducto");
+                },
+            });
+
+            $btnBuscar.click(function (e, draw) {
+                e.preventDefault();
+                botonActualizar("btnBuscarUsuario");
+
+                if (typeof draw === 'undefined')
+                    draw = true;
+
+                dataTable.draw(draw);
+            });
+
+            var dataTable2 = $tablaRoles.DataTable({
+                "dom": dom,
+                "oLanguage": idiomaDT,
+                "bRetrieve": true,
+                "bServerSide": true,
+                "filter": true,
+                //"iDisplayLength": cantidadFilas(),
+                "iDisplayLength": 10,
+                //processing: true,
+                "ajax": {
+                    "type": "POST",
+                    "url": URL_BASE + 'Usuario/ObtenerRoles',
+                    "contentType": 'application/json; charset=utf-8',
+                    'data': function (data) {
+                        //data.producto = $txtProducto.val();
+                        return JSON.stringify(data);
+                    }
+                },
+                "columns": [
+                    {
+                        data: "Nombre",
+                        name: "Nombre",
+                        sWidth: "30%",
+                        render: function (data, type, fila) {
+                            return '<span class="t-e-a"><span class="t-e-b"><a  href="javascript:void(0)" title="Editar" onclick="editarRol(this)"  data-rolid="' + fila.RolId + '">' + fila.Nombre + '</span></span></a>'
+                        }
+                    },
+                    {
+                        data: "Descripcion",
+                        name: "Descripcion",
+                        sWidth: "70%",
+                        orderable: false,
+                    },
+                    {
+                        data: "Acciones",
+                        name: "Acciones",
+                        sWidth: "1%",
+                        sClass: 'text-center',
+                        orderable: false,
+                        render: function (data, type, fila) {
+                            var menu = '<a class="nav-item dropdown-toggle mr-md-2" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="display:block">' +
+                                '<span class="fas fa fa-ellipsis-v"></span></a>' +
+                                '<div class="dropdown-menu dropdown-menu-right">' +
+                                '<a class="dropdown-item" href="javascript:void(0)" title="Editar" onclick="editarRol(this)" data-rolid="' + fila.RolId + '"><span class="fas fa-edit"></span> Editar</a>' +
+                                '<a class="dropdown-item" href="javascript:void(0)" title="Eliminar" onclick="eliminarRol(this)" data-rolid="' + fila.RolId + '"><span class="fas fa-trash"></span> Eliminar</a>' +
+                                '</div>'
+                            return menu;
+                        }
+                    },
+                ],
+                "drawCallback": function (settings) {
+                    botonActualizar2("btnBuscarProducto");
+                },
+            });
+
+
+            var dataTable3 = $tablaVendedores.DataTable({
+                "dom": dom,
+                "oLanguage": idiomaDT,
+                "bRetrieve": true,
+                "bServerSide": true,
+                "filter": true,
+                //"iDisplayLength": cantidadFilas(),
+                "iDisplayLength": 10,
+                //processing: true,
+                "ajax": {
+                    "type": "POST",
+                    "url": URL_BASE + 'Vendedor/ObtenerVendedores',
+                    "contentType": 'application/json; charset=utf-8',
+                    'data': function (data) {
+                        //data.producto = $txtProducto.val();
+                        return JSON.stringify(data);
+                    }
+                },
+                "columns": [
+                    {
+                        data: "NombreCompleto",
+                        name: "NombreCompleto",
+                        sWidth: "20%",
+                        render: function (data, type, fila) {
+                            return '<span class="t-e-a"><span class="t-e-b"><a  href="javascript:void(0)" title="Editar" onclick="editarUsuario(this)"  data-usuarioid="' + fila.VendedorId + '">' + fila.NombreCompleto + '</span></span></a>'
+                        }
+                    },      
+                    {
+                        data: "Email",
+                        name: "Email",
+                        sWidth: "20%"
+                    },        
+                    {
+                        data: "Acciones",
+                        name: "Acciones",
+                        sWidth: "1%",
+                        sClass: 'text-center',
+                        orderable: false,
+                        render: function (data, type, fila) {
+                            var menu = '<a class="nav-item dropdown-toggle mr-md-2" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="display:block">' +
+                                '<span class="fas fa fa-ellipsis-v"></span></a>' +
+                                '<div class="dropdown-menu dropdown-menu-right">' +
+                                '<a class="dropdown-item" href="javascript:void(0)" title="Editar" onclick="editarVendedor(this)" data-vendedorid="' + fila.VendedorId + '"><span class="fas fa-edit"></span> Editar</a>' +
+                                '<a class="dropdown-item" href="javascript:void(0)" title="Eliminar" onclick="eliminarVendedor(this)" data-vendedorid="' + fila.VendedorId + '"><span class="fas fa-trash"></span> Eliminar</a>' +
+                                '</div>'
+                            return menu;
+                        }
+                    },
+                ],
+                "drawCallback": function (settings) {
+                    botonActualizar2("btnBuscarVendedor");
+                },
+            });
+        })
+    </script>
+}

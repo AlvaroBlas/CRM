@@ -1,0 +1,14 @@
+﻿@model ProductoModelo
+
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLongTitle">Nuevo Producto</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+@using (Html.BeginForm("Crear", "Producto", FormMethod.Post, new { @autocomplete = "off" }))
+{
+    <text>
+        @Html.Partial("_CrearOEditar")
+    </text>
+}

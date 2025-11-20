@@ -1,0 +1,36 @@
+﻿@model FacturaModelo
+
+<tr class="ember-view">
+    @using (Html.BeginCollectionItem("Facturas"))
+    {
+        @Html.HiddenFor(model => model.FacturaId)
+        @Html.HiddenFor(model => model.NumeroFactura)
+        <td width="30%">
+            @Model.FechaFacturaStr
+            <br>
+            <small>
+                <span class="text-muted">Fecha de vencimiento</span>: @Model.FechaVencimientoStr
+            </small>
+        </td>
+        <td>
+            <span>
+                @Model.NumeroFactura
+            </span>
+        </td>
+        <td class="text-right">@Model.TotalStr</td>
+        <td class="text-right">
+            @Model.SaldoAdeudado
+            @Html.HiddenFor(model => model.SaldoAdeudado)
+        </td>
+        <td style="width:16%; position: relative;" class="text-right">
+            @Html.TextBoxFor(model => model.ImporteRecibido, new { @class = "form-control form-control-sm text-right i-p-f" })
+            <br>
+            @if (Model.PagoRecibidoId == 0)
+            {
+                <small>
+                    <a href="javascript:void(0)" class="i-p-p">Pagar el total</a>
+                </small>
+            }
+        </td>
+    }
+</tr>

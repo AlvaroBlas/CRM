@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html lang="es" ng-app="SaludOcupacionalLoginNET">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <title>Medical Dent - Iniciar Sesión</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/ico" href="~/favicon.ico" />
+    @Styles.Render("~/Content/devcorecss")
+
+    <script type="text/javascript">
+        var URL_BASE = "@Url.Content("~/")";
+        window.devcore = {
+            paciente: {},
+            cuenta: {},
+            global: {}
+        };
+    </script>
+</head>
+
+<body class="login" ng-controller="LoginController" style="overflow:hidden;position:absolute;width:100%;top:0;background:#F4F6F9;">
+    @RenderSection("featured", required: false)
+
+    <div class="login-form padding20 block-shadow" style="opacity: 1; -webkit-transform: scale(1); transform: scale(1); -webkit-transition: 0.5s; transition: 0.5s;">
+        @RenderBody()
+    </div>
+    <div class="sistema-version">
+        <span class="ng-binding">
+            Version @ViewContext.Controller.GetType().Assembly.GetName().Version @String.Format("{0:dddd, MMMM d, yyyy HH:mm:ss}", File.GetLastWriteTime(ViewContext.Controller.GetType().Assembly.Location))
+        </span>
+        <a href="http://devcore.com.pe" target="_blank" class="logo devcore"> </a>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @*@Scripts.Render("~/bundles/angular")*@
+    <script src="~/Scripts/jquery.blockUI.js"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,137 @@
+﻿@model NumeracionModelo
+
+<div class="modal-header">
+    <h5 class="modal-title">Número de Orden Trabajo</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+@using (Html.BeginForm("NumeracionOrden", "Configuracion", FormMethod.Post, new { @id = "FormNumeracionOrden", @autocomplete = "off" }))
+{
+    @Html.HiddenFor(model => model.ConfiguracionId)
+    @Html.HiddenFor(model => model.Editar)
+    <div class="modal-body">
+        <div class="form-row form-group">
+            <div class="col-md-12">
+                Sus números de ordenes están configurados en el modo de generación automática para ahorrarle tiempo.
+                ¿Está seguro de que desea cambiar esta configuración?
+            </div>
+        </div>
+        <div class="form-row form-group">
+            <div class="col-md-6">
+                <div class="custom-control custom-radio divAutomatico">
+                    @Html.RadioButtonFor(model => model.AnadirManualmente, false, new { @class = "custom-control-input" })
+                    @*<input type="radio" id="ContinuarGeneracionAutomatica" name="customRadio" class="custom-control-input" @(Model.ContinuarGeneracionAutomatica ? "checked" : "")>*@
+                    <label class="custom-control-label"> Continuar generando automáticamente números de orden</label>
+                </div>
+            </div>
+            <div class="col-md-3 numeracionDatos" @(Model.AnadirManualmente ? "style=display:none;" : string.Empty)>
+                <label>Prefijo</label>
+                @Html.TextBoxFor(model => model.Prefijo, new { @class = "form-control form-control-sm" })
+            </div>
+            <div class="col-md-3 numeracionDatos" @(Model.AnadirManualmente ? "style=display:none;" : string.Empty)>
+                <label>Siguiente número</label>
+                @Html.TextBoxFor(model => model.SiguienteNumero, new { @class = "form-control form-control-sm" })
+                @Html.ValidationMessageFor(model => model.SiguienteNumero)
+            </div>
+        </div>
+        <div class="form-row form-group">
+            <div class="col-md-6">
+                <div class="custom-control custom-radio divManualmente">
+                    @Html.RadioButtonFor(model => model.AnadirManualmente, true, new { @class = "custom-control-input" })
+                    @*<input type="radio" id="AnadirManualmente" name="customRadio" class="custom-control-input" @(Model.AnadirManualmente ? "checked" : "")>*@
+                    <label class="custom-control-label"> Los añadiré manualmente cada vez</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        <button type="submit" class="btn btn-danger btn-sm elCl">Guardar</button>
+    </div>
+}
+
+<script>
+    $(function () {
+
+        var $numeracionDatos = $(".numeracionDatos");
+
+        $(".divManualmente").on('click', function () {
+            $('input[type="radio"]').removeAttr("checked");
+            $(this).find('input').attr('checked', "checked");
+            $numeracionDatos.hide();
+        })
+
+        $(".divAutomatico").on('click', function () {
+            $('input[type="radio"]').removeAttr("checked");
+            $(this).find('input').attr('checked', "checked");
+            $numeracionDatos.show();
+        })
+
+        $('#SiguienteNumero').on('input', function () {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+
+        var btn, texto;
+
+        var $form = $("#FormNumeracionOrden");
+
+        $form.removeData("validator");
+        $form.removeData("unobtrusiveValidation");
+        $.validator.unobtrusive.parse($form);
+
+        var $validator = $form.validate();
+
+        if (typeof ($validator) !== "undefined") {
+
+        }
+
+        var modalId = $form.closest('.modal').attr("id");
+
+        $form.ajaxForm({
+            beforeSubmit: function (data) {
+                btn = $form.find(":submit");
+                btn.prop('disabled', true);
+                texto = btn.text();
+                btn.empty();
+                btn.append('<i class="fa fa-spinner fa-spin"></i> ' + texto);
+            },
+            success: function (data) {
+
+                if (data.resultado) {
+
+                    if (data.manualmente) {
+                        $("#NumeroRegistro").removeAttr('readonly');
+                        if (!data.editar)
+                            $("#NumeroRegistro").val("");
+                    } else {
+                        if ($("#NumeroRegistro").length > 0) {
+                            $("#NumeroRegistro").val(data.nuevoNumero);
+                            $("#NumeroRegistro").attr('readonly', 'readonly');
+                        }
+                    }
+
+                    mensajeDevCore(1, data.mensaje);
+
+                    $("#" + modalId).modal('hide');
+                }
+
+                btn.prop('disabled', false);
+                btn.empty();
+                btn.text(texto);
+            },
+            error: function (data) {
+                if (data.status === "500") {
+                    btn.prop('disabled', false);
+                    btn.empty();
+                    btn.text(texto);
+                    mensajeDevCore(3, "Ha ocurrido un error, por favor intente de nuevo más tarde");
+                }
+            },
+            complete: function (res, xhr) {
+
+            }
+        });
+
+    });
+</script>

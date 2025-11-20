@@ -1,0 +1,14 @@
+﻿@model OrdenTrabajoModelo
+
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLongTitle">Nueva Orden Trabajo</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+@using (Html.BeginForm("Crear", "OrdenTrabajo", FormMethod.Post, new { @autocomplete = "off", @id = "FormOrdenTrabajo" }))
+{
+    <text>
+        @Html.Partial("_CrearOEditar")
+    </text>
+}

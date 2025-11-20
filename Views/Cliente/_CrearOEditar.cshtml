@@ -1,0 +1,637 @@
+﻿@model ClienteModelo
+
+<style>
+    .tab-pane {
+        padding: 10px;
+    }
+</style>
+
+<div class="modal-body">
+    <fieldset>
+        <legend>Detalle de Cuenta</legend>
+        <div class="form-row">
+            <div class="form-group col-md-2">
+                <label for="DNI" class="sm">DNI</label>
+                @Html.TextBoxFor(model => model.DNI, new { @class = "form-control form-control-sm" })
+            </div>
+            <div class="form-group col-md-2">
+                <label for="NombreContactoPrincipal" class="sm">Saludo</label>
+                @Html.DropDownListFor(model => model.Saludo, new SelectList(
+                 new List<object>{
+              new { value = Saludo.Doctor.ValorEntero() , text = Saludo.Doctor.DescripcionAtributo()  },
+              new { value = Saludo.Señor.ValorEntero() , text = Saludo.Señor.DescripcionAtributo()  },
+              new { value = Saludo.Señora.ValorEntero() , text = Saludo.Señora.DescripcionAtributo()  },
+              new { value = Saludo.Señorita.ValorEntero() , text = Saludo.Señorita.DescripcionAtributo()  },
+              new { value = Saludo.Tecnico.ValorEntero() , text = Saludo.Tecnico.DescripcionAtributo()  }
+                 }, "value", "text"), new { @class = "form-control form-control-sm" })
+            </div>
+            <div class="form-group col-md-3">
+                <label for="NombreContactoPrincipal" class="sm">Nombre Contacto Principal</label>
+                @Html.TextBoxFor(model => model.NombreContactoPrincipal, new { @class = "form-control form-control-sm" })
+            </div>
+            <div class="form-group col-md-5">
+                <label for="ApellidoContactoPrincipal" class="sm">Apellido Contacto Principal</label>
+                @Html.TextBoxFor(model => model.ApellidoContactoPrincipal, new { @class = "form-control form-control-sm" })
+            </div>
+            <div style="margin-top:-16px;margin-left:5px">
+                @Html.ValidationMessageFor(model => model.DNI)
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label for="RUC" class="sm">RUC</label>
+                @Html.TextBoxFor(model => model.RUC, new { @class = "form-control form-control-sm" })
+            </div>
+            <div class="form-group col-md-9">
+                <label for="Cuenta" class="sm">Razon Social</label>
+                @Html.TextBoxFor(model => model.Cuenta, new { @class = "form-control form-control-sm" })
+            </div>
+            <div style="margin-top:-16px;margin-left:5px">
+                @Html.ValidationMessageFor(model => model.RUC)
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label for="RUC" class="sm requerido">Nombre para facturas y gastos</label>
+                @*@if (Model.NombreVisualizacion.TieneValor())
+                    {*@
+                @Html.DropDownListFor(model => model.NombreVisualizacion, Model.ListaNombresVisualizacion, new { @class = "form-control form-control-sm" })
+                @*}
+                    else
+                    {
+                        @Html.DropDownListFor(model => model.NombreVisualizacion, Model.ListaNombresVisualizacion, new { @class = "form-control form-control-sm" })
+                    }*@
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label for="TelefonoFijo" class="sm">Tel.Fijo Contacto</label>
+                @Html.TextBoxFor(model => model.TelefonoFijo, new { @class = "form-control form-control-sm" })
+            </div>
+            <div class="form-group col-md-3">
+                <label for="Movil" class="sm">Móvil Contacto</label>
+                @Html.TextBoxFor(model => model.Movil, new { @class = "form-control form-control-sm" })
+            </div>
+            <div class="form-group col-md-6">
+                <label for="Email" class="sm">Email</label>
+                @Html.TextBoxFor(model => model.Email, new { @class = "form-control form-control-sm" })
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label for="FechaNacimiento" class="sm">Fecha de Nacimiento</label>
+                @Html.TextBoxFor(model => model.FechaNacimiento, new { @Value = (Model.FechaNacimiento.HasValue ? Model.FechaNacimiento.Value.ToShortDateString() : string.Empty), @class = "form-control form-control-sm" })
+            </div>
+            <div class="form-group col-md-9">
+                <label for="CentroTrabajo" class="sm">Centro Trabajo</label>
+                @Html.TextBoxFor(model => model.CentroTrabajo, new { @class = "form-control form-control-sm" })
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="CentroTrabajo" class="sm">COP</label>
+                @Html.TextBoxFor(model => model.COP, new { @class = "form-control form-control-sm" })
+            </div>
+            @*<div class="form-group col-md-4">
+                    <label for="Colegiatura" class="sm">Colegiatura</label>
+                    @Html.TextBoxFor(model => model.Colegiatura, new { @class = "form-control form-control-sm" })
+                </div>*@
+            <div class="form-group col-md-6">
+                <label for="Especializacion" class="sm">Especialización</label>
+                @Html.DropDownListFor(model => model.EspecializacionId, Model.EspecializacionesDisponibles, string.Empty, new { @class = "form-control form-control-sm" })
+            </div>
+            <div class="form-group col-md-2">
+                <div class="custom-control custom-checkbox" style="margin-top:34px;text-align:right;margin-right:14px;">
+                    @Html.CheckBoxFor(model => model.Activo, new { @class = "custom-control-input" })
+                    <label class="custom-control-label" for="Activo">Activo</label>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Otros detalles</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Dirección</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="contacto-tab" data-toggle="tab" href="#contacto" role="tab" aria-controls="profile" aria-selected="false">Personas de contacto</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Comentarios</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label for="DireccionFactura" class="sm">Moneda</label>
+                    @Html.DropDownListFor(model => model.MonedaId, Model.MonedasDisponibles, new { @class = "form-control form-control-sm" })
+                </div>
+                <div class="form-group col-md-12">
+                    <label for="DistritoFactura" class="sm">Término Pago</label>
+                    @Html.DropDownListFor(model => model.TerminoPagoId, Model.TerminosDisponibles, new { @class = "form-control form-control-sm" })
+                </div>
+            </div>
+            <div class="form-row">
+                <label for="DistritoFactura" class="col-md-12 col-form-label col-form-label-sm font-weight-bold sm">Horario de atención</label>
+                <div class="form-group col-md-12">
+                    <table class="table">
+                        <tr>
+                            <td style="vertical-align:middle;" width="110px">Lunes-Viernes</td>
+                            <td width="115px">Inicio: @Html.TextBoxFor(model => model.LunesViernesManianaInicio,
+                                                     new {@Value = (Model.LunesViernesManianaInicio.HasValue ? Model.LunesViernesManianaInicio.Value.ToShortTimeString() : string.Empty), @class = "form-control form-control-sm" })</td>
+                            <td width="115px">Fin: @Html.TextBoxFor(model => model.LunesViernesManianaFin,
+                                                  new { @Value = (Model.LunesViernesManianaFin.HasValue ? Model.LunesViernesManianaFin.Value.ToShortTimeString() : string.Empty), @class = "form-control form-control-sm" })</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td style="vertical-align:middle;">Sabado</td>
+                            <td>Inicio: @Html.TextBoxFor(model => model.SabadoManianaInicio,
+                                       new { @Value = (Model.SabadoManianaInicio.HasValue ? Model.SabadoManianaInicio.Value.ToShortTimeString() : string.Empty), @class = "form-control form-control-sm" })</td>
+                            <td>Fin: @Html.TextBoxFor(model => model.SabadoManianaFin,
+                                    new { @Value = (Model.SabadoManianaFin.HasValue ? Model.SabadoManianaFin.Value.ToShortTimeString() : string.Empty), @class = "form-control form-control-sm" })</td>
+                            <td></td>
+                        </tr>
+                    </table>
+                    @*@Html.TextAreaFor(model => model.HorarioAtencion, new { @class = "form-control form-control-sm" })*@
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="DireccionFactura" class="sm">Entidad Financiera</label>
+                    @Html.DropDownListFor(model => model.EntidadFinancieraId, Model.EntidadesDisponibles, string.Empty, new { @class = "form-control form-control-sm" })
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="DistritoFactura" class="sm">Numero de cuenta</label>
+                    @Html.TextBoxFor(model => model.NumeroCuentaBancaria, new { @class = "form-control form-control-sm" })
+                </div>
+                <div class="form-group col-md-5">
+                    <label for="DistritoFactura" class="sm">Titular de cuenta</label>
+                    @Html.TextBoxFor(model => model.TitularCuenta, new { @class = "form-control form-control-sm" })
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="DireccionFactura" class="sm">Departamento(Factura)</label>
+                    @Html.DropDownListFor(model => model.DepartamentoFacturacionId, Model.DepartamentosFacturacion, string.Empty, new { @class = "form-control form-control-sm" })
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="DireccionFactura" class="sm">Provincia(Factura)</label>
+                    @Html.DropDownListFor(model => model.ProvinciaFacturacionId, Model.ProvinciasFacturacion, new { @class = "form-control form-control-sm" })
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="DireccionFactura" class="sm">Distrito(Factura)</label>
+                    @Html.DropDownListFor(model => model.DistritoFacturacionId, Model.DistritosFacturacion, new { @class = "form-control form-control-sm" })
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label for="DireccionFactura" class="sm">Dirección(Factura)</label>
+                    @Html.TextAreaFor(model => model.DireccionFactura, new { @class = "form-control form-control-sm" })
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label for="DireccionFactura" class="sm">Referencia(Factura)</label>
+                    @Html.TextBoxFor(model => model.ReferenciaFactura, new { @class = "form-control form-control-sm" })
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="DireccionFactura" class="sm">Departamento(Envio)</label>
+                    @Html.DropDownListFor(model => model.DepartamentoEnvioId, Model.DepartamentosEnvio, string.Empty, new { @class = "form-control form-control-sm" })
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="DireccionFactura" class="sm">Provincia(Envio)</label>
+                    @Html.DropDownListFor(model => model.ProvinciaEnvioId, Model.ProvinciasEnvio, new { @class = "form-control form-control-sm" })
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="DireccionFactura" class="sm">Distrito(Envio)</label>
+                    @Html.DropDownListFor(model => model.DistritoEnvioId, Model.DistritosEnvio, new { @class = "form-control form-control-sm" })
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label for="DireccionEnvio" class="sm">Dirección(Envio)</label>
+                    @Html.TextAreaFor(model => model.DireccionEnvio, new { @class = "form-control form-control-sm" })
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label for="DireccionFactura" class="sm">Referencia(Envio)</label>
+                    @Html.TextBoxFor(model => model.ReferenciaEnvio, new { @class = "form-control form-control-sm" })
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade show" id="contacto" role="tabpanel" aria-labelledby="home-tab">
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <table class="table table-striped table-bordered" id="tablaContactos">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Nombre
+                                </th>
+                                <th>
+                                    Apellidos
+                                </th>
+                                <th>
+                                    Email
+                                </th>
+                                <th width="100px">
+                                    Telefono
+                                </th>
+                                <th width="100px">
+                                    Movil
+                                </th>
+                                <th width="50px"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Contactos.Count > 0)
+                            {
+                                foreach (var c in Model.Contactos)
+                                {
+                                    Html.RenderAction("AgregarContacto", "Cliente", c);
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="6" class="text-center">No tiene contactos añadidos.</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <a style="" href="javascript:void(0)" class="btn btn-link btn-sm" id="btnAgregarContacto">
+                        <span class="fas fa-plus"></span> Agregar persona de contacto
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label for="Observacion" class="sm">Observación</label>
+                    @Html.TextAreaFor(model => model.Observacion, new { @class = "form-control form-control-sm" })
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+    <button type="submit" class="btn btn-danger btn-sm">Guardar</button>
+</div>
+
+<script>
+    $(function () {
+
+        var $btnAgregarContacto = $("#btnAgregarContacto");
+        var $tablaContactos = $("#tablaContactos");
+        var $lvmananainicio = $("#LunesViernesManianaInicio");
+        var $lvmananafin = $("#LunesViernesManianaFin");
+        var $smananainicio = $("#SabadoManianaInicio");
+        var $smananafin = $("#SabadoManianaFin");
+        var $manianaInicio = $('#ManianaInicio');
+        var $manianaFin = $('#ManianaFin');
+        var $tardeInicio = $('#TardeInicio');
+        var $tardeFin = $('#TardeFin');
+        var $nocheInicio = $('#NocheInicio');
+        var $nocheFin = $('#NocheFin');
+        var $entidadFinancieraId = $("#EntidadFinancieraId");
+        var $fechaNacimiento = $("#FechaNacimiento");
+        var $nombreVisualizacion = $("#NombreVisualizacion");
+        var $nombreContactoPrincipal = $("#NombreContactoPrincipal");
+        var $apellidoContactoPrincipal = $("#ApellidoContactoPrincipal");
+        var $cuenta = $("#Cuenta");
+
+        var $departamentoFacturacionId = $("#DepartamentoFacturacionId");
+        var $provinciaFacturacionId = $("#ProvinciaFacturacionId");
+        var $distritoFacturacionId = $("#DistritoFacturacionId");
+
+
+        var $departamentoEnvioId = $("#DepartamentoEnvioId");
+        var $provinciaEnvioId = $("#ProvinciaEnvioId");
+        var $distritoEnvioId = $("#DistritoEnvioId");
+
+        $departamentoFacturacionId.select2({
+            placeholder: "Seleccionar",
+            allowClear: true
+        });
+
+        $departamentoEnvioId.select2({
+            placeholder: "Seleccionar",
+            allowClear: true
+        });
+
+        $provinciaFacturacionId.select2({
+            placeholder: "Seleccionar",
+            allowClear: true
+        });
+
+        $provinciaEnvioId.select2({
+            placeholder: "Seleccionar",
+            allowClear: true
+        });
+
+        $distritoFacturacionId.select2({
+            placeholder: "Seleccionar",
+            allowClear: true
+        });
+
+        $distritoEnvioId.select2({
+            placeholder: "Seleccionar",
+            allowClear: true
+        });
+
+        $departamentoFacturacionId.change(function () {
+            obtenerProvincias($(this), $provinciaFacturacionId);
+        });
+
+        $provinciaFacturacionId.change(function () {
+            obtenerDistritos($(this), $distritoFacturacionId);
+        });
+
+        $departamentoEnvioId.change(function () {
+            obtenerProvincias($(this), $provinciaEnvioId);
+        });
+
+        $provinciaEnvioId.change(function () {
+            obtenerDistritos($(this), $distritoEnvioId);
+        });
+
+        var obtenerProvincias = function (select, selectProvincia) {
+            var $selectProvincia = selectProvincia;
+            var id = select.val();
+
+            $.ajax({
+                type: 'POST',
+                url: URL_BASE + "Ubicacion/ObtenerProvinciasPorDepartamentoId",
+                data: { departamentoId: id },
+                success: function (data) {
+                    $selectProvincia.empty();
+                    $selectProvincia.append("<option value=''></option>");
+                    $.each(data, function (index, valor) {
+                        $selectProvincia.append(
+                            "<option value='" + valor.ProvinciaId + "'>" + valor.Nombre + "</option>"
+                        );
+                    });
+                    $selectProvincia.select2({
+                        placeholder: "Seleccionar",
+                        allowClear: true
+                    });
+                }
+            });
+        };
+
+        var obtenerDistritos = function (select, selectDistrito) {
+
+            var $selectDistrito = selectDistrito;
+            var id = select.val();
+
+            $.ajax({
+                type: 'POST',
+                url: URL_BASE + "Ubicacion/ObtenerDistritosPorProvinciaId",
+                data: { provinciaId: id },
+                success: function (data) {
+                    $selectDistrito.empty();
+                    $selectDistrito.append("<option value=''></option>");
+                    $.each(data, function (index, valor) {
+                        $selectDistrito.append(
+                            "<option value='" + valor.DistritoId + "'>" + valor.Nombre + "</option>"
+                        );
+                    });
+                    $selectDistrito.select2({
+                        placeholder: "Seleccionar",
+                        allowClear: true
+                    });
+                }
+            });
+        };
+
+        $nombreVisualizacion.select2();
+
+        $nombreContactoPrincipal.on('keyup', function () {
+            var nombreContacto = $(this).val();
+            var apellidoContacto = $apellidoContactoPrincipal.val();
+            var texto = nombreContacto + " " + apellidoContacto;
+            var textoInvertido = apellidoContacto + ", " + nombreContacto;
+            var razonSocial = $cuenta.val();
+
+            $nombreVisualizacion.empty();
+
+            if (nombreContacto != null && nombreContacto.length > 0) {
+                $nombreVisualizacion.append($('<option>', {
+                    value: texto,
+                    text: texto
+                }));
+            }
+
+            if (apellidoContacto != null && apellidoContacto.length > 0) {
+                $nombreVisualizacion.append($('<option>', {
+                    value: textoInvertido,
+                    text: textoInvertido
+                }));
+            }
+
+            if (razonSocial != null && razonSocial.length > 0) {
+                $nombreVisualizacion.append($('<option>', {
+                    value: razonSocial,
+                    text: razonSocial
+                }));
+            }
+
+            $nombreVisualizacion.select2();
+        });
+
+        $cuenta.on('keyup', function () {
+            var nombreContacto = $nombreContactoPrincipal.val();
+            var apellidoContacto = $apellidoContactoPrincipal.val();
+            var texto = nombreContacto + " " + apellidoContacto;
+            var textoInvertido = apellidoContacto + ", " + nombreContacto;
+            var razonSocial = $(this).val();
+
+            $nombreVisualizacion.empty();
+
+            if (nombreContacto != null && nombreContacto.length > 0) {
+                $nombreVisualizacion.append($('<option>', {
+                    value: texto,
+                    text: texto
+                }));
+            }
+
+            if (apellidoContacto != null && apellidoContacto.length > 0) {
+                $nombreVisualizacion.append($('<option>', {
+                    value: textoInvertido,
+                    text: textoInvertido
+                }));
+            }
+
+            if (razonSocial != null && razonSocial.length > 0) {
+                $nombreVisualizacion.append($('<option>', {
+                    value: razonSocial,
+                    text: razonSocial
+                }));
+            }
+
+            $nombreVisualizacion.select2();
+        });
+
+        $apellidoContactoPrincipal.on('keyup', function () {
+            var nombreContacto = $nombreContactoPrincipal.val();
+            var apellidoContacto = $(this).val();
+            var texto = nombreContacto + " " + apellidoContacto;
+            var textoInvertido = apellidoContacto + ", " + nombreContacto;
+            var razonSocial = $cuenta.val();
+
+            $nombreVisualizacion.empty();
+            if (nombreContacto != null && nombreContacto.length > 0) {
+                $nombreVisualizacion.append($('<option>', {
+                    value: texto,
+                    text: texto
+                }));
+            }
+
+            if (apellidoContacto != null && apellidoContacto.length > 0) {
+                $nombreVisualizacion.append($('<option>', {
+                    value: textoInvertido,
+                    text: textoInvertido
+                }));
+            }
+
+            if (razonSocial != null && razonSocial.length > 0) {
+                $nombreVisualizacion.append($('<option>', {
+                    value: razonSocial,
+                    text: razonSocial
+                }));
+            }
+
+            $nombreVisualizacion.select2();
+        });
+
+
+        $entidadFinancieraId.select2({
+            placeholder: "-Seleccione entidad-"
+        });
+
+        var opcionesDt = {
+            "singleDatePicker": true,
+            "autoApply": false,
+            "showDropdowns": true,
+            "autoUpdateInput": false,
+            "applyButtonClasses": "btn-danger",
+            "cancelClass": "btn-secondary",
+            locale: {
+                format: 'DD/MM/YYYY',
+                applyLabel: 'Aplicar',
+                cancelLabel: 'Cancelar',
+                daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+                monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Setiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            },
+            "timePicker24Hour": false,
+        }
+
+        $fechaNacimiento.daterangepicker(opcionesDt, function (start, end, label) {
+            $fechaNacimiento.val(start.format('DD/MM/YYYY'));
+        });
+
+        $lvmananainicio.timepicker({
+            showMeridian: true,
+            minuteStep: 1
+        });
+
+        $lvmananafin.timepicker({
+            showMeridian: true,
+            minuteStep: 1
+        });
+
+        $smananainicio.timepicker({
+            showMeridian: true,
+            minuteStep: 1
+        });
+
+        $smananafin.timepicker({
+            showMeridian: true,
+            minuteStep: 1
+        });
+
+        //$manianaInicio.timepicker({
+        //    showMeridian: true,
+        //    minuteStep: 1
+        //});
+
+        //$manianaFin.timepicker({
+        //    showMeridian: true,
+        //    minuteStep: 1
+        //});
+
+        //$tardeInicio.timepicker({
+        //    showMeridian: true,
+        //    minuteStep: 1
+        //});
+
+
+        //$tardeFin.timepicker({
+        //    showMeridian: true,
+        //    minuteStep: 1
+        //});
+
+
+        //$nocheInicio.timepicker({
+        //    showMeridian: true,
+        //    minuteStep: 1
+        //});
+
+
+        //$nocheFin.timepicker({
+        //    showMeridian: true,
+        //    minuteStep: 1
+        //});
+
+        $btnAgregarContacto.on('click', function (e) {
+
+            var body = $tablaContactos.find('tbody');
+
+            $tablaContactos.find("tbody > tr").each(function () {
+                var td = $(this).find("td:first").html();
+                if (td === "No tiene contactos añadidos.") {
+                    $tablaContactos.find("tbody").empty();
+                }
+            });
+
+            $.ajax({
+                url: URL_BASE + "Cliente/AgregarContacto",
+                cache: false,
+                success: function (html) {
+                    body.append(html);
+                    $("form").removeData("validator");
+                    $("form").removeData("unobtrusiveValidation");
+                    $.validator.unobtrusive.parse("form");
+                },
+                complete: function () {
+                }
+            });
+
+            $tablaContactos.find("tbody > tr td .btnEliminarContacto").bind('click', function () {
+                eliminarFila(this);
+            });
+        });
+
+        $(document).on("click", ".btnEliminarContacto", function () {
+            eliminarFila(this);
+        });
+
+        var eliminarFila = function (fila) {
+            var $fila = $(fila).closest("tr");
+            $fila.remove();
+        };
+    })
+</script>

@@ -1,0 +1,55 @@
+﻿@model MedicalDentCRM.Base.Usuario
+
+<style>
+    .tab-pane {
+        padding: 10px;
+    }
+</style>
+
+@{
+    List<SelectListItem> roles = ViewBag.Roles as List<SelectListItem>;
+}
+
+<div class="modal-body">
+   
+    <fieldset>
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label for="Codigo" class="sm">Nombre usuario</label>
+                <input type="hidden" id="FakePassword" name="FakePassword" />
+                @Html.TextBoxFor(model => model.NombreUsuario, new { @class = "form-control form-control-sm", @autocomplete = "off" })
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label for="Codigo" class="sm">Contraseña</label>
+                @Html.PasswordFor(model => model.Clave, new { @class = "form-control form-control-sm", @autocomplete = "off" })
+            </div>
+        </div>
+        <label class="font-weight-bold">Cuenta Telefonia IP</label>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="Codigo" class="sm">VOIP Usuario</label>
+                @Html.TextBoxFor(model => model.VoipUsuario, new { @class = "form-control form-control-sm" })
+            </div>
+            <div class="form-group col-md-4">
+                <label for="Codigo" class="sm">VOIP clave</label>
+                @Html.TextBoxFor(model => model.VoipClave, new { @class = "form-control form-control-sm" })
+            </div>
+            <div class="form-group col-md-4">
+                <label for="Codigo" class="sm">SIP</label>
+                @Html.TextBoxFor(model => model.VoipSIP, new { @class = "form-control form-control-sm" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-12">
+                <label for="Descripcion" class="sm">Rol</label>
+                @Html.DropDownListFor(model => model.RolId, roles, new { @class = "form-control form-control-sm" })
+            </div>
+        </div>
+    </fieldset>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+    <button type="submit" class="btn btn-danger btn-sm">Guardar</button>
+</div>

@@ -1,0 +1,264 @@
+﻿@model MedicalDentCRM.Models.PagoRecibidoModelo
+
+<div class="form-group row">
+    <label for="ImporteTotalRecibido" class="col-md-2 col-form-label col-form-label-sm requerido">Importe</label>
+    <div class="col-md-10">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="input-group input-group-sm">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">@Model.Moneda</span>
+                    </div>
+                    @Html.TextBoxFor(model => model.ImporteTotalRecibido, new { @class = "form-control form-control-sm text-right" })
+                </div>
+            </div>
+            <label class="control-label col-form-label-sm pull-left">Cargos bancarios (si existen)</label>
+            <div class="col-md-2">
+                @Html.TextBoxFor(model => model.CargosBancarios, new { @class = "form-control form-control-sm text-right" })
+            </div>
+        </div>
+        @if (Model.ImporteTotalFacturas > 0)
+        {
+            @Html.HiddenFor(model => model.ImporteTotalFacturas)
+            <label class="checkbox cursor-pointer pl-0" style="font-size:14px">
+                <input id="chkImporteTotal" type="checkbox" class="ember-checkbox ember-view"> Pagar el importe total @string.Format("({0}{1})", Model.Moneda, Model.ImporteTotalFacturas.FormatearADecimales())
+            </label>
+        }
+    </div>
+</div>
+<div class="form-group row">
+    <label for="FechaPago" class="col-md-2 col-form-label col-form-label-sm requerido">Fecha de pago</label>
+    <div class="col-md-5">
+        @Html.TextBoxFor(model => model.FechaPago, new { @Value = Model.FechaPago.ConvertirFechaDescriptiva2(), @class = "form-control form-control-sm" })
+    </div>
+</div>
+<div class="form-group row">
+    <label for="NumeroPago" class="col-md-2 col-form-label col-form-label-sm requerido">N.º de pago</label>
+    <div class="col-md-5">
+        @Html.TextBoxFor(model => model.NumeroPago, new { @class = "form-control form-control-sm", @readonly = "readonly" })
+    </div>
+</div>
+<div class="form-group row">
+    <label for="ModoPagoId" class="col-md-2 col-form-label col-form-label-sm">Modo de pago</label>
+    <div class="col-md-5">
+        @Html.DropDownListFor(model => model.ModoPagoId, Model.ModosPagosDisponibles, new { @class = "form-control form-control-sm" })
+    </div>
+</div>
+<div class="form-group row">
+    <label for="NumeroReferencia" class="col-md-2 col-form-label col-form-label-sm">Nº. de referencia</label>
+    <div class="col-md-5">
+        @Html.TextBoxFor(model => model.NumeroReferencia, new { @class = "form-control form-control-sm" })
+    </div>
+</div>
+@*<div class="form-group row">
+        <label for="NumeroReferencia" class="col-md-2 col-form-label col-form-label-sm">¿Se han deducido los impuestos?</label>
+        <div class="col-md-5 col-form-label-sm">
+            @Html.CheckBoxFor(model => model.DeducidoImpuestos) Sí, el cliente ha deducido impuestos.
+        </div>
+    </div>*@
+<div class="row">
+    <div class="control-label col-md-7">
+        <h4 style="font-weight:normal;font-size:18px;line-height:45px;"> Facturas no pagadas </h4>
+    </div> <div class="col-md-5 clearfix">
+        <br>
+        <small>
+            <a class="pull-right" href="javascript:void(0)" id="borrarImporteAplicado">Borrar importe aplicado</a>
+        </small>
+    </div>
+</div>
+<div class="clearfix"></div>
+<div>
+    <table class="table line-item-table" id="tablaFacturasPendientes">
+        <thead>
+            <tr class="line-item-header">
+                <th width="200px">Fecha</th>
+                <th>Número de factura</th>
+                <th class="text-right">Importe de la factura</th>
+                <th class="text-right"> Importe adeudado</th>
+                @*<th width="16%" class="text-right hide">Retención tributaria</th>*@
+                <th style="width:12%;" class="text-right">Pago</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Facturas.Count > 0)
+            {
+                foreach (var f in Model.Facturas)
+                {
+                    Html.RenderPartial("_AgregarFactura", f);
+                }
+            }
+            else
+            {
+                <tr>
+                    <td style="height:120px;font-size:16px;vertical-align:middle" colspan="5" class="text-center">No hay facturas pendientes de pago para este cliente que se pueden aplicar para este pago.</td>
+                </tr>
+            }
+            <tr>
+                <td colspan="2" style="padding-top: 0px;"><small class="text-muted">**La lista solo contiene facturas ENVIADAS</small></td>
+                <td colspan="2" class="text-right">Total</td>
+                @*<td class="text-right hide">0.00</td>*@
+                <td class="text-right">
+                    <span class="totalIngresado">0.00</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="row">
+    <div class="col-md-7" style="margin-left:-15px">
+    </div>
+    <div class="divTotales unused-amount-zero alert alert-warning col-md-5 clearfix ">
+        <div class="row">
+            <p class="col-md-8 text-right">Importe recibido :</p>
+            <p class="col-md-4 text-right" id="t_importeRecibido">0.00</p>
+        </div> <div class="row">
+            <p class="col-md-8 text-right">Importe utilizado para los pagos :</p>
+            <p class="col-md-4 text-right" id="t_importeUtilizado">0.00</p>
+        </div> <div class="row">
+            <p class="col-md-8 text-right">Importe reembolsado :</p>
+            <p class="col-md-4 text-right">0.00</p>
+        </div> <div class="row">
+            <p class="col-md-8 text-right">
+                <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 512 512" xml:space="preserve" class="icon icon-sm text-bottom text-red"><path d="M508.2 461.2c-14-28.3-215-420.6-227.5-444.5-11.3-21.4-38.1-22.7-49.3-.9-17.1 33.3-217.1 425.4-227 444.8C-8 485 7.7 512.5 28.9 512.5h455c23.2 0 34.6-30.6 24.3-51.3zm-251.7-16c-16.5 0-29.8-14.9-29.8-33.2 0-18.3 13.3-33.2 29.8-33.2s29.8 14.9 29.8 33.2c0 18.4-13.4 33.2-29.8 33.2zm39.4-271.9c-2.5 22.4-21.1 132.2-27.2 168-1.1 6.6-6.3 12.2-12.4 12.2h-.2c-6.3 0-11.6-5.7-12.8-12.6-6.2-36.4-24.7-145.8-27.2-167.9-3-26.5 15.6-50.2 39.6-50.2 24.4 0 43.2 23.6 40.2 50.5z" id="Layer_2_2_"></path></svg> Importe excedente:
+            </p>
+            <p class="col-md-4 text-right">
+                @Model.Moneda
+                <span id="t_importeExcedente">
+                    0.00
+                </span>
+            </p>
+        </div>
+    </div>
+</div>
+<div class="form-group row">
+    <div class="col-xl-12">
+        <label for="Notas" class="col-form-label col-form-label-sm">Notas</label>
+        @Html.TextAreaFor(model => model.Notas, new { @class = "form-control form-control-sm" })
+    </div>
+</div>
+
+@if (Model.ClienteId > 0)
+{
+    <script>
+        $(function () {
+
+            moment.locale('es')
+
+            var $fechaPago = $("#FechaPago");
+            var $chkImporteTotal = $("#chkImporteTotal");
+            var $importeTotalFacturas = $("#ImporteTotalFacturas");
+            var $importeTotalRecibido = $("#ImporteTotalRecibido");
+            var $totalIngresado = $(".totalIngresado");
+            var $tablaFacturasPendientes = $("#tablaFacturasPendientes");
+            var $divTotales = $(".divTotales");
+            var $timporteRecibido = $("#t_importeRecibido");
+            var $timporteUtilizado = $("#t_importeUtilizado");
+            var $timporteExcedente = $("#t_importeExcedente");
+            var $borrarImporteAplicado = $("#borrarImporteAplicado");
+
+            var opcionesDt = {
+                "singleDatePicker": true,
+                "autoApply": true,
+                "autoUpdateInput": false,
+                "applyButtonClasses": "btn-danger",
+                "cancelClass": "btn-secondary",
+                locale: {
+                    format: 'DD MMMM YYYY',
+                    applyLabel: 'Aplicar',
+                    cancelLabel: 'Cancelar',
+                    daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+                    monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Setiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                }
+            }
+
+            $fechaPago.daterangepicker(opcionesDt, function (start, end, label) {
+                $fechaPago.val(start.format('DD MMMM YYYY'));
+            });
+
+            $chkImporteTotal.on('change', function () {
+
+                var total = $importeTotalFacturas.val();
+
+                if (this.checked) {
+                    $importeTotalRecibido.val(total);
+                    $importeTotalRecibido.attr("readonly", "readonly");
+                    distribuirImporteTotal(true);
+                    mostrarTotales();
+                } else {
+                    $importeTotalRecibido.val("");
+                    $importeTotalRecibido.removeAttr("readonly");
+                    distribuirImporteTotal(false);
+                    mostrarTotales();
+                }
+            });
+
+            var distribuirImporteTotal = function (marcado) {
+
+                var importeTotalRecibido = parseFloat($importeTotalRecibido.val()).toFixed(2);
+
+                $tablaFacturasPendientes.find("tbody > tr").each(function () {
+                    var index = $(this).find('input').val();
+                    var saldoAdeudado = parseFloat($('#Facturas_' + index + '__SaldoAdeudado').val()) || 0;
+                    console.log(saldoAdeudado);
+                    if (marcado) {
+                        $('#Facturas_' + index + '__ImporteRecibido').val(saldoAdeudado.toFixed(2));
+                        $totalIngresado.text(importeTotalRecibido);
+                    }
+                    else {
+                        $('#Facturas_' + index + '__ImporteRecibido').val("");
+                        $totalIngresado.text("0.00");
+                    }
+                });
+            };
+
+            var mostrarTotales = function () {
+
+                var suma = 0;
+                var importeTotalRecibido = parseFloat($importeTotalRecibido.val()) || 0;
+
+                $tablaFacturasPendientes.find("tbody > tr.ember-view").each(function () {
+                    var index = $(this).find('input').val();
+                    var importeRecibido = parseFloat($('#Facturas_' + index + '__ImporteRecibido').val()) || 0;
+                    suma = suma + importeRecibido;
+                });
+
+                var importeExcedente = parseFloat(importeTotalRecibido - suma).toFixed(2);
+
+                $timporteRecibido.text(importeTotalRecibido.toFixed(2));
+                $totalIngresado.text(suma.toFixed(2));
+                $timporteUtilizado.text(suma.toFixed(2));
+                $timporteExcedente.text(importeExcedente)
+
+                if (importeExcedente != 0) {
+                    $divTotales.removeClass('unused-amount-zero').addClass("dashed-border");
+                } else {
+                    $divTotales.removeClass('dashed-border').addClass("unused-amount-zero");
+                }
+            }
+
+            $(document).on("keyup", ".i-p-f", function () {
+                mostrarTotales();
+            });
+
+            $(document).on("click", ".i-p-p", function () {
+                var $fila = $(this).closest("tr");
+                var index = $fila.find('input').val();
+                var saldoAdeudado = parseFloat($('#Facturas_' + index + '__SaldoAdeudado').val()) || 0;
+                $('#Facturas_' + index + '__ImporteRecibido').val(saldoAdeudado.toFixed(2));
+                mostrarTotales();
+            });
+
+            $(document).on("keyup", "#ImporteTotalRecibido", function () {
+                mostrarTotales();
+            });
+
+            $borrarImporteAplicado.on('click', function () {
+                $tablaFacturasPendientes.find("tbody > tr.ember-view").each(function () {
+                    var index = $(this).find('input').val();
+                    $('#Facturas_' + index + '__ImporteRecibido').val("");
+                });
+                mostrarTotales();
+            });
+        })
+    </script>
+}

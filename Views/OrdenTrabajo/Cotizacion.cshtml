@@ -1,0 +1,196 @@
+﻿@model OrdenTrabajoModelo
+
+<style>
+    table {
+        font-family: Arial, Helvetica, sans-serif;
+    }
+</style>
+
+<div style="margin-left:50px;margin-right:50px">
+    <table style="width:100%;margin-top:50px" border="0" cellpadding="0" cellspacing="0">
+        <tr>
+            <td>
+                <img src="@Server.MapPath("~/Content/img/dent.png")" width="300px" />
+            </td>
+            <td>
+                <table class="w-100 f-s-12">
+                    <tr>
+                        <td class="f-w-b t-r">@Model.Compania.RazonSocial</td>
+                    </tr>
+                    <tr>
+                        <td class="t-r">@string.Format("{0}{1}, {2}", Model.Compania.Direccion, Model.Compania.Ciudad, Model.Compania.Provincia)</td>
+                    </tr>
+                    <tr>
+                        <td class="t-r">
+                            Telef: @Model.Compania.TelefonoFijo Cel: @Model.Compania.TelefonoMovil
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="t-r">Email: @Model.Compania.Email</td>
+                    </tr>
+                    <tr>
+                        <td class="t-r">Web: @Model.Compania.Web</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <div style="border-bottom:2px solid lightgray;margin-top:10px">
+    </div>
+    <table class="w-100 f-s-12" cellpadding="2" border="0" cellspacing="0" style="margin-top:50px;">
+        <tr>
+            <td class="f-w-b">
+                Fecha: @DateTime.Now.ConvertirAHoraUsuario()
+            </td>
+            <td rowspan="7" class="t-r">
+                <div class="f-w-b f-s-16 t-c" style="background-color:#BDB9B9;height:20px;width:190px;margin:auto;padding:15px">
+                    PROFORMA: @string.Format("COTI{0}", Model.OrdenTrabajoId.ToString("00000"))
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td height="10px"></td>
+        </tr>
+        <tr>
+            <td class="f-w-b">
+                Señores: @Model.ClienteModelo.Cuenta
+            </td>
+        </tr>
+        <tr>
+            <td>
+                DNI/RUC: @Model.ClienteModelo.RUC
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Telefono: @Model.ClienteModelo.Telefonos
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Email: @Model.ClienteModelo.Email
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Email: @Model.ClienteModelo.DireccionFactura @Model.ClienteModelo.DistritoFactura @Model.ClienteModelo.DepartamentoFactura
+            </td>
+        </tr>
+    </table>
+
+    <style>
+        .t1 td {
+            border: 1px solid white;
+        }
+    </style>
+
+    <table style="margin-top:80px;" cellpadding="4" border="0" cellspacing="0" class="f-s-13 t1 w-100">
+        <tr>
+            <td class="t-c f-w-b" style="background-color:#BDB9B9" height="30px">
+                Item
+            </td>
+            <td class="t-c f-w-b" style="background-color:#BDB9B9">
+                Descripción
+            </td>
+            <td class="t-c f-w-b" style="background-color:#BDB9B9">
+                Precio Unitario
+            </td>
+            <td class="t-c f-w-b" style="background-color:#BDB9B9">
+                Cantidad
+            </td>
+            <td class="t-c f-w-b" style="background-color:#BDB9B9">
+                Total
+            </td>
+        </tr>
+        @{
+            int i = 1;
+        }
+        @foreach (var p in Model.Productos)
+        {
+            <tr>
+                <td class="t-c" height="50px" style="background-color:#BDB9B9">@i</td>
+                <td class="f-w-b" style="background-color:#EEEEEE">
+                    @p.NombreProducto
+                </td>
+                <td class="t-r" style="background-color:#EEEEEE">
+                    S/. @p.Precio.FormatearADecimales()
+                </td>
+                <td class="t-c" style="background-color:#EEEEEE">
+                    @p.Cantidad
+                </td>
+                <td class="t-r f-w-b" style="background-color:#EEEEEE">
+                    S/. @p.Total.FormatearADecimales()
+                </td>
+            </tr>
+            i++;
+        }
+
+        <tr>
+            <td colspan="4" class="t-r" height="35px">
+                Sub Total
+            </td>
+            <td style="background-color:#BDB9B9" class="t-r">
+                S/. @Model.SubTotal.FormatearADecimales()
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4" class="t-r" height="35px">
+                IGV 18.00%
+            </td>
+            <td style="background-color:#BDB9B9" class="t-r">
+                S/. @Model.Impuesto.FormatearADecimales()
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4" class="t-r f-w-b f-s-16" height="35px" style="color:darkred;border:none !important;">
+                Precio Total
+            </td>
+            <td class="t-r f-w-b f-s-16" style="color:darkred">
+                S/. @Model.Total.FormatearADecimales()
+            </td>
+        </tr>
+    </table>
+
+    <table class="w-100 f-s-12" style="margin-top:100px" cellpadding="0" cellspacing="0">
+        <tr>
+            <td class="f-w-b">
+                CONDICIONES COMERCIALES:
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.Raw(HttpUtility.HtmlEncode(Model.CondicionesGenerales).Replace("\n", "<br/>"))
+            </td>
+        </tr>
+        <tr>
+            <td height="15px"></td>
+        </tr>
+        <tr>
+            <td class="f-w-b">
+                DEPOSITAR A:
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.Raw(HttpUtility.HtmlEncode(Model.DepositarA).Replace("\n", "<br/>"))
+            </td>
+        </tr>
+    </table>
+    <table cellpadding="0" cellspacing="0" class="w-100 f-s-12" style="margin-top:50px">
+        <tr>
+            <td></td>
+            <td class="t-r">
+                Atentamente,<br />
+                @Model.Vendedor
+            </td>
+        </tr>
+    </table>
+    <table cellpadding="0" cellspacing="0" class="w-100" style="margin-top:90px">
+        <tr>
+            <td></td>
+            <td class="t-r">
+                <img src="@Server.MapPath("~/Content/img/l2.jpg")" width="400px" />
+            </td>
+        </tr>
+    </table>
+</div>

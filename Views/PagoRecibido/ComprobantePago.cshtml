@@ -1,0 +1,407 @@
+﻿@model List<ComprobantePagoModelo>
+
+@{
+    var pago = ViewBag.Comprabante as MedicalDentCRM.Base.PagoRecibido;
+}
+
+<div class="details-page">
+    <div style="margin-bottom:50px;max-width:8.27in;margin-left:auto;margin-right:auto;" class="details-container clearfix ">
+        <div id="ember4189" class="ember-view">
+            <style media="all" type="text/css">
+                .pcs-template {
+                    font-family: Open Sans, 'WebFont-Open Sans';
+                    font-size: 11pt;
+                    color: #333333;
+                    background: #ffffff;
+                }
+
+                .pcs-header-content {
+                    font-size: 8pt;
+                    color: #333333;
+                    background-color: #ffffff;
+                }
+
+                .pcs-template-body {
+                    padding: 0 0.40in 0 0.55in;
+                }
+
+                .pcs-template-footer {
+                    height: 0.70in;
+                    font-size: 6pt;
+                    color: #aaaaaa;
+                    padding: 0 0.40in 0 0.55in;
+                    background-color: #ffffff;
+                }
+
+                .pcs-footer-content {
+                    word-wrap: break-word;
+                    color: #aaaaaa;
+                    border-top: 1px solid #ece7e7;
+                }
+
+                .pcs-label {
+                    color: #777777;
+                }
+
+                .pcs-entity-title {
+                    font-size: 13pt;
+                    color: #333333;
+                }
+
+                .pcs-orgname {
+                    font-size: 15pt;
+                    color: #333333;
+                }
+
+                .pcs-customer-name {
+                    font-size: 12pt;
+                    color: #333333;
+                }
+
+                .pcs-itemtable-header {
+                    font-size: 11pt;
+                    color: #333333;
+                    background-color: #eff0f1;
+                }
+
+                .pcs-itemtable-breakword {
+                    word-wrap: break-word;
+                }
+
+                .pcs-taxtable-header {
+                    font-size: 11pt;
+                    color: #000;
+                    background-color: #f5f4f3;
+                }
+
+                .itemBody tr {
+                    page-break-inside: avoid;
+                    page-break-after: auto;
+                }
+
+                .pcs-item-row {
+                    font-size: 11pt;
+                    border-bottom: 1px solid #ece7e7;
+                    background-color: #ffffff;
+                    color: #333333;
+                }
+
+                .pcs-item-sku {
+                    margin-top: 2px;
+                    font-size: 10px;
+                    color: #444444;
+                }
+
+                .pcs-item-desc {
+                    color: #8e8e8e;
+                    font-size: 11pt;
+                }
+
+                .pcs-balance {
+                    background-color: #ffffff;
+                    font-size: 9pt;
+                    color: #333333;
+                }
+
+                .pcs-totals {
+                    font-size: 16pt;
+                    color: #ffffff;
+                    background-color: #78ae54;
+                }
+
+                .pcs-notes {
+                    font-size: 9pt;
+                }
+
+                .pcs-terms {
+                    font-size: 9pt;
+                }
+
+                .pcs-header-first {
+                    background-color: #ffffff;
+                    font-size: 8pt;
+                    color: #333333;
+                    height: auto;
+                }
+
+                .pcs-status {
+                    color:;
+                    font-size: 15pt;
+                    border: 3px solid;
+                    padding: 3px 8px;
+                }
+
+
+                .pcs-template-header {
+                    padding: 0 0.40in 0 0.55in;
+                    height: 0.70in;
+                }
+
+                .pcs-template-fill-emptydiv {
+                    display: table-cell;
+                    content: " ";
+                    width: 100%;
+                }
+
+
+                /* Additional styles for RTL compat */
+
+                /* Helper Classes */
+
+                .inline {
+                    display: inline-block;
+                }
+
+                .v-top {
+                    vertical-align: top;
+                }
+
+                .text-align-right {
+                    text-align: right;
+                }
+
+                .rtl .text-align-right {
+                    text-align: left;
+                }
+
+                .text-align-left {
+                    text-align: left;
+                }
+
+                .rtl .text-align-left {
+                    text-align: right;
+                }
+
+                /* Helper Classes End */
+
+                .item-details-inline {
+                    display: inline-block;
+                    margin: 0 10px;
+                    vertical-align: top;
+                    max-width: 70%;
+                }
+
+                .total-in-words-container {
+                    width: 100%;
+                    margin-top: 10px;
+                }
+
+                .total-in-words-label {
+                    vertical-align: top;
+                    padding: 0 10px;
+                }
+
+                .total-in-words-value {
+                    width: 170px;
+                }
+
+                .total-section-label {
+                    padding: 5px 10px 5px 0;
+                    vertical-align: middle;
+                }
+
+                .total-section-value {
+                    width: 120px;
+                    vertical-align: middle;
+                    padding: 10px 10px 10px 5px;
+                }
+
+                .rtl .total-section-value {
+                    padding: 10px 5px 10px 10px;
+                }
+
+                .tax-summary-description {
+                    color: #727272;
+                    font-size: 8pt;
+                }
+
+                .rtl th {
+                    text-align: inherit; /* Specifically setting th as inherit for supporting RTL */
+                }
+
+                .pcs-total {
+                    font-size: 16pt;
+                    color: #ffffff;
+                }
+
+                .pcs-payment-details-header {
+                    color: #333333;
+                    font-size: 15pt;
+                }
+
+                td .inner-container {
+                    border-left: 1px solid #ededed;
+                    padding-left: 20px;
+                }
+
+                .add-info td {
+                    width: 24%;
+                    padding: 20px 0;
+                    border-bottom: 1px solid #ededed
+                }
+
+                    .add-info td:last-child {
+                        width: auto;
+                    }
+
+                .inner-container .pcs-label {
+                    font-weight: bold;
+                    font-size: 13px;
+                }
+
+                .add-info td:first-child .inner-container {
+                    border-left: none;
+                }
+            </style>
+
+            <div style="font-size:11pt; font-family: Open Sans;" class="pcs-template">
+                <div class="pcs-template-header pcs-header-content" id="header">
+                    <div class="pcs-template-fill-emptydiv"></div>
+                </div>
+                <div style="padding:0 35px;">
+                    <div style="padding-bottom:35px;border-bottom:1px solid #eee;width:100%;">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td style="vertical-align:top;padding-left:30px">
+                                        <p><span class="pcs-orgname"><b>@ViewBag.Compania</b><br></span></p>
+                                        <span style="white-space: pre-wrap;color:#999;" id="tmp_org_address">Perú</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div style="padding:35px 0 50px;text-align:center">
+                        <span style="border-bottom:1px solid #eee;" class="pcs-entity-title">RECIBO DE PAGOS</span>
+                    </div>
+
+                    <div style="width: 70%;float: left;">
+                        <div style="width: 100%;padding: 11px 0;">
+                            <div style="width:35%;float:left;" class="pcs-label">Fecha de pago</div>
+                            <div style="width:65%;border-bottom:1px solid #eee;float:right;"><b>@pago.FechaPago.ConvertirFechaDescriptiva2()</b></div>
+                            <div style="clear:both;"></div>
+                        </div>
+                        <div style="width: 100%;padding: 10px 0;">
+                            <div style="width:35%;float:left;" class="pcs-label">Número de referencia</div>
+                            <div style="width:65%;border-bottom:1px solid #eee;float:right;min-height:22px"><b>@pago.NumeroReferencia</b></div>
+                            <div style="clear:both;"></div>
+                        </div>
+                        <div style="width: 100%;padding: 11px 0;">
+                            <div style="width:35%;float:left;" class="pcs-label">Modo de pago</div>
+                            <div style="width:65%;border-bottom:1px solid #eee;float:right;"><b>@pago.ModoPago.Nombre</b></div>
+                            <div style="clear:both;"></div>
+                        </div>
+                    </div>
+                    <div style="text-align:center;color:#ffffff;float:right;background:#78ae54;width: 25%; padding: 34px 5px;">
+                        <span> Importe recibido</span><br>
+                        <span class="pcs-total">
+                            @string.Format("{0}{1}", pago.Cliente.Moneda.Codigo, pago.ImporteTotalRecibido)
+                        </span>
+                    </div><div style="clear:both;">
+                    </div>
+                    <div style="margin-top:50px">
+                        <table style="width:100%">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div>
+                                            <p class="pcs-label" id="tmp_billing_address_label" style="font-weight:600">Facturar a</p>
+                                            <span>
+                                                <strong>
+                                                    <span class="pcs-customer-name" id="zb-pdf-customer-detail">
+                                                        @*<a href="#/contacts/616415000000058001">@pago.Cliente.NombreVisualizacion</a>*@
+                                                        <span>@pago.Cliente.NombreVisualizacion</span>
+                                                    </span>
+                                                </strong>
+                                            </span>
+                                        </div>
+                                        @*<div>
+                                                <p class="pcs-label" id="tmp_billing_address_label" style="font-weight:600">Facturar a</p>
+                                                <span style="white-space: pre-wrap;" id="tmp_billing_address">
+                                                    <strong>
+                                                        <span class="pcs-customer-name" id="zb-pdf-customer-detail">
+                                                            <a href="#/contacts/616415000000058001">@pago.Cliente.NombreVisualizacion</a>
+                                                            <span>@pago.Cliente.NombreVisualizacion</span>
+                                                        </span>
+                                                    </strong>
+                                                </span>
+                                            </div>*@
+                                    </td>
+                                    <td style="text-align: right;vertical-align:top"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div style="margin: 100px -35px 0 -35px;border-top:1px solid #ededed;"></div>
+                    <div style="page-break-inside: avoid;">
+                        <div class="add-info">
+                            <table style="width:100%">
+                                <tbody>
+                                    <tr></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div style="margin-top:50px;page-break-inside: avoid;">
+                        <h4 class="pcs-payment-details-header" style="margin-bottom:18px;">Pago de</h4>
+
+                        <table style="width:100%;table-layout:fixed;" class="pcs-itemtable" border="0" cellspacing="0" cellpadding="0">
+                            <thead>
+                                <tr style="height:40px;">
+
+                                    <td style="padding:5px 10px 5px 10px;word-wrap: break-word;" class="pcs-itemtable-header">
+                                        Número de factura
+                                    </td>
+
+                                    <td style="padding:5px 10px 5px 5px;word-wrap: break-word;" class="pcs-itemtable-header">
+                                        Fecha de la factura
+                                    </td>
+
+                                    <td align="right" style="padding:5px 10px 5px 5px;word-wrap: break-word;" class="pcs-itemtable-header">
+                                        Importe de la factura
+                                    </td>
+
+
+                                    <td align="right" style="padding:5px 10px 5px 5px;word-wrap: break-word;" class="pcs-itemtable-header">
+                                        Importe del pago
+                                    </td>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var p in Model)
+                                {
+                                    <tr style="border-top:1px solid #ededed">
+
+                                        <td valign="top" style="padding: 10px 0px 10px 10px;word-wrap: break-word;" class="pcs-item-row">
+                                            <span>
+                                                @*<a href="#/invoices/616415000000097041">INV-000010</a>*@
+                                                @p.NumeroFactura
+                                            </span>
+                                        </td>
+                                        <td valign="top" style="padding: 10px 10px 5px 10px;word-wrap: break-word;" class="pcs-item-row">
+                                            @p.FechaFactura.Value.ConvertirFechaDescriptiva2()
+                                        </td>
+                                        <td valign="top" style="padding: 10px 10px 5px 10px;text-align:right;word-wrap: break-word;" class="pcs-item-row">
+                                            @string.Format("{0}{1}", pago.Cliente.Moneda.Codigo, p.Total)
+                                        </td>                                         
+                                        <td valign="top" style="text-align:right;padding: 10px 10px 10px 5px;word-wrap: break-word;" class="pcs-item-row">
+                                            @string.Format("{0}{1}", pago.Cliente.Moneda.Codigo, p.ImporteRecibido)
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+                <div class="pcs-template-footer">
+                    <div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

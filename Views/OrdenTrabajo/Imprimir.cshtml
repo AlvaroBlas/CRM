@@ -1,0 +1,371 @@
+﻿@model MedicalDentCRM.Base.OrdenTrabajo
+
+@{
+    ViewBag.Titulo = Model.Cliente.Cuenta;
+}
+
+<style>
+    table {
+        font-family: Tahoma
+    }
+</style>
+
+<div style="border-radius:30px;border:1px solid black;float:left;width:70%">
+    <table class="w-100 f-s-13" cellpadding="0" border="0" cellspacing="0" style="padding:0 20px 8px 16px">
+        <tr>
+            <td height="22px" class="f-w-b" width="70px" valign="bottom">Solicitante:</td>
+            <td style="border-bottom:1px solid black;padding-left:10px" valign="bottom" colspan="3">
+                @Model.Cliente.NombreVisualizacion
+            </td>
+        </tr>
+        <tr>
+            <td height="22px" class="f-w-b" valign="bottom">Dirección:</td>
+            <td style="border-bottom:1px solid black;padding-left:10px" colspan="3">
+                @Model.Cliente.DireccionEnvio @Html.DisplayFor(model => model.Cliente.DistritoEnvio.Nombre) @Html.DisplayFor(model => model.Cliente.ProvinciaEnvio.Nombre)
+            </td>
+        </tr>
+        <tr>
+            <td height="22px" class="f-w-b" valign="bottom">Referencia:</td>
+            <td style="border-bottom:1px solid black;padding-left:10px" colspan="3">
+                @Model.Cliente.ReferenciaEnvio
+            </td>
+        </tr>
+        <tr>
+            <td height="22px" class="f-w-b" valign="bottom">DNI/RUC:</td>
+            <td style="border-bottom:1px solid black;padding-left:10px" colspan="3">
+                @Model.Cliente.NumeroDocumento <span class="f-w-b">/</span> @Model.Cliente.RUC
+            </td>
+        </tr>
+        <tr>
+            <td height="22px" class="f-w-b" valign="bottom">Tel. Fijo:</td>
+            <td style="border-bottom:1px solid black;padding-left:10px">
+                @Model.Cliente.TelefonoFijo
+            </td>
+            <td height="22px" class="f-w-b" valign="bottom" width="60px">Movil:</td>
+            <td style="border-bottom:1px solid black;padding-left:10px">
+                @Model.Cliente.TelefonoMovil
+            </td>
+        </tr>
+    </table>
+</div>
+<div style="float:right;width:27%">
+    <table cellpadding="0" cellspacing="0" class="w-100" border="0">
+        <tr>
+            <td class="t-c" colspan="2">
+                <img id="img" src="@Server.MapPath("~/Content/img/dent.png")" width="190px" />
+            </td>
+        </tr>
+        <tr>
+            <td class="t-c f-w-b" colspan="2">
+                <div style="background-color:#BDB9B9;margin-top:2px;padding:2px;border-radius:20px">
+                    ORDEN DE TRABAJO
+                </div>
+                Nº @Model.NumeroRegistro
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div style="background-color:#BDB9B9;padding:4px;margin-top:4px;border-radius:20px;padding:5px">
+                    <span class="f-w-b f-s-11" style="line-height:10px">
+                        FECHA DE RECEPCIÓN:
+                    </span><span class="f-s-14"> @Model.FechaIngreso.ConvertirFechaCorta()</span>
+                    <span class="f-w-b f-s-11" style="margin-left:86px;line-height:10px">
+                        HORA:
+                    </span><span class="f-s-14">
+                        @Model.FechaIngreso.ConvertirHoraCorta()
+                    </span>
+                    <br />
+                    <span class="f-w-b f-s-11" style="line-height:10px">
+                        FECHA ESTIMADA DE ENTREGA:
+                    </span><span class="f-s-13">
+                        @Model.FechaEstimadaEntrega.ConvertirFechaCorta()
+                    </span>
+                    <span class="f-w-b f-s-11" style="margin-left:86px;line-height:10px">
+                        HORA:
+                    </span><span class="f-s-14"> @(Model.FechaEstimadaEntrega.ConvertirHoraCorta())</span>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+<div style="border-radius:30px;border:1px solid black;float:left;width:70%;margin-top:5px">
+    <table class="w-100 f-s-13" cellpadding="0" border="0" cellspacing="0" style="padding:0 20px 8px 16px">
+        <tr>
+            <td height="30px" class="f-w-b" width="70px" valign="bottom">Paciente:</td>
+            <td style="border-bottom:1px solid black;padding-left:10px" valign="bottom" colspan="3">
+                @Model.Paciente
+            </td>
+            <td height="30px" class="f-w-b" width="70px" valign="bottom">Edad:</td>
+            <td style="border-bottom:1px solid black;padding-left:10px" valign="bottom" colspan="3">
+                @Model.Edad
+            </td>
+            <td height="30px" class="f-w-b" width="70px" valign="bottom">Sexo:</td>
+            <td style="border-bottom:1px solid black;padding-left:10px" valign="bottom" colspan="3">
+                @Model.Sexo
+            </td>
+        </tr>
+    </table>
+</div>
+<div style="display: block;clear: both;content: " ";">
+</div>
+<div style="width:40%;margin-top:5px;float:left">
+    <table class="w-100 f-s-14" border="1" cellpadding="5" cellspacing="0">
+        <tr>
+            <td class="f-w-b t-c" width="40px" style="background-color:gray;color:white">
+                CANT.
+            </td>
+            <td class="f-w-b" style="background-color:gray;color:white">
+                PRODUCTOS
+            </td>
+            <td class="f-w-b" style="background-color:gray;color:white">
+                COLOR
+            </td>
+        </tr>
+        @foreach (var p in Model.OrdenDetalleTrabajo)
+        {
+            <tr>
+                <td class="t-c">
+                    @p.Cantidad
+                </td>
+                <td>
+                    @p.Producto.Nombre
+                </td>
+                <td>
+                    @(p.Color != null ? p.Color.Nombre : "SIN COLOR")
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+<div style="width:50%;float:left;margin-top:5px;margin-left:60px" class="t-c">
+    <span class="f-w-b t-c" style="font-size:23px">ODONTOGRAMA</span><br />
+    <span class="f-w-b t-c" style="font-size:15px">Odontograma Geométrico</span>
+    <table class="w-100" cellpadding="0" cellspacing="0" border="1">
+        <tr>
+            <td height="20px" width="25px">
+                @(Model.Odontograma.Select(i => i.NumeroDiente).Contains(18) ? "X" : string.Empty)
+            </td>
+            <td width="25px">
+                @(Model.Odontograma.Select(i => i.NumeroDiente).Contains(17) ? "X" : string.Empty)
+            </td>
+            <td width="25px">
+                @(Model.Odontograma.Select(i => i.NumeroDiente).Contains(16) ? "X" : string.Empty)
+            </td>
+            <td width="25px">
+                @(Model.Odontograma.Select(i => i.NumeroDiente).Contains(15) ? "X" : string.Empty)
+            </td>
+            <td width="25px">
+                @(Model.Odontograma.Select(i => i.NumeroDiente).Contains(14) ? "X" : string.Empty)
+            </td>
+            <td width="25px">@(Model.Odontograma.Select(i => i.NumeroDiente).Contains(13) ? "X" : string.Empty)</td>
+            <td width="25px">@(Model.Odontograma.Select(i => i.NumeroDiente).Contains(12) ? "X" : string.Empty)</td>
+            <td width="25px">@(Model.Odontograma.Select(i => i.NumeroDiente).Contains(11) ? "X" : string.Empty)</td>
+            <td width="25px"></td>
+            <td width="25px">@(Model.Odontograma.Select(i => i.NumeroDiente).Contains(21) ? "X" : string.Empty)</td>
+            <td width="25px">@(Model.Odontograma.Select(i => i.NumeroDiente).Contains(22) ? "X" : string.Empty)</td>
+            <td width="25px">@(Model.Odontograma.Select(i => i.NumeroDiente).Contains(23) ? "X" : string.Empty)</td>
+            <td width="25px">@(Model.Odontograma.Select(i => i.NumeroDiente).Contains(24) ? "X" : string.Empty)</td>
+            <td width="25px">@(Model.Odontograma.Select(i => i.NumeroDiente).Contains(25) ? "X" : string.Empty)</td>
+            <td width="25px">@(Model.Odontograma.Select(i => i.NumeroDiente).Contains(26) ? "X" : string.Empty)</td>
+            <td width="25px">@(Model.Odontograma.Select(i => i.NumeroDiente).Contains(27) ? "X" : string.Empty)</td>
+            <td width="25px">@(Model.Odontograma.Select(i => i.NumeroDiente).Contains(28) ? "X" : string.Empty)</td>
+        </tr>
+    </table>
+    <table class="w-100" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+            <td width="25px" height="20px">18</td>
+            <td width="25px">17</td>
+            <td width="25px">16</td>
+            <td width="25px">15</td>
+            <td width="25px">14</td>
+            <td width="25px">13</td>
+            <td width="25px">12</td>
+            <td width="25px">11</td>
+            <td width="25px"></td>
+            <td width="25px">21</td>
+            <td width="25px">22</td>
+            <td width="25px">23</td>
+            <td width="25px">24</td>
+            <td width="25px">25</td>
+            <td width="25px">26</td>
+            <td width="25px">27</td>
+            <td width="25px">28</td>
+        </tr>
+    </table>
+    <table class="w-100" cellpadding="0" cellspacing="0" border="0" style="margin-top:4px">
+        <tr>
+            <td height="20px">
+                <img src="@Server.MapPath("~/Content/img/d.jpg")" height="16px" />
+            </td>
+            <td><img src="@Server.MapPath("~/Content/img/d.jpg")" height="16px" /></td>
+            <td><img src="@Server.MapPath("~/Content/img/d.jpg")" height="16px" /></td>
+            <td><img src="@Server.MapPath("~/Content/img/d.jpg")" height="16px" /></td>
+            <td><img src="@Server.MapPath("~/Content/img/d.jpg")" height="16px" /></td>
+            <td><img src="@Server.MapPath("~/Content/img/d.jpg")" height="16px" /></td>
+            <td><img src="@Server.MapPath("~/Content/img/d.jpg")" height="16px" /></td>
+            <td><img src="@Server.MapPath("~/Content/img/d.jpg")" height="16px" /></td>
+            <td width="25px"></td>
+            <td><img src="@Server.MapPath("~/Content/img/d.jpg")" height="16px" /></td>
+            <td><img src="@Server.MapPath("~/Content/img/d.jpg")" height="16px" /></td>
+            <td><img src="@Server.MapPath("~/Content/img/d.jpg")" height="16px" /></td>
+            <td><img src="@Server.MapPath("~/Content/img/d.jpg")" height="16px" /></td>
+            <td><img src="@Server.MapPath("~/Content/img/d.jpg")" height="16px" /></td>
+            <td><img src="@Server.MapPath("~/Content/img/d.jpg")" height="16px" /></td>
+            <td><img src="@Server.MapPath("~/Content/img/d.jpg")" height="16px" /></td>
+            <td><img src="@Server.MapPath("~/Content/img/d.jpg")" height="16px" /></td>
+        </tr>
+    </table>
+    <table class="w-100" cellpadding="0" cellspacing="0" border="0" style="margin-top:4px">
+        <tr>
+            <td height="20px">
+                <img src="@Server.MapPath("~/Content/img/d.jpg")" height="16px" />
+            </td>
+            <td><img src="@Server.MapPath("~/Content/img/d.jpg")" height="16px" /></td>
+            <td><img src="@Server.MapPath("~/Content/img/d.jpg")" height="16px" /></td>
+            <td><img src="@Server.MapPath("~/Content/img/d.jpg")" height="16px" /></td>
+            <td><img src="@Server.MapPath("~/Content/img/d.jpg")" height="16px" /></td>
+            <td><img src="@Server.MapPath("~/Content/img/d.jpg")" height="16px" /></td>
+            <td><img src="@Server.MapPath("~/Content/img/d.jpg")" height="16px" /></td>
+            <td><img src="@Server.MapPath("~/Content/img/d.jpg")" height="16px" /></td>
+            <td width="25px"></td>
+            <td><img src="@Server.MapPath("~/Content/img/d.jpg")" height="16px" /></td>
+            <td><img src="@Server.MapPath("~/Content/img/d.jpg")" height="16px" /></td>
+            <td><img src="@Server.MapPath("~/Content/img/d.jpg")" height="16px" /></td>
+            <td><img src="@Server.MapPath("~/Content/img/d.jpg")" height="16px" /></td>
+            <td><img src="@Server.MapPath("~/Content/img/d.jpg")" height="16px" /></td>
+            <td><img src="@Server.MapPath("~/Content/img/d.jpg")" height="16px" /></td>
+            <td><img src="@Server.MapPath("~/Content/img/d.jpg")" height="16px" /></td>
+            <td><img src="@Server.MapPath("~/Content/img/d.jpg")" height="16px" /></td>
+        </tr>
+    </table>
+    <table class="w-100" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+            <td width="25px" height="20px">48</td>
+            <td width="25px">47</td>
+            <td width="25px">46</td>
+            <td width="25px">45</td>
+            <td width="25px">44</td>
+            <td width="25px">43</td>
+            <td width="25px">42</td>
+            <td width="25px">41</td>
+            <td width="25px"></td>
+            <td width="25px">31</td>
+            <td width="25px">32</td>
+            <td width="25px">33</td>
+            <td width="25px">34</td>
+            <td width="25px">35</td>
+            <td width="25px">36</td>
+            <td width="25px">37</td>
+            <td width="25px">38</td>
+        </tr>
+    </table>
+    <table class="w-100" cellpadding="0" cellspacing="0" border="1">
+        <tr>
+            <td width="25px" height="20px">@(Model.Odontograma.Select(i => i.NumeroDiente).Contains(48) ? "X" : string.Empty)</td>
+            <td width="25px">@(Model.Odontograma.Select(i => i.NumeroDiente).Contains(47) ? "X" : string.Empty)</td>
+            <td width="25px">@(Model.Odontograma.Select(i => i.NumeroDiente).Contains(46) ? "X" : string.Empty)</td>
+            <td width="25px">@(Model.Odontograma.Select(i => i.NumeroDiente).Contains(45) ? "X" : string.Empty)</td>
+            <td width="25px">@(Model.Odontograma.Select(i => i.NumeroDiente).Contains(44) ? "X" : string.Empty)</td>
+            <td width="25px">@(Model.Odontograma.Select(i => i.NumeroDiente).Contains(43) ? "X" : string.Empty)</td>
+            <td width="25px">@(Model.Odontograma.Select(i => i.NumeroDiente).Contains(42) ? "X" : string.Empty)</td>
+            <td width="25px">@(Model.Odontograma.Select(i => i.NumeroDiente).Contains(41) ? "X" : string.Empty)</td>
+            <td width="25px"></td>
+            <td width="25px">@(Model.Odontograma.Select(i => i.NumeroDiente).Contains(31) ? "X" : string.Empty)</td>
+            <td width="25px">@(Model.Odontograma.Select(i => i.NumeroDiente).Contains(32) ? "X" : string.Empty)</td>
+            <td width="25px">@(Model.Odontograma.Select(i => i.NumeroDiente).Contains(33) ? "X" : string.Empty)</td>
+            <td width="25px">@(Model.Odontograma.Select(i => i.NumeroDiente).Contains(34) ? "X" : string.Empty)</td>
+            <td width="25px">@(Model.Odontograma.Select(i => i.NumeroDiente).Contains(35) ? "X" : string.Empty)</td>
+            <td width="25px">@(Model.Odontograma.Select(i => i.NumeroDiente).Contains(36) ? "X" : string.Empty)</td>
+            <td width="25px">@(Model.Odontograma.Select(i => i.NumeroDiente).Contains(37) ? "X" : string.Empty)</td>
+            <td width="25px">@(Model.Odontograma.Select(i => i.NumeroDiente).Contains(38) ? "X" : string.Empty)</td>
+        </tr>
+    </table>
+</div>
+<div style="display: block;clear: both;content: " ";">
+</div>
+<div style="margin-top:10px">
+    <table class="w-100 f-s-12" border="0" cellpadding="0" cellspacing="0" style="margin-top:10px">
+        <tr>
+            <td class="t-c">
+                <div style="float:left;margin-left:60px;margin-right:10px" class="t-c">
+                    REGISTRO DE MORDIDA
+                </div>
+                <div style="border:1px solid black;width:15px;height:15px;float:left">
+                    @(Model.RegistroMordida ? "X" : string.Empty)
+                </div>
+            </td>
+            <td>
+                <div style="float:left;margin-left:60px;margin-right:10px" class="t-c">
+                    IMPRESIÓN DEFINITIVA
+                </div>
+                <div style="border:1px solid black;width:15px;height:15px;float:left;text-align:center">
+                    @(Model.ImpresionDefinitiva ? "X" : string.Empty)
+                </div>
+            </td>
+            <td>
+                <div style="float:left;margin-left:60px;margin-right:10px" class="t-c">
+                    FOTOGRAFIA
+                </div>
+                <div style="border:1px solid black;width:15px;height:15px;float:left;">
+                    @(Model.Fotografia ? "X" : string.Empty)
+                </div>
+            </td>
+            <td>
+                <div style="float:left;margin-left:60px;margin-right:10px" class="t-c">
+                    ANTAGONISTA
+                </div>
+                <div style="border:1px solid black;width:15px;height:15px;float:left;text-align:center">
+                    @(Model.Antagonista ? "X" : string.Empty)
+                </div>
+            </td>
+        </tr>
+    </table>
+    <table class="w-100" cellpadding="0" cellspacing="0" style="margin-top:15px">
+        <tr>
+            <td width="130px">
+                Observaciones:
+            </td>
+            <td style="border-bottom:1px solid black">
+                @Model.Observaciones
+            </td>
+        </tr>
+        <tr>
+            <td height="25px"></td>
+            <td style="border-bottom:1px solid black"></td>
+        </tr>
+    </table>
+</div>
+<table cellpadding="0" cellspacing="0" class="f-s-11" style="margin:10px auto 5px auto;width:80%" border="0">
+    <tr>
+        <td class="t-c">
+            <span class="f-w-b">Sede Central: </span> (01)680 2500<br />
+            <span class="f-w-b">Av.Arenales #630-Jesús Maria</span>
+        </td>
+        <td class="t-c" width="30%">
+            HORARIO<br />
+            <span class="f-w-b">Luneas a viernes de</span> 8:00am-8:00pm<br />
+            <span class="f-w-b">Sábado de</span> 8:00am-5:00pm
+        </td>
+        <td class="t-c">
+            TIPO DE PAGO <br />
+            <span class="f-w-b">BANCO BCP-SOLES</span><br />
+            <span class="f-w-b">Nº: 193-2121811-0-33</span><br />
+            <span class="f-w-b">CCI:002-193-002121811033-12</span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="3" height="20px">
+            <span class="f-w-b f-s-13">RECOMENDACIÓN: </span> PARA UN OPTIMO RESULTADO UTILIZAR MATERIALES ADECUADOS Y RESPETAR SUS TIEMPOS DE TRABAJO.
+        </td>
+    </tr>
+</table>
+<span class="f-s-16"><img width="32px" src="data:image/png;base64,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" /> Servicio delivery gratuito*</span>
+<br />
+<span style="font-size:9px">* Aplica solo a pedidos que sean iguales o mayores a S/. 100.00</span>
+<table class="w-100" cellpadding="0" cellspacing="0" border="0" style="margin-top:5px">
+    <tr>
+        <td height="25px" style="background-color:gray;color:white;font-size:18px" class="t-c f-w-b">
+            www.medicaldentdigital.pe
+        </td>
+    </tr>
+</table>

@@ -1,0 +1,27 @@
+﻿@model ContactoModelo
+
+<tr>
+    @using (Html.BeginCollectionItem("Contactos"))
+    {
+        <td>
+            @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control form-control-sm" })
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.Apellidos, new { @class = "form-control form-control-sm" })
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.Email, new { @class = "form-control form-control-sm" })
+        </td>
+        <td width="100px">
+            @Html.TextBoxFor(model => model.Telefono, new { @class = "form-control form-control-sm" })
+        </td>
+        <td width="100px">
+            @Html.TextBoxFor(model => model.Movil, new { @class = "form-control form-control-sm" })
+        </td>
+        <td width="50px" class="t-c">
+            <button type="button" class="btn btn-link btn-sm btnEliminarContacto">
+                <i class="fas fa-trash"></i>
+            </button>
+        </td>
+    }
+</tr>

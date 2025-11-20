@@ -1,0 +1,29 @@
+﻿@model List<ComentarioModelo>
+
+@if (Model.Count > 0)
+{
+    <section class="cd-timeline js-cd-timeline dc" style="width:62%;margin-top:0">
+        @foreach (var a in Model)
+        {
+            <div class="cd-timeline__container">
+                <div class="cd-timeline__block js-cd-block">
+                    <div class="cd-timeline__img cd-timeline__img--picture js-cd-img">
+                        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 512 512" xml:space="preserve" class="icon-comment icon icon-xs text-bottom "><path d="M256.7.2C116.9.2 3.1 115 3.1 255.9 3.1 323.5 29.2 385 72 430.8c-13.5 17.1-45.6 56.7-59.8 63.7-27.6 13.7 9.6 21.3 52.4 12.5 23.1-4.8 47.8-14.2 64.9-30.1 37.5 22 81 34.7 127.3 34.7 139.9 0 253.7-114.8 253.7-255.7S396.6.2 256.7.2zm0 471.5c-118 0-214.1-96.9-214.1-215.8S138.7 40.1 256.7 40.1 470.8 137 470.8 255.9s-96.1 215.8-214.1 215.8z"></path><path d="M115.4 220.7h279.8c10.9 0 19.7-8.9 19.6-19.9 0-11-8.8-19.9-19.7-19.9H115.4c-10.9 0-19.7 8.9-19.7 19.9 0 11 8.8 19.9 19.7 19.9zM395.2 291.2H115.4c-10.9 0-19.7 8.9-19.7 19.9 0 11 8.8 19.9 19.7 19.9h279.8c10.9 0 19.6-8.9 19.6-19.9.1-11-8.7-19.9-19.6-19.9z"></path></svg>
+                    </div>
+                    <div class="cd-timeline__content js-cd-content">
+                        <div class="arrow"></div>
+                        <div class="text-muted tiempo">
+                            <small>@a.FechaCreacion.ConvertirFechaDescriptiva2() @a.FechaCreacion.ConvertirHoraLarga()</small>
+                        </div>
+                        <p class="text-regular">
+                            @a.Descripcion
+                        </p>
+                        <div class="text-muted">
+                            <strong class="text-lowercase"> por @a.Usuario</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </section>
+}

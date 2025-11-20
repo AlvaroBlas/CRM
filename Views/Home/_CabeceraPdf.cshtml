@@ -1,0 +1,22 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body style="padding:0;margin:0">
+    @if (ViewBag.MostrarLogo)
+    {
+        <div style="border:0px solid black;">
+            <img src="@Url.Content("~/Content/Img/cabecera.png")" style="width:21cm;height:3cm;" />
+        </div>
+    }
+    else
+    {
+        <div style="height:@string.Format("{0}px", ViewBag.Alto)"></div>
+    }
+</body>
+</html>
+

@@ -1,0 +1,457 @@
+﻿@model ClienteDetalleModelo
+
+<style>
+    .divVentas {
+        width: 100%;
+        margin: 10px 20px;
+    }
+
+    .panel-heading {
+        padding: 0;
+        border: 0;
+    }
+
+    .divVentas .panel-default > .panel-heading {
+        background-color: white;
+        border: none;
+    }
+
+    .divVentas .panel-default {
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        border-color: #f0f0f0;
+    }
+
+    .divVentas .panel-title > a, .panel-title > a:active {
+        display: block;
+        padding: 8px 0;
+        color: #222;
+        font-size: 15px;
+        font-weight: normal;
+        letter-spacing: 1px;
+        word-spacing: 3px;
+        text-decoration: none;
+    }
+
+    .divVentas .panel-default > .panel-heading {
+        padding: 5px 0;
+    }
+
+    .divVentas .panel-default .panel-body {
+        padding: 0 40px 10px 0;
+    }
+
+    .divVentas .panel-default > .panel-heading h4 {
+        margin-bottom: 0;
+    }
+
+    .divVentas .panel-heading a:before {
+        font-family: 'Glyphicons Halflings';
+        content: "\e114";
+        float: left;
+        font-size: 10px;
+        margin: 4px 10px 0 0;
+        transition: all 0.5s;
+    }
+
+    .panel-heading.active a:before {
+        -webkit-transform: rotate(180deg);
+        -moz-transform: rotate(180deg);
+        transform: rotate(180deg);
+    }
+</style>
+
+<input type="hidden" value="@Model.ClienteId" class="clienteId" />
+<div class="divVentas center-block">
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+        <div class="panel panel-default">
+            <div class="panel-heading active" role="tab" id="headingOne">
+                <h4 class="panel-title">
+                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        Facturas
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse show" role="tabpanel" aria-labelledby="headingOne">
+                <div class="panel-body clearfix">
+                    <table id="detelleFacturas" class="table table-striped" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Fecha
+                                </th>
+                                <th>
+                                    Nº de factura
+                                </th>
+                                <th>
+                                    Nº de orden
+                                </th>
+                                <th>
+                                    Importe
+                                </th>
+                                <th>
+                                    Saldo adeudado
+                                </th>
+                                <th>
+                                    Estado
+                                </th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading active" role="tab" id="headingTwo">
+                <h4 class="panel-title">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        Pagos recibidos
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseTwo" class="panel-collapse collapse show" role="tabpanel" aria-labelledby="headingTwo">
+                <div class="panel-body clearfix">
+                    <table id="detallePagos" class="table table-striped" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Fecha
+                                </th>
+                                <th>
+                                    Nº de Pago
+                                </th>
+                                <th>
+                                    Nº de Factura
+                                </th>
+                                <th>
+                                    Modo de pago
+                                </th>
+                                <th>
+                                    Importe recibido
+                                </th>
+                                <th>
+                                    Importe sin utilizar
+                                </th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading active" role="tab" id="headingThree">
+                <h4 class="panel-title">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        Ordenes de trabajo
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseThree" class="panel-collapse collapse show" role="tabpanel" aria-labelledby="headingThree">
+                <div class="panel-body clearfix">
+                    <table id="detalleOrdenes" class="table table-striped" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Fecha
+                                </th>
+                                <th>
+                                    <span class="t-e-a" title="Nº DE ORDEN">
+                                        <span class="t-e-b">
+                                            Nº de Orden
+                                        </span>
+                                    </span>
+                                </th>
+                                <th>
+                                    Productos
+                                </th>
+                                <th>
+                                    Importe
+                                </th>
+                                <th>
+                                    Estado
+                                </th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.panel-collapse').on('show.bs.collapse', function () {
+            $(this).siblings('.panel-heading').addClass('active');
+        });
+
+        $('.panel-collapse').on('hide.bs.collapse', function () {
+            $(this).siblings('.panel-heading').removeClass('active');
+        });
+
+        var $tablaDetalleFacturas = $("#detelleFacturas");
+        var $tablaDetalleOrdenes = $("#detalleOrdenes")
+        var $tablaDetallePagos = $("#detallePagos");
+        var $clienteId = $(".clienteId");
+
+        dom = '<"top leni ocultar" l>rt<"pull-left m-r-10 m-t-5"><"pull-left"i><"clear"><"pull-right"p>';
+
+        var dataTableFacturas = $tablaDetalleFacturas.DataTable({
+            "dom": dom,
+            "oLanguage": idiomaDT,
+            responsive: true,
+            "bRetrieve": true,
+            "bServerSide": true,
+            "filter": true,
+            "iDisplayLength": 5,
+            //processing: true,
+            "ajax": {
+                "type": "POST",
+                "url": URL_BASE + 'Factura/ObtenerFacturas',
+                "contentType": 'application/json; charset=utf-8',
+                'data': function (data) {
+                    //data.cuenta = $txtCuenta.val();
+                    //data.estado = $cmbEstado.val();
+                    data.clienteId = $clienteId.val();
+                    return JSON.stringify(data);
+                }
+            },
+            "order": [[0, "desc"]],
+            "columns": [
+                {
+                    data: "FechaFactura",
+                    name: "FechaFactura",
+                    sWidth: "8%",
+                    render: function (data, type, fila) {
+                        return '<span>' + fila.FechaFacturaStr + '</span>'
+                    }
+                },
+                {
+                    data: "NumeroFactura",
+                    name: "NumeroFactura",
+                    sWidth: "8%",
+                    orderable: false,
+                    render: function (data, type, fila) {
+                        return '<a href="javascript:void(0)" onclick="editarFactura(this)" data-facturaid="' + fila.FacturaId + '">' + fila.NumeroFactura + '</a>'
+                    }
+                },
+                {
+                    data: "NumeroOrden",
+                    name: "NumeroOrden",
+                    sWidth: "8%",
+                    orderable: false,
+                },
+                {
+                    data: "Total",
+                    name: "Total",
+                    sWidth: "10%",
+                    sClass: "text-right",
+                    orderable: false,
+                    render: function (data, type, fila) {
+                        return '<span>' + (fila.Moneda + fila.TotalStr) + '</span>'
+                    }
+                },
+                {
+                    data: "SaldoAdeudado",
+                    name: "SaldoAdeudado",
+                    sWidth: "10%",
+                    sClass: "text-right",
+                    orderable: false,
+                    render: function (data, type, fila) {
+                        return '<span>' + (fila.Moneda + fila.SaldoAdeudadoStr) + '</span>'
+                    }
+                },
+                {
+                    data: "EstadoStr",
+                    name: "EstadoStr",
+                    sWidth: "5%",
+                    orderable: false,
+                    render: function (data, type, fila) {
+
+                        var css = "";
+
+                        if (fila.Estado == 1)
+                            css = "text-primary"
+                        //else if (fila.Estado == 2)
+                        //    css = "text-overdue"
+                        else if (fila.Estado == 2)
+                            css = "text-success"
+                        else if (fila.Estado == 3)
+                            css = "text-secondary"
+
+                        return '<span class="' + css + '">' + fila.EstadoStr + '</span>'
+                    }
+                }
+            ],
+            "drawCallback": function (settings) {
+                botonActualizar2("btnBuscarOrden");
+            },
+        });
+
+
+        var dataTableOrdenes = $tablaDetalleOrdenes.DataTable({
+            "dom": dom,
+            "oLanguage": idiomaDT,
+            responsive: true,
+            "bRetrieve": true,
+            "bServerSide": true,
+            "filter": true,
+            "iDisplayLength": 10,
+            //processing: true,
+            "ajax": {
+                "type": "POST",
+                "url": URL_BASE + 'OrdenTrabajo/ObtenerOrdenes',
+                "contentType": 'application/json; charset=utf-8',
+                'data': function (data) {
+                    data.clienteId = $clienteId.val();
+                    return JSON.stringify(data);
+                }
+            },
+            "order": [[0, "desc"]],
+            "columns": [
+                {
+                    data: "FechaRecepcion",
+                    name: "FechaRecepcion",
+                    sWidth: "10%",
+                    render: function (data, type, fila) {
+                        return '<span>' + fila.FechaRecepcionStr2 + '</span>'
+                    }
+                },
+                {
+                    data: "Codigo",
+                    name: "Codigo",
+                    sWidth: "10%",
+                    orderable: false,
+                    render: function (data, type, fila) {
+                        return '<a href="javascript:void(0)" onclick="editarOrden(this)" data-ordentrabajoid="' + fila.OrdenTrabajoId + '">' + fila.Codigo + '</a>'
+                    }
+                },
+                {
+                    data: "DetalleProductos",
+                    name: "DetalleProductos",
+                    sWidth: "25%",
+                    orderable: false,
+                    render: function (data, type, fila) {
+                        return '<span class="t-e-a" title="' + fila.DetalleProductos + '"><span class="t-e-b">' + fila.DetalleProductos + '</span></span>'
+                    }
+                },
+                {
+                    data: "Total",
+                    name: "TotalStr",
+                    sWidth: "5%",
+                    sClass: "text-right",
+                    orderable: false,
+                    render: function (data, type, fila) {
+                        return '<span>' + (fila.Moneda + fila.TotalStr) + '</span>'
+                    }
+                },
+                {
+                    data: "Estado",
+                    name: "Estado",
+                    sWidth: "5%",
+                    orderable: false,
+                    render: function (data, type, fila) {
+
+                        var css = "badge-light";
+
+                        if (data === 1)
+                            css = "badge-dark";
+                        else if (data === 2)
+                            css = "badge-danger";
+                        else if (data === 3)
+                            css = "badge-info";
+                        else if (data === 4)
+                            css = "badge-warning";
+                        else if (data === 5)
+                            css = "badge-primary";
+                        else if (data === 6)
+                            css = "badge-secondary";
+                        else if (data === 7)
+                            css = "badge-success";
+
+                        return '<span class="badge ' + css + '">' + fila.EstadoStr + '</span>';
+                    }
+                }
+            ],
+            "drawCallback": function (settings) {
+                botonActualizar2("btnBuscarOrden");
+            },
+        });
+
+        var dataTablePagos = $tablaDetallePagos.DataTable({
+            "dom": dom,
+            "oLanguage": idiomaDT,
+            responsive: true,
+            "bRetrieve": true,
+            "bServerSide": true,
+            "filter": true,
+            "iDisplayLength": 10,
+            //processing: true,
+            "ajax": {
+                "type": "POST",
+                "url": URL_BASE + 'PagoRecibido/ObtenerPagos',
+                "contentType": 'application/json; charset=utf-8',
+                'data': function (data) {
+                    data.clienteId = $clienteId.val();
+                    return JSON.stringify(data);
+                }
+            },
+            "order": [[0, "desc"]],
+            "columns": [
+                {
+                    data: "Fecha",
+                    name: "Fecha",
+                    sWidth: "8%",
+                    render: function (data, type, fila) {
+                        return '<span>' + fila.FechaStr + '</span>'
+                    }
+                },
+                {
+                    data: "NumeroPago",
+                    name: "NumeroPago",
+                    sWidth: "5%",
+                    orderable: false,
+                    render: function (data, type, fila) {
+                        return '<a href="javascript:void(0)" onclick="editarPagoRecibido(this)" data-pagoid="' + fila.PagoRecibidoId + '">' + fila.NumeroPago + '</a>'
+                    }
+                },
+                {
+                    data: "NumeroFactura",
+                    name: "NumeroFactura",
+                    sWidth: "10%",
+                    orderable: false,
+                },
+                {
+                    data: "ModoPago",
+                    name: "ModoPago",
+                    sWidth: "5%",
+                    orderable: false,
+                },
+                {
+                    data: "ImporteRecibido",
+                    name: "ImporteRecibido",
+                    sWidth: "10%",
+                    sClass: "text-right",
+                    orderable: false,
+                    render: function (data, type, fila) {
+                        return '<span>' + (fila.Moneda + fila.ImporteTotalRecibidoStr) + '</span>'
+                    }
+                },
+                {
+                    data: "ImporteSinUsar",
+                    name: "ImporteSinUsar",
+                    sWidth: "10%",
+                    sClass: "text-right",
+                    orderable: false,
+                    render: function (data, type, fila) {
+                        return '<span>' + (fila.Moneda + fila.ImporteSinUsarStr) + '</span>'
+                    }
+                },
+            ],
+            "drawCallback": function (settings) {
+                botonActualizar2("btnBuscarOrden");
+            },
+        });
+    })
+</script>

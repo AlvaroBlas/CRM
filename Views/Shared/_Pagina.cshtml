@@ -1,0 +1,204 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Titulo - Medical Dent</title>
+    <link href="~/Content/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/Content/responsive.bootstrap.min.css" rel="stylesheet" />
+    <link rel="shortcut icon" type="image/ico" href="~/favicon.ico" />
+    @Styles.Render("~/Content/devcorecss")
+    @Scripts.Render("~/bundles/modernizr")
+    <link rel="stylesheet" href="~/Content/all.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.datatables.net/select/1.3.0/css/select.dataTables.min.css" />
+
+    <script type="text/javascript">
+        var URL_BASE = "@Url.Content("~/")";
+        window.devcore = {
+            global: {},
+            cuenta: {}
+        };
+    </script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-rojo fixed-top" style="padding-top: 0px !important; padding-bottom: 0px !important; padding-left: 0px !important;">
+        <div class="navbar-header" style="background:white;">
+            <a class="navbar-brand" href="@Url.Action("Index","Home")">
+                <img src="@Url.Content("~/Content/img/dent.png")" style="height:38px;margin:0 5px 0 0;" />
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbarColor01">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link @(ViewContext.RouteData.Values["Controller"].ToString() == "Home" ? "active" : "")" href="@Url.Action("Index","Home")">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link @(ViewContext.RouteData.Values["Controller"].ToString() == "Cliente" ? "active" : "")" href="@Url.Action("Index","Cliente")">Cuentas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link @(ViewContext.RouteData.Values["Controller"].ToString() == "Producto" ? "active" : "")" href="@Url.Action("Index","Producto")">Productos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link @(ViewContext.RouteData.Values["Controller"].ToString() == "OrdenTrabajo" ? "active" : "")" href="@Url.Action("Index","OrdenTrabajo")">Orden trabajo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link @(ViewContext.RouteData.Values["Controller"].ToString() == "Factura" ? "active" : "")" href="@Url.Action("Index","Factura")">Ticket y Pagos</a>
+                </li>
+                @*<li class="nav-item">
+                    <a class="nav-link @(ViewContext.RouteData.Values["Controller"].ToString() == "PagoRecibido" ? "active" : "")" href="@Url.Action("Index","PagoRecibido")">Pagos recibidos</a>
+                </li>*@
+                @*<li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["Controller"].ToString() == "Gasto" ? "active" : "")" href="@Url.Action("Index","Gasto")">Gastos</a>
+                    </li>*@
+                <li class="nav-item">
+                    <a class="nav-link @(ViewContext.RouteData.Values["Controller"].ToString() == "Informe" ? "active" : "")" href="@Url.Action("Index","Informe")">Informes</a>
+                </li>
+            </ul>
+            @*<a class="nav-link pl-0" href="@Url.Action("CerrarSesion","Cuenta")" style="color:white">Cerrar Sesión</a>*@
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" id="btnNotificacion" data-url="@Url.Action("Notificacion","Notificacion")">
+                        <i class="fas fa-bell"></i>
+                        @if (ViewBag.CantidadNotificacion > 0)
+                        {
+                            <span class="notificacion-efecto" style="display: inline;"></span>
+                            <div id="divCantidadNotificacion" class="label label-danger notificacion" style="display: block;">
+                                @*<div ng-class="{true: 'w-11', false: 'w-12'}[hc.mn.CantidadNotificaciones > 9]" class="ng-binding w-12">
+                                        1
+                                    </div>*@
+                                @ViewBag.CantidadNotificacion
+                            </div>
+                        }
+                    </a>
+                </li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        @User.Identity.Name.ToUpper()
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bd-versions">
+                        <a class="dropdown-item" href="@Url.Action("Configuracion","Cuenta")">Perfil de la organización</a>
+                        <a class="dropdown-item" href="@Url.Action("Index","Usuario")">Configuración</a>
+                        <a class="dropdown-item" id="btnConectar" href="javascript:void(0)">Conectar VOIP</a>
+                        <a class="dropdown-item" href="@Url.Action("CerrarSesion","Cuenta")">Cerrar Sesión</a>
+                        @*<a class="dropdown-item" href="https://getbootstrap.com/docs/4.0/">v4.0.0</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="https://v4-alpha.getbootstrap.com/">v4 Alpha 6</a>
+                            <a class="dropdown-item" href="https://getbootstrap.com/docs/3.4/">v3.4.1</a>
+                            <a class="dropdown-item" href="https://getbootstrap.com/docs/3.3/">v3.3.7</a>
+                            <a class="dropdown-item" href="https://getbootstrap.com/2.3.2/">v2.3.2</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/docs/versions/">All versions</a>*@
+                    </div>
+                </li>
+            </ul>
+            @*<form class="form-inline">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Search</button>
+                </form>*@
+        </div>
+    </nav>
+    @*<div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <span class="text-success fas fa-check-circle mr-2 f-s-16"></span>
+                <strong class="mr-auto">Bootstrap</strong>
+                <small class="text-muted"></small>
+                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="toast-body">
+                Heads up, toasts will stack automatically
+            </div>
+        </div>*@
+    <div class="app-content">
+        <div class="contenedor">
+            @RenderBody()
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script src="~/Scripts/jquery.dataTables.js"></script>
+    <script src="~/Scripts/dataTables.bootstrap4.min.js"></script>
+    <script src="~/Scripts/dataTables.responsive.min.js"></script>
+    <script src="~/Scripts/responsive.bootstrap4.min.js"></script>
+    <script src="~/Scripts/select2.min.js"></script>
+    <script src="~/Scripts/Chart.min.js"></script>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+    @*<script src="https://cdn.datatables.net/select/1.3.0/js/dataTables.select.min.js"></script>*@
+    <link type="text/css" href="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.11/css/dataTables.checkboxes.css" rel="stylesheet" />
+    <script type="text/javascript" src="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.11/js/dataTables.checkboxes.min.js"></script>
+    <script src="~/Scripts/jquery.signalR-2.4.0.min.js"></script>
+    <!--Reference the autogenerated SignalR hub script. -->
+    <script src="~/signalr/hubs"></script>
+    <script>
+        var hub = $.connection.serverHub;
+        $.connection.hub.logging = true;
+
+        hub.client.mensajeServidor = function (mensaje) {
+            mensajeDevCore(2, mensaje);
+        };
+
+        hub.client.llamadaEntrante = function (contacto) {
+            llamadaEntrante(contacto);
+            console.log(contacto.Cuenta);
+        };
+
+        hub.client.llamadaCancelada = function () {
+            $('#modalLlamadaEntrante').modal('hide');
+        };
+
+        //hub.client.refreshNotification = function (data) {
+        //    console.log(data.length);
+        //    for (var i = 0; i < data.length; i++) {
+        //        console.log("Numero:" + data[i].NumeroRegistro);
+        //    }
+        //}
+
+        //hub.client.addLatestNotification = function (data) {
+        //    console.log("Numero:" + data.NumeroRegistro + " Fecha:" + data.FechaEstimadaEntrega);
+        //}
+
+        // Start the hub
+        $.connection.hub.start().done(function (e) {
+            console.log('SignarlR Conectado');
+            // Call the Send method on the hub.
+            $("#btnConectar").on('click', function () {
+                hub.server.conectarVoip();
+            });
+
+            $(document).on('click', "#btnContestarLlamada", function () {
+                hub.server.contestarLlamada();
+            });
+
+            $(document).on('click', "#btnColgar", function () {
+                hub.server.colgarLlamada();
+            });
+        });
+
+        $.connection.hub.error(function (error) {
+            console.log('SignalR error: ' + error)
+        });
+
+        var $btnNotificacion = $("#btnNotificacion");
+
+        $btnNotificacion.on('click', function () {
+            var url = $(this).data("url");
+            crearModalCentrado(url, 1, 1);
+        });
+
+    </script>
+    @RenderSection("scripts", required: false)
+    @*@Scripts.Render("~/bundles/jquery")
+        @RenderSection("scripts", required: false)*@
+</body>
+</html>

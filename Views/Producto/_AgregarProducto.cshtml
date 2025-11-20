@@ -1,0 +1,33 @@
+﻿@model OrdenTrabajoDetalleModelo
+
+<tr>
+    @using (Html.BeginCollectionItem("Productos"))
+    {
+        <td>
+            @Html.DropDownListFor(x => x.ProductoId, Model.ProductoDisponibles, string.Empty, new { @class = Model.Bloqueado ? "cmbProducto bloqueado" : "cmbProducto", @style = "width:100%" })
+        </td>
+        <td width="150px">
+            @Html.DropDownListFor(x => x.ColorId, Model.ColoresDisponibles,"SIN COLOR", new { @class = Model.Bloqueado ? "cmbColor bloqueado" : "cmbColor", @style = "width:100%" })
+        </td>
+        <td width="60px">
+            @Html.TextBoxFor(model => model.Cantidad, new { @class = Model.Bloqueado ? "form-control form-control-sm pq-cantidad-o bloqueado" : "form-control form-control-sm pq-cantidad-o" })
+        </td>
+        <td width="100px">
+            @Html.TextBoxFor(model => model.Precio, new { @class = Model.Bloqueado ? "form-control form-control-sm text-right pq-precio-o bloqueado" : "form-control form-control-sm text-right pq-precio-o" })
+        </td>
+        <td width="100px">
+            @Html.TextBoxFor(model => model.SubTotal, new { @class = Model.Bloqueado ? "form-control form-control-sm text-right bloqueado" : "form-control form-control-sm text-right", @readonly = "readonly" })
+            @Html.HiddenFor(model => model.ImpuestoId)
+            @*@Html.HiddenFor(model => model.ImpuestoPrecio)*@
+            @Html.HiddenFor(model => model.Impuesto)
+        </td>
+        <td width="50px" class="t-c">
+            @if (!Model.Bloqueado)
+            {
+                <button type="button" class="btn btn-link btn-sm btnEliminarProducto">
+                    <i class="fas fa-trash"></i>
+                </button>
+            }
+        </td>
+    }
+</tr>

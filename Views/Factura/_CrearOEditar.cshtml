@@ -1,0 +1,265 @@
+﻿@model MedicalDentCRM.Models.FacturaModelo
+
+<div class="modal-body">
+    <div style="max-width:1040px;padding-top:18px;">
+        <div class="form-group col-md-12">
+            <div class="form-group row">
+                <label for="ClienteId" class="col-md-2 col-form-label col-form-label-sm requerido">
+                    Nombre de cliente
+                </label>
+                <div class="col-md-6">
+                    @if (Model.Bloqueado)
+                    {
+                        @Html.DropDownListFor(model => model.ClienteId, Model.ClientesDisponibles, string.Empty, new { @class = "form-control form-control-sm bloqueado", @style = "width:100%" })
+                    }
+                    else
+                    {
+                        @Html.DropDownListFor(model => model.ClienteId, Model.ClientesDisponibles, string.Empty, new { @class = "form-control form-control-sm", @style = "width:100%" })
+                    }
+                </div>
+                <div class="col-md-4">
+                </div>
+                <div class="col-md-2">
+                </div>
+                <div class="col-md-6 info-c">
+                </div>
+                <div class="col-md-4">
+                </div>
+                <div class="col-md-2">
+                </div>
+                <div class="col-md-10">
+                    <div class="dirFactura info-cliente">
+                    </div>
+                    <div class="dirEnvio info-cliente">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group col-md-12">
+            <div class="form-group row">
+                <label for="NumeroFactura" class="col-md-2 col-form-label col-form-label-sm requerido">Nº de ticket</label>
+                <div class="col-md-4">
+                    @{
+                        var atributos = new RouteValueDictionary
+                                                            {
+                                                            { "class", "form-control form-control-sm"}
+                                                                };
+
+                        if (Model.NumeroFactura.TieneValor())
+                        {
+                            atributos.Add("readonly", "readonly");
+                        }
+                    }
+                    @Html.TextBoxFor(model => model.NumeroFactura, atributos)
+                </div>
+                @if (Model.Estado == EstadoFactura.Pendiente)
+                {
+                    <i class="numeracionFactura text-primary" data-facturaid="@Model.FacturaId">
+                        <svg version="1.1" style="vertical-align:text-bottom;cursor:pointer" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 512 512" xml:space="preserve" class="icon icon-sm text-top"><path d="M258.3 149.8c-57.3 0-103.9 46.6-103.9 103.9 0 57.3 46.6 103.9 103.9 103.9s104-46.6 104-103.9c0-57.3-46.6-103.9-104-103.9zm0 175.9c-39.7 0-71.9-32.3-71.9-71.9 0-39.7 32.3-71.9 71.9-71.9 39.7 0 71.9 32.3 71.9 71.9.1 39.6-32.2 71.9-71.9 71.9z"></path><path d="M491.4 202.9l-38.7-14c-3-9.5-6.6-18.6-10.7-27.1l18.3-38.3c5.6-11.8 3.2-26-6-35.2l-30.5-30.6c-9.3-9.3-23.4-11.7-35.2-6.1l-38.2 18.1c-8.1-3.8-16.7-7.1-27.1-10.3l-14-38.7C304.9 8.5 293.2.4 280.2.4h-43.6c-12.9 0-24.6 8.2-29.1 20.4l-14.1 38.8c-9.7 3.1-18.8 6.7-27.1 10.7l-38.2-18.4c-11.8-5.6-26-3.2-35.2 6L62.1 88.3c-9.3 9.3-11.7 23.5-6 35.3l18 37.8c-5.2 9.8-9.2 18.7-12.2 27l-40.8 14.2C8.6 207 .2 218.7.2 232v43.3c0 13.2 8.4 25 20.7 29.2l40.9 14.3c3.1 8.8 6.9 17.7 11.7 27.1L55.6 384c-5.6 11.9-3.2 26 6.2 35.2L92.6 450c9.2 9.2 23.4 11.7 35.2 6l38.1-18.1c9.7 5.2 18.6 9.2 27.1 12.2l14.2 40.8c4.3 12.5 16 20.8 29.3 20.8h43.3c13.2 0 25-8.4 29.3-20.8l14.2-40.9c8.9-3.1 18-7 27.1-11.7l38.1 17.9c11.8 5.6 26 3.1 35.3-6.2l30.7-30.9c9.2-9.2 11.6-23.3 6-35.2l-18.2-38.4c3.8-8 7.1-16.6 10.3-27.1l38.6-14c12.3-4.3 20.6-16 20.6-29V232c0-13-8.2-24.7-20.4-29.1zm-11.6 71.8l-38.5 14c-9.2 3.3-16.1 10.6-19 19.9v.1c-2.8 9.3-5.7 16.8-8.9 23.5-4.1 8.5-4.2 18.3-.1 26.7l18.2 38.3-29.7 29.9-38-17.9c-8.9-4.1-18.8-4-27.3.5-8 4.1-16 7.6-23.7 10.3-8.9 2.9-16.1 10.1-19.3 19.1l-14.2 40.7h-41.8L223.2 439c-3.1-8.9-10-15.9-19-19-7.3-2.6-15-6.1-23.7-10.7s-19.1-4.8-27.9-.6l-37.9 18-29.9-29.8 17.9-37.9c4.1-8.9 4-18.9-.5-27.3-4.3-8.3-7.7-16.1-10.3-23.9-3.1-8.9-10.2-16-19.1-19.1l-40.6-14.2v-41.8l40.7-14.2c8.9-3.1 15.9-10 19-18.9 2.5-7 6-14.7 10.7-23.5 4.6-8.6 4.9-19 .6-27.9l-18-37.8L115 80.9l38 18.3c8.5 4.1 18.6 4 27.1-.2 7.1-3.5 15.1-6.6 23.6-9.3 9-2.9 16.3-9.9 19.6-19l14-38.5h42.1l13.9 38.4c3.3 9.2 10.6 16.1 19.9 19h.1c9.2 2.8 16.6 5.6 23.4 8.9 8.6 4.1 18.3 4.1 26.8.1l38-18 29.5 29.6-18.2 38-.1.2c-4 8.7-4 18.5.2 26.9 3.6 7.4 6.7 15.3 9.3 23.5 2.7 9 9.8 16.4 18.9 19.8l38.5 14v42.1z"></path></svg>
+                    </i>
+                }
+                <div class="col-md-4" style="line-height:30px">
+                    @Html.CheckBoxFor(model => model.EsBoleta)<label for="EsBoleta" class="m-0 ml-2"> Es boleta?</label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group col-md-12">
+            <div class="form-group row">
+                <label for="NumeroOrden" class="col-md-2 col-form-label col-form-label-sm">Número de orden</label>
+                <div class="col-md-4">
+                    @Html.TextBoxFor(model => model.NumeroOrden, new { @class = "form-control form-control-sm" })
+                </div>
+            </div>
+        </div>
+        <div class="form-group col-md-12">
+            <div class="form-group row">
+                <label for="FechaFactura" class="col-md-2 col-form-label col-form-label-sm requerido">Fecha del ticket</label>
+                <div class="col-md-3">
+                    @Html.TextBoxFor(model => model.FechaFactura, new { @Value = Model.FechaFactura.ConvertirFechaCorta(), @class = "form-control form-control-sm" })
+                </div>
+                <div class="col-md-1">
+                    <label for="TerminoPagoId" class="col-md-2 col-form-label col-form-label-sm">Términos</label>
+                </div>
+                <div class="col-md-3">
+                    @Html.DropDownListFor(model => model.TerminoPagoId, Model.TerminosDisponibles, new { @class = "form-control form-control-sm", @style = "width:100%" })
+                </div>
+                <div class="col-md-1">
+                    <label for="TerminoPagoId" class="col-md-2 col-form-label col-form-label-sm">F.Venc</label>
+                </div>
+                <div class="col-md-2">
+                    @Html.TextBoxFor(model => model.FechaVencimiento, new { @Value = Model.FechaVencimiento.ConvertirFechaCorta(), @class = "form-control form-control-sm" })
+                </div>
+            </div>
+        </div>
+        <div class="form-group col-md-12">
+            <div class="form-group row">
+                <label for="VendedorId" class="col-md-2 col-form-label col-form-label-sm">Vendedor</label>
+                <div class="col-md-6">
+                    @if (Model.Bloqueado)
+                    {
+                        @Html.DropDownListFor(model => model.VendedorId, Model.VendedoresDisponibles, string.Empty, new { @class = "form-control form-control-sm bloqueado", @style = "width:100%" })
+                    }
+                    else
+                    {
+                        @Html.DropDownListFor(model => model.VendedorId, Model.VendedoresDisponibles, string.Empty, new { @class = "form-control form-control-sm", @style = "width:100%" })
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="max-width:1040px;padding-left:13px;">
+        @if (!Model.Bloqueado)
+        {
+            <div class="col-sm-12">
+                <button style="" type="button" class="btn btn-danger btn-sm pull-right mb-2" id="btnAgregarProducto">
+                    <span class="fas fa-plus"></span> Agregar producto
+                </button>
+            </div>
+        }
+        <div class="col-sm-12">
+            <table id="tablaProductos" class="w-100 mb-2 table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>
+                            Producto
+                        </th>
+                        <th width="150px">
+                            Color
+                        </th>
+                        <th width="60px">
+                            Cant.
+                        </th>
+                        <th width="100px">
+                            Precio
+                        </th>
+                        <th width="100px">
+                            Importe
+                        </th>
+                        <th width="50px" class="text-center">
+                            @Model.Productos.Sum(i => i.Cantidad)
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Productos.Count > 0)
+                    {
+                        foreach (var p in Model.Productos)
+                        {
+                            Html.RenderAction("AgregarProducto", "Producto", p);
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center">No tiene productos añadidos.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="col-sm-6">
+        </div>
+        <div class="col-sm-6 mt-3">
+            <table class="table" style="width:435px">
+                <tr>
+                    <td>Subtotal</td>
+                    <td class="text-right">
+                        <span id="sSubtotal">
+                            0.00
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>IGV[18%]</td>
+                    <td class="text-right">
+                        <span id="sImpuesto">
+                            0.00
+                        </span>
+                    </td>
+                </tr>
+                <tr style="background:#F9F8F8;border:1px solid #ECECEC">
+                    <td>Total (PEN)</td>
+                    <td class="text-right">
+                        <span id="sTotal">
+                            0.00
+                        </span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div style="max-width:1040px;padding-top:18px;">
+        <div class="form-group col-md-12">
+            <label for="ClienteId" class="col-form-label col-form-label-sm">Observaciones</label>
+            <div>
+                @Html.TextAreaFor(model => model.NotasCliente, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group col-md-12">
+            <label for="ClienteId" class="col-form-label col-form-label-sm">Términos y condiciones</label>
+            <div>
+                @Html.TextAreaFor(model => model.TerminosYCondiciones, new { @class = "form-control", @rows = "4" })
+                <small class="help-block"> Aparecerán en la factura </small>
+            </div>
+        </div>
+        <div class="form-group col-md-12">
+            <label>Adjuntar Archivo</label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroupFileAddon01">Subir</span>
+                </div>
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" accept="image/*" id="ArchivoAdjunto" name="ArchivoAdjunto" aria-describedby="inputGroupFileAddon01">
+                    <label class="custom-file-label" for="inputGroupFile01">@(Model.NombreArchivo.TieneValor() ? Model.NombreArchivo : "Elegir el Archivo")</label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group col-md-12">
+            <label for="ClienteId" class="col-form-label col-form-label-sm">Enviar por correo electrónico</label>
+            <div>
+
+                @if (Model.Contactos.Count > 0)
+                {
+                    foreach (var e in Model.Contactos)
+                    {
+                        <div class="cf-label">
+                            <div class="checkbox">
+                                <label title="@e.Email">
+                                    @Html.CheckBoxFor(model => e.EnviarCorreo)
+                                    <span class="emailEnviar">
+                                        @e.Cuenta &lt;@e.Email&gt;
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="mt-1">
+                        <div class="font-small">
+                            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 512 512" xml:space="preserve" class="icon icon-attention text-bottom"><path d="M508.2 461.2c-14-28.3-215-420.6-227.5-444.5-11.3-21.4-38.1-22.7-49.3-.9-17.1 33.3-217.1 425.4-227 444.8C-8 485 7.7 512.5 28.9 512.5h455c23.2 0 34.6-30.6 24.3-51.3zm-251.7-16c-16.5 0-29.8-14.9-29.8-33.2 0-18.3 13.3-33.2 29.8-33.2s29.8 14.9 29.8 33.2c0 18.4-13.4 33.2-29.8 33.2zm39.4-271.9c-2.5 22.4-21.1 132.2-27.2 168-1.1 6.6-6.3 12.2-12.4 12.2h-.2c-6.3 0-11.6-5.7-12.8-12.6-6.2-36.4-24.7-145.8-27.2-167.9-3-26.5 15.6-50.2 39.6-50.2 24.4 0 43.2 23.6 40.2 50.5z" id="Layer_2_2_"></path>
+                    </svg>
+                            &nbsp;No se ha encontrado ningun correo electronico registrado.  <div>
+                                @*<a data-ember-action="" data-ember-action-3605="3605">+ Agregar nuevo</a>*@
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    @*<div class="fixed-bottom barraAcciones">
+            <a href="@Url.Action("Index", "Factura")" class="btn btn-secondary btn-sm">Cancelar</a>
+            <button type="submit" class="btn btn-danger btn-sm">Guardar</button>
+        </div>*@
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+    @*@if (Model.Estado == EstadoFactura.Pendiente)
+        {*@
+    <button type="submit" class="btn btn-danger btn-sm">Guardar</button>
+    @*}*@
+</div>
+
+@Html.Partial("_js")

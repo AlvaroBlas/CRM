@@ -1,0 +1,14 @@
+﻿@model MedicalDentCRM.Base.Vendedor
+
+<div class="modal-header">
+    <h5 class="modal-title">Nuevo Vendedor</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+@using (Html.BeginForm("CrearVendedor", "Usuario", FormMethod.Post, new { @autocomplete = "off" }))
+{
+    <text>
+        @Html.Partial("_CrearOEditarVendedor")
+    </text>
+}
